@@ -26,6 +26,9 @@
     "@nestjs/config": "^1.0.3",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@types/morgan": "^1.9.3",
+    "morgan": "^1.10.0",
+    "nest-morgan": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
