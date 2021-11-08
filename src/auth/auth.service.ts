@@ -12,12 +12,14 @@ import { sign } from 'crypto';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { AgreementResponseDto } from './dto/agreement.response.dto';
 import { AgreementRepository } from 'src/repositories/agreement.repository';
+import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly agreementRepository: AgreementRepository,
+    private readonly userAgreementRepository: UserAgreementRepository,
     @InjectRepository(University) private univRepository: Repository<University>,
     private jwtService: JwtService,
   ) {}
@@ -59,6 +61,16 @@ export class AuthService {
     user.department = signupRequestDto.department;
   
     await this.userRepository.save(user);
+
+    const agreements = await this.agreementRepository.findAll();
+    await Promise.all(
+      agreements.map((agreement) => {
+        this.userAgreementRepository.save({
+          user: user,
+          agreement: agreement
+        });
+      })
+    );
   }
 
   async checkEmail(email: string) {
