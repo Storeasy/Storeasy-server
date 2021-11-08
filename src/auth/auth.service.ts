@@ -1,4 +1,4 @@
-import { Body, ConflictException, Injectable } from '@nestjs/common';
+import { Body, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entities/User';
@@ -68,7 +68,14 @@ export class AuthService {
   }
 
   async getAgreements(): Promise<AgreementResponseDto[]> {
-    const agreementResponseDtos: AgreementResponseDto[] = await this.agreementRepository.findAll();
-    return agreementResponseDtos;
+    return await this.agreementRepository.findAll();;
+  }
+  
+  async getAgreement(agreementId: number): Promise<AgreementResponseDto> {
+    const agreement = await this.agreementRepository.findOneByAgreementId(agreementId);
+    if (!agreement) {
+      throw new NotFoundException(ResponseStatus.AGREEMENT_NOT_FOUND);
+    }
+    return agreement;
   }
 }

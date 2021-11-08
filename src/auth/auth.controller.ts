@@ -3,7 +3,6 @@ import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
 import { SignupRequestDto } from './dto/signup.request.dto';
 import { Public } from 'src/decorators/public.decorators';
-import { NotLoggedInGuard } from './guard/not-logged-in.guard';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { LoginResponseDto } from './dto/login.response.dto';
 import { ResponseStatus } from 'src/config/res/response-status';
@@ -37,5 +36,11 @@ export class AuthController {
   async getAgreements(): Promise<ResponseEntity<AgreementResponseDto[]>> {
     const data = await this.authService.getAgreements();
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_AGREEMENTS_SUCCESS, data);
+  }
+
+  @Get('agreements/:agreementId')
+  async getAgreement(@Param('agreementId') agreementId: number): Promise<ResponseEntity<AgreementResponseDto>> {
+    const data = await this.authService.getAgreement(agreementId);
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_AGREEMENT_SUCCESS, data);
   }
 }
