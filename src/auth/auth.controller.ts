@@ -7,6 +7,7 @@ import { NotLoggedInGuard } from './guard/not-logged-in.guard';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { LoginResponseDto } from './dto/login.response.dto';
 import { ResponseStatus } from 'src/config/res/response-status';
+import { AgreementResponseDto } from './dto/agreement.response.dto';
 
 @Public()
 @Controller('api/auth')
@@ -15,8 +16,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req): ResponseEntity<LoginResponseDto> {
-    const data = this.authService.login(req.user);
+  async login(@Request() req): Promise<ResponseEntity<LoginResponseDto>> {
+    const data = await this.authService.login(req.user);
     return ResponseEntity.OK_WITH(ResponseStatus.LOGIN_SUCCESS, data);
   }
 
@@ -30,5 +31,11 @@ export class AuthController {
   async checkEmail(@Param('email') email: string) {
     await this.authService.checkEmail(email);
     return ResponseEntity.OK(ResponseStatus.CHECK_EMAIL_SUCCESS);
+  }
+
+  @Get('agreements')
+  async getAgreements(): Promise<ResponseEntity<AgreementResponseDto[]>> {
+    const data = await this.authService.getAgreements();
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_AGREEMENTS_SUCCESS, data);
   }
 }

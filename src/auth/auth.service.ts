@@ -10,11 +10,14 @@ import { University } from 'src/entities/University';
 import { UserRepository } from 'src/repositories/user.repository';
 import { sign } from 'crypto';
 import { ResponseStatus } from 'src/config/res/response-status';
+import { AgreementResponseDto } from './dto/agreement.response.dto';
+import { AgreementRepository } from 'src/repositories/agreement.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly agreementRepository: AgreementRepository,
     @InjectRepository(University) private univRepository: Repository<University>,
     private jwtService: JwtService,
   ) {}
@@ -32,14 +35,13 @@ export class AuthService {
     return null;
   }
 
-  login(user: User): LoginResponseDto {
+  async login(user: User): Promise<LoginResponseDto> {
     const payload = { username: user.email, sub: user.id};
     const access_token = this.jwtService.sign(payload);
-    
-    const data: LoginResponseDto = {
+
+    return {
       access_token: access_token,
     }
-    return data;
   }
 
   async signup(signupRequestDto: SignupRequestDto) {
@@ -63,5 +65,10 @@ export class AuthService {
     if (await this.userRepository.existsByEmail(email)) {
       throw new ConflictException(ResponseStatus.CHECK_EMAIL_FAIL);
     }
+  }
+
+  async getAgreements(): Promise<AgreementResponseDto[]> {
+    const agreementResponseDtos: AgreementResponseDto[] = await this.agreementRepository.findAll();
+    return agreementResponseDtos;
   }
 }
