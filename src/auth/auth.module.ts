@@ -25,6 +25,8 @@ import { University } from 'src/entities/University';
 import { UserAgreement } from 'src/entities/UserAgreement';
 import { UserTag } from 'src/entities/UserTag';
 import { UserRepository } from 'src/repositories/user.repository';
+import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
+import { AgreementRepository } from 'src/repositories/agreement.repository';
 
 @Module({
   imports: [
@@ -52,6 +54,8 @@ import { UserRepository } from 'src/repositories/user.repository';
       UserAgreement,
       Agreement,
       UserRepository,
+      AgreementRepository,
+      UserAgreementRepository,
     ]),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

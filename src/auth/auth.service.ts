@@ -1,4 +1,4 @@
-import { Body, ConflictException, Injectable } from '@nestjs/common';
+import { Body, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entities/User';
@@ -10,11 +10,16 @@ import { University } from 'src/entities/University';
 import { UserRepository } from 'src/repositories/user.repository';
 import { sign } from 'crypto';
 import { ResponseStatus } from 'src/config/res/response-status';
+import { AgreementResponseDto } from './dto/agreement.response.dto';
+import { AgreementRepository } from 'src/repositories/agreement.repository';
+import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly agreementRepository: AgreementRepository,
+    private readonly userAgreementRepository: UserAgreementRepository,
     @InjectRepository(University) private univRepository: Repository<University>,
     private jwtService: JwtService,
   ) {}
@@ -32,14 +37,13 @@ export class AuthService {
     return null;
   }
 
-  login(user: User): LoginResponseDto {
+  async login(user: User): Promise<LoginResponseDto> {
     const payload = { username: user.email, sub: user.id};
     const access_token = this.jwtService.sign(payload);
-    
-    const data: LoginResponseDto = {
+
+    return {
       access_token: access_token,
     }
-    return data;
   }
 
   async signup(signupRequestDto: SignupRequestDto) {
@@ -57,11 +61,33 @@ export class AuthService {
     user.department = signupRequestDto.department;
   
     await this.userRepository.save(user);
+
+    const agreements = await this.agreementRepository.findAll();
+    await Promise.all(
+      agreements.map((agreement) => {
+        this.userAgreementRepository.save({
+          user: user,
+          agreement: agreement
+        });
+      })
+    );
   }
 
   async checkEmail(email: string) {
     if (await this.userRepository.existsByEmail(email)) {
       throw new ConflictException(ResponseStatus.CHECK_EMAIL_FAIL);
     }
+  }
+
+  async getAgreements(): Promise<AgreementResponseDto[]> {
+    return await this.agreementRepository.findAll();;
+  }
+  
+  async getAgreement(agreementId: number): Promise<AgreementResponseDto> {
+    const agreement = await this.agreementRepository.findOneByAgreementId(agreementId);
+    if (!agreement) {
+      throw new NotFoundException(ResponseStatus.AGREEMENT_NOT_FOUND);
+    }
+    return agreement;
   }
 }
