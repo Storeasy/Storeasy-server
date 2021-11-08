@@ -27,6 +27,7 @@ import { UserTag } from 'src/entities/UserTag';
 import { UserRepository } from 'src/repositories/user.repository';
 import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
 import { AgreementRepository } from 'src/repositories/agreement.repository';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { AgreementRepository } from 'src/repositories/agreement.repository';
       AgreementRepository,
       UserAgreementRepository,
     ]),
+    MailModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],

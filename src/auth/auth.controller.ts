@@ -7,11 +7,15 @@ import { ResponseEntity } from 'src/config/res/response-entity';
 import { LoginResponseDto } from './dto/login.response.dto';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { AgreementResponseDto } from './dto/agreement.response.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Public()
 @Controller('api/auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private mailService: MailService,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -42,5 +46,11 @@ export class AuthController {
   async getAgreement(@Param('agreementId') agreementId: number): Promise<ResponseEntity<AgreementResponseDto>> {
     const data = await this.authService.getAgreement(agreementId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_AGREEMENT_SUCCESS, data);
+  }
+
+  @Get('mail/:to')
+  async sendAuthMail(@Param('to') to: string) {
+    await this.mailService.sendAuthMail(to);
+    return ResponseEntity.OK(ResponseStatus.SEND_AUTH_MAIL_SUCCESS);
   }
 }
