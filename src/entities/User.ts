@@ -11,7 +11,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Auth } from "./Auth";
 import { LikeIssue } from "./LikeIssue";
 import { LikeUser } from "./LikeUser";
 import { Profile } from "./Profile";
@@ -61,9 +60,6 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date | null;
-
-  @OneToOne(() => Auth, (auth) => auth.user)
-  auth: Auth;
 
   @OneToMany(() => LikeIssue, (likeIssue) => likeIssue.senderUser)
   likeIssues: LikeIssue[];
