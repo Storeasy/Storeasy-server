@@ -28,6 +28,7 @@ import { UserRepository } from 'src/repositories/user.repository';
 import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
 import { AgreementRepository } from 'src/repositories/agreement.repository';
 import { MailModule } from 'src/mail/mail.module';
+import { AuthRepository } from 'src/repositories/auth.repository';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { MailModule } from 'src/mail/mail.module';
       UserRepository,
       AgreementRepository,
       UserAgreementRepository,
+      AuthRepository,
     ]),
     MailModule,
   ],

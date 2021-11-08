@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne } from "typeorm";
-import { User } from "./User";
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne, UpdateDateColumn } from "typeorm";
 
 @Entity("auth", { schema: "haecareer" })
 export class Auth {
@@ -13,6 +12,7 @@ export class Auth {
   attemptCount: number;
 
   @CreateDateColumn()
+  @UpdateDateColumn()
   requestTime: Date;
 
 }

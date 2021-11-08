@@ -8,6 +8,7 @@ import { LoginResponseDto } from './dto/login.response.dto';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { AgreementResponseDto } from './dto/agreement.response.dto';
 import { MailService } from 'src/mail/mail.service';
+import { CheckAuthCodeRequestDto } from './dto/check-auth-code.request.dto';
 
 @Public()
 @Controller('api/auth')
@@ -52,5 +53,11 @@ export class AuthController {
   async sendAuthMail(@Param('to') to: string) {
     await this.mailService.sendAuthMail(to);
     return ResponseEntity.OK(ResponseStatus.SEND_AUTH_MAIL_SUCCESS);
+  }
+
+  @Get('mail')
+  async checkAuthCode(@Body() checkAuthCodeRequestDto: CheckAuthCodeRequestDto) {
+    await this.authService.checkAuthCode(checkAuthCodeRequestDto);
+    return ResponseEntity.OK(ResponseStatus.CHECK_AUTH_CODE_SUCCESS);
   }
 }

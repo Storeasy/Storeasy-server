@@ -1,4 +1,4 @@
-import { Body, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entities/User';
@@ -13,6 +13,8 @@ import { ResponseStatus } from 'src/config/res/response-status';
 import { AgreementResponseDto } from './dto/agreement.response.dto';
 import { AgreementRepository } from 'src/repositories/agreement.repository';
 import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
+import { CheckAuthCodeRequestDto } from './dto/check-auth-code.request.dto';
+import { AuthRepository } from 'src/repositories/auth.repository';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,7 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly agreementRepository: AgreementRepository,
     private readonly userAgreementRepository: UserAgreementRepository,
-    @InjectRepository(University) private univRepository: Repository<University>,
+    private readonly authRepository: AuthRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -89,5 +91,17 @@ export class AuthService {
       throw new NotFoundException(ResponseStatus.AGREEMENT_NOT_FOUND);
     }
     return agreement;
+  }
+
+  async checkAuthCode(checkAuthCodeRequestDto: CheckAuthCodeRequestDto) {
+    const auth = await this.authRepository.findOneByEmail(checkAuthCodeRequestDto.email);
+    if (!auth) {
+      throw new NotFoundException(ResponseStatus.AUTH_NOT_FOUND);
+    }
+    if (auth.code != checkAuthCodeRequestDto.code) {
+      auth.attemptCount++;
+      await this.authRepository.save(auth);
+      throw new BadRequestException(ResponseStatus.CHECK_AUTH_CODE_FAIL);
+    }
   }
 }
