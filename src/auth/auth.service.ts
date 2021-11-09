@@ -15,11 +15,13 @@ import { AgreementRepository } from 'src/repositories/agreement.repository';
 import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
 import { CheckAuthCodeRequestDto } from './dto/check-auth-code.request.dto';
 import { AuthRepository } from 'src/repositories/auth.repository';
+import { ProfileRepository } from 'src/repositories/profile.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly profileRepository: ProfileRepository,
     private readonly agreementRepository: AgreementRepository,
     private readonly userAgreementRepository: UserAgreementRepository,
     private readonly authRepository: AuthRepository,
@@ -49,21 +51,30 @@ export class AuthService {
   }
 
   async signup(signupRequestDto: SignupRequestDto) {
+    // 이메일 중복 확인
     await this.checkEmail(signupRequestDto.email);
 
+    // 비밀번호 암호화
     const hashedPassword = await bcrypt.hash(signupRequestDto.password, 12);
 
-    const user = this.userRepository.create();
-    user.email = signupRequestDto.email;
-    user.password = hashedPassword;
-    user.name = signupRequestDto.name;
-    user.birthDate = signupRequestDto.birthDate;
-    user.admissionYear = signupRequestDto.admissionYear;
-    user.universityName = signupRequestDto.universityName;
-    user.department = signupRequestDto.department;
-  
-    await this.userRepository.save(user);
+    // 유저 생성, 저장  
+    const user = await this.userRepository.save({
+      email: signupRequestDto.email,
+      password: hashedPassword,
+      name: signupRequestDto.name,
+      birthDate: signupRequestDto.birthDate,
+      admissionYear: signupRequestDto.admissionYear,
+      universityName: signupRequestDto.universityName,
+      department: signupRequestDto.department
+    });
 
+    // 프로필 생성, 저장
+    await this.profileRepository.save({
+      userId: user.id,
+      nickname: user.name
+    });
+
+    // 유저 약관 동의 생성, 저장
     const agreements = await this.agreementRepository.findAll();
     await Promise.all(
       agreements.map((agreement) => {

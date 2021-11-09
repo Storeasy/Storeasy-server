@@ -10,6 +10,10 @@ import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { AuthController } from './auth/auth.controller';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { MailModule } from './mail/mail.module';
+import { ProfileController } from './profile/profile.controller';
+import { ProfileService } from './profile/profile.service';
+import { ProfileModule } from './profile/profile.module';
+import { TagModule } from './tag/tag.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -22,8 +26,10 @@ dotenv.config();
     TypeOrmModule.forRoot(ormconfig),
     AuthModule,
     MailModule,
+    ProfileModule,
+    TagModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, ProfileController],
   providers: [
     {
       provide: APP_INTERCEPTOR,
@@ -36,7 +42,7 @@ dotenv.config();
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    }
+    },
   ],
 })
 export class AppModule {}

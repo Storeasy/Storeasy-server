@@ -5,10 +5,12 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { PageTag } from "./PageTag";
 import { ProfileTag } from "./ProfileTag";
+import { RecommendTag } from "./RecommendTag";
 import { TagColor } from "./TagColor";
 import { UserTag } from "./UserTag";
 
@@ -40,4 +42,7 @@ export class Tag {
 
   @OneToMany(() => UserTag, (userTag) => userTag.tag)
   userTags: UserTag[];
+
+  @OneToOne(() => RecommendTag, (recommendTag) => recommendTag.tag)
+  recommendTag: RecommendTag;
 }
