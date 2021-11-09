@@ -15,13 +15,13 @@ import { AgreementRepository } from 'src/repositories/agreement.repository';
 import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
 import { CheckAuthCodeRequestDto } from './dto/check-auth-code.request.dto';
 import { AuthRepository } from 'src/repositories/auth.repository';
-import { profileRepository } from 'src/repositories/profile.repository';
+import { ProfileRepository } from 'src/repositories/profile.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly profileRepository: profileRepository,
+    private readonly profileRepository: ProfileRepository,
     private readonly agreementRepository: AgreementRepository,
     private readonly userAgreementRepository: UserAgreementRepository,
     private readonly authRepository: AuthRepository,

@@ -20,6 +20,7 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static AUTH_NOT_FOUND = new ResponseStatus(HttpStatus.BAD_REQUEST, "인증 정보를 찾을 수 없습니다");
   static READ_ALL_RECOMMEND_TAGS_SUCCESS = new ResponseStatus(HttpStatus.OK, "추천 태그 조회 성공");
   static CREATE_TAG_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "태그 등록 성공");
+  static CREATE_PROFILE_TAG_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "프로필 태그 설정 성공");
   
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

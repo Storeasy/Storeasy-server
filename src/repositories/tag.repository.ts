@@ -18,4 +18,10 @@ export class TagRepository extends Repository<Tag> {
       }, 
       relations: ['tagColor']});
   }
+
+  public async findByIds(ids: number[]) {
+    return await this.createQueryBuilder()
+      .whereInIds(ids)
+      .getMany();
+  }
 }
