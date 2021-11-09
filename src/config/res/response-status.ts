@@ -18,6 +18,7 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static CHECK_AUTH_CODE_SUCCESS = new ResponseStatus(HttpStatus.OK, "이메일 인증 번호 확인 성공");
   static CHECK_AUTH_CODE_FAIL = new ResponseStatus(HttpStatus.BAD_REQUEST, "이메일 인증 번호 확인 실패");
   static AUTH_NOT_FOUND = new ResponseStatus(HttpStatus.BAD_REQUEST, "인증 정보를 찾을 수 없습니다");
+  static READ_ALL_RECOMMEND_TAGS_SUCCESS = new ResponseStatus(HttpStatus.OK, "추천 태그 조회 성공");
   
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;
