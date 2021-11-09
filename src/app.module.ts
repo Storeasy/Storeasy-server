@@ -13,6 +13,7 @@ import { MailModule } from './mail/mail.module';
 import { ProfileController } from './profile/profile.controller';
 import { ProfileService } from './profile/profile.service';
 import { ProfileModule } from './profile/profile.module';
+import { TagModule } from './tag/tag.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,6 +27,7 @@ dotenv.config();
     AuthModule,
     MailModule,
     ProfileModule,
+    TagModule,
   ],
   controllers: [AuthController, ProfileController],
   providers: [

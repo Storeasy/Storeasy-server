@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { RecommendTag } from 'src/entities/RecommendTag';
 import { profileRepository } from 'src/repositories/profile.repository';
 import { RecommendTagRepository } from 'src/repositories/recommend-tag.repository';
-import { TagResponseDto } from './dto/tag.response.dto';
+import { TagResponseDto } from '../tag/dto/tag.response.dto';
 
 @Injectable()
 export class ProfileService {

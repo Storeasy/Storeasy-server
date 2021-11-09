@@ -1,4 +1,5 @@
 import { RecommendTag } from "src/entities/RecommendTag";
+import { Tag } from "src/entities/Tag";
 
 export class TagResponseDto {
   id: number;
@@ -10,6 +11,14 @@ export class TagResponseDto {
       id: recommendTag.id,
       tagName: recommendTag.tag.name,
       tagColor: recommendTag.tag.tagColor.value
+    }
+  }
+
+  public static ofTag(tag: Tag): TagResponseDto {
+    return {
+      id: parseInt(tag.id),
+      tagName: tag.name,
+      tagColor: tag.tagColor.value
     }
   }
 }
