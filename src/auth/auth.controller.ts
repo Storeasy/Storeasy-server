@@ -18,7 +18,7 @@ export class AuthController {
     private mailService: MailService,
   ) {}
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard)    
   @Post('login')
   async login(@Request() req): Promise<ResponseEntity<LoginResponseDto>> {
     const data = await this.authService.login(req.user);
