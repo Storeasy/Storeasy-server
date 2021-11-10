@@ -4,7 +4,7 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-FROM node:16.14.0
+FROM node:16.13.0
 WORKDIR /usr/src/app
 COPY --from=builder /app ./
 
