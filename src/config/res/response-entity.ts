@@ -1,11 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiOkResponse, ApiProperty, ApiResponse, ApiResponseProperty } from '@nestjs/swagger';
 import { ResponseStatus } from "./response-status";
 import { Exclude, Expose } from 'class-transformer';
 
 export class ResponseEntity<T> {
   @Exclude() private readonly _status: number;
+
   @Exclude() private readonly _code: string;
+
   @Exclude() private readonly _message: string;
+
   @Exclude() private readonly _data: T;
 
   private constructor(status: ResponseStatus, data: T) {

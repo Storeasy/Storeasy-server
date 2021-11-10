@@ -43,10 +43,10 @@ export class AuthService {
 
   async login(user: User): Promise<LoginResponseDto> {
     const payload = { username: user.email, sub: user.id};
-    const access_token = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload);
 
     return {
-      access_token: access_token,
+      accessToken: accessToken,
     }
   }
 
