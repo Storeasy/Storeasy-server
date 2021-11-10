@@ -21,6 +21,7 @@ dotenv.config();
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'prod' ? '.env.prod' : '.env',
     }), 
     MorganModule,
     TypeOrmModule.forRoot(ormconfig),
