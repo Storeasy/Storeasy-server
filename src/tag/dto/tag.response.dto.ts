@@ -26,7 +26,7 @@ export class TagResponseDto {
 
   public static ofTag(tag: Tag): TagResponseDto {
     return {
-      id: parseInt(tag.id),
+      id: +tag.id,
       tagName: tag.name,
       tagColor: tag.tagColor.value
     }

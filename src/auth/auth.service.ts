@@ -1,14 +1,10 @@
-import { BadRequestException, Body, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entities/User';
-import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { LoginResponseDto } from './dto/login.response.dto';
 import { SignupRequestDto } from './dto/signup.request.dto';
-import { University } from 'src/entities/University';
 import { UserRepository } from 'src/repositories/user.repository';
-import { sign } from 'crypto';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { AgreementResponseDto } from './dto/agreement.response.dto';
 import { AgreementRepository } from 'src/repositories/agreement.repository';
