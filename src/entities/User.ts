@@ -19,6 +19,7 @@ import { University } from "./University";
 import { UserAgreement } from "./UserAgreement";
 import { UserTag } from "./UserTag";
 import { IsEmail } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
 
 @Index("email", ["email"], { unique: true })
 @Index("university_id", ["universityId"], {})
@@ -27,7 +28,6 @@ export class User {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;
 
-  @IsEmail()
   @Column("varchar", { name: "email", unique: true, length: 255 })
   email: string;
 

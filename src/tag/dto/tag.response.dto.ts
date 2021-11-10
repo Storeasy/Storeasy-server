@@ -1,9 +1,19 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNumber, IsString } from "class-validator";
 import { RecommendTag } from "src/entities/RecommendTag";
 import { Tag } from "src/entities/Tag";
 
 export class TagResponseDto {
+  @ApiProperty()
+  @IsNumber()
   id: number;
+
+  @ApiProperty()
+  @IsString()
   tagName: string;
+
+  @ApiProperty()
+  @IsString()
   tagColor: string;
 
   public static ofRecommendTag(recommendTag: RecommendTag): TagResponseDto {
