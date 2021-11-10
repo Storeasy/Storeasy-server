@@ -23,7 +23,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 @Index("email", ["email"], { unique: true })
 @Index("university_id", ["universityId"], {})
-@Entity("user", { schema: "haecareer" })
+@Entity("user")
 export class User {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;

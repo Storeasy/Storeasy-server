@@ -3,7 +3,7 @@ import { User } from "./User";
 import { Tag } from "./Tag";
 
 @Index("tag_id", ["tagId"], {})
-@Entity("profile_tag", { schema: "haecareer" })
+@Entity("profile_tag")
 export class ProfileTag {
   @Column("bigint", { primary: true, name: "user_id" })
   userId: string;

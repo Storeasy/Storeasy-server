@@ -3,7 +3,7 @@ import { User } from "./User";
 import { Agreement } from "./Agreement";
 
 @Index("agreement_id", ["agreementId"], {})
-@Entity("user_agreement", { schema: "haecareer" })
+@Entity("user_agreement")
 export class UserAgreement {
   @Column("bigint", { primary: true, name: "user_id" })
   userId: string;

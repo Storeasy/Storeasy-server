@@ -3,7 +3,7 @@ import { Tag } from "./Tag";
 import { UserTag } from "./UserTag";
 
 @Index("value", ["value"], { unique: true })
-@Entity("tag_color", { schema: "haecareer" })
+@Entity("tag_color")
 export class TagColor {
   @Column("int", { primary: true, name: "id" })
   id: number;

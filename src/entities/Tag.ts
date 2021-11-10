@@ -16,7 +16,7 @@ import { UserTag } from "./UserTag";
 
 @Index("name", ["name"], { unique: true })
 @Index("tag_color_id", ["tagColorId"], {})
-@Entity("tag", { schema: "haecareer" })
+@Entity("tag")
 export class Tag {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;

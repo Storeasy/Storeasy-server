@@ -10,7 +10,7 @@ import { User } from "./User";
 
 @Index("receiver", ["receiver"], {})
 @Index("sender", ["sender"], {})
-@Entity("like_user", { schema: "haecareer" })
+@Entity("like_user")
 export class LikeUser {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;

@@ -9,7 +9,7 @@ import {
 import { Page } from "./Page";
 
 @Index("page_id", ["pageId"], {})
-@Entity("page_image", { schema: "haecareer" })
+@Entity("page_image")
 export class PageImage {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;

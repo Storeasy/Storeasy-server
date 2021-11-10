@@ -2,7 +2,7 @@ import { Column, Entity, Index, JoinColumn, OneToOne } from "typeorm";
 import { Tag } from "./Tag";
 
 @Index("tag_id", ["tagId"], { unique: true })
-@Entity("recommend_tag", { schema: "haecareer" })
+@Entity("recommend_tag")
 export class RecommendTag {
   @Column("int", { primary: true, name: "id" })
   id: number;

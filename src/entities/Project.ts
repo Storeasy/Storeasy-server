@@ -13,7 +13,7 @@ import { Page } from "./Page";
 import { ProjectColor } from "./ProjectColor";
 
 @Index("project_color_id", ["projectColorId"], {})
-@Entity("project", { schema: "haecareer" })
+@Entity("project")
 export class Project {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;

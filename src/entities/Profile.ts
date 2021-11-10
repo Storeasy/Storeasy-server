@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { User } from "./User";
 
-@Entity("profile", { schema: "haecareer" })
+@Entity("profile")
 export class Profile {
   @Column("bigint", { primary: true, name: "user_id" })
   userId: string;

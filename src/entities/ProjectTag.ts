@@ -1,6 +1,6 @@
 import { Column, Entity } from "typeorm";
 
-@Entity("project_tag", { schema: "haecareer" })
+@Entity("project_tag")
 export class ProjectTag {
   @Column("bigint", { primary: true, name: "project_id" })
   projectId: string;

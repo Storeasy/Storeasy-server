@@ -11,7 +11,7 @@ import { Page } from "./Page";
 
 @Index("page_id", ["pageId"], {})
 @Index("sender", ["sender"], {})
-@Entity("like_issue", { schema: "haecareer" })
+@Entity("like_issue")
 export class LikeIssue {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;

@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne, UpdateDateColumn } from "typeorm";
 
-@Entity("auth", { schema: "haecareer" })
+@Entity("auth")
 export class Auth {
   @Column("varchar", { primary: true, name: "email"})
   email: string;

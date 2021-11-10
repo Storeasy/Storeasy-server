@@ -5,7 +5,7 @@ import { TagColor } from "./TagColor";
 
 @Index("tag_color_id", ["tagColorId"], {})
 @Index("tag_id", ["tagId"], {})
-@Entity("user_tag", { schema: "haecareer" })
+@Entity("user_tag")
 export class UserTag {
   @Column("bigint", { primary: true, name: "user_id" })
   userId: string;

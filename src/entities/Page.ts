@@ -15,7 +15,7 @@ import { PageImage } from "./PageImage";
 import { PageTag } from "./PageTag";
 
 @Index("project_id", ["projectId"], {})
-@Entity("page", { schema: "haecareer" })
+@Entity("page")
 export class Page {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;
