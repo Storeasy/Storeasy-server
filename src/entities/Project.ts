@@ -11,12 +11,17 @@ import {
 } from "typeorm";
 import { Page } from "./Page";
 import { ProjectColor } from "./ProjectColor";
+import { User } from "./User";
 
 @Index("project_color_id", ["projectColorId"], {})
+@Index("user_id", ["userId"], {})
 @Entity("project")
 export class Project {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;
+
+  @Column("bigint", { name: "user_id" })
+  userId: string;
 
   @Column("varchar", { name: "title", length: 30 })
   title: string;
@@ -41,6 +46,13 @@ export class Project {
 
   @OneToMany(() => Page, (page) => page.project)
   pages: Page[];
+
+  @ManyToOne(() => User, (user) => user.projects, {
+    onDelete: "CASCADE",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  user: User;
 
   @ManyToOne(() => ProjectColor, (projectColor) => projectColor.projects, {
     onDelete: "NO ACTION",

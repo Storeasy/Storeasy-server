@@ -13,12 +13,11 @@ export class ProjectService {
   ) {}
 
   async getProjectColors(): Promise<ProjectColorResponseDto[]> {
-    const colors = await this.projectColorRepository.find();
-    return colors;
+    return await this.projectColorRepository.find();
   }
 
   async createProject(userId: number, createProjectRequestDto: CreateProjectRequestDto) {
-
+    
   }
 
   async updateProject(userId: number, projectId: number, updateProjectRequestDto: UpdateProjectRequestDto) {

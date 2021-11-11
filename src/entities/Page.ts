@@ -12,13 +12,18 @@ import {
 import { LikePage } from "./LikePage";
 import { Project } from "./Project";
 import { PageImage } from "./PageImage";
-import { PageTag } from "./PageTag";
+import { PageTag } from "./PageTag";import { User } from "./User";
+;
 
 @Index("project_id", ["projectId"], {})
+@Index("user_id", ["userId"], {})
 @Entity("page")
 export class Page {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;
+
+  @Column("bigint", { name: "user_id" })
+  userId: string;
 
   @Column("varchar", { name: "title", length: 50 })
   title: string;
@@ -43,6 +48,13 @@ export class Page {
 
   @OneToMany(() => LikePage, (likePage) => likePage.page)
   likePages: LikePage[];
+
+  @ManyToOne(() => User, (user) => user.pages, {
+    onDelete: "CASCADE",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  user: User;
 
   @ManyToOne(() => Project, (project) => project.pages, {
     onDelete: "CASCADE",
