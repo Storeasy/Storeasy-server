@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsString } from "class-validator";
+import { IsDateString, IsNumber, IsString } from "class-validator";
 
 export class CreateProjectRequestDto {
   @ApiProperty({
@@ -34,6 +34,6 @@ export class CreateProjectRequestDto {
     example: 1,
     description: "프로젝트색 ID"
   })
-  @IsDateString()
+  @IsNumber()
   projectColorId: number;
 }

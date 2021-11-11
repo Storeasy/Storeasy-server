@@ -18,10 +18,10 @@ import { User } from "./User";
 @Entity("project")
 export class Project {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("bigint", { name: "user_id" })
-  userId: string;
+  userId: number;
 
   @Column("varchar", { name: "title", length: 30 })
   title: string;
