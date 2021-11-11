@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { LikeIssue } from "./LikeIssue";
+import { LikePage } from "./LikePage";
 import { Project } from "./Project";
 import { PageImage } from "./PageImage";
 import { PageTag } from "./PageTag";
@@ -41,8 +41,8 @@ export class Page {
   @UpdateDateColumn()
   updatedAt: Date | null;
 
-  @OneToMany(() => LikeIssue, (likeIssue) => likeIssue.page)
-  likeIssues: LikeIssue[];
+  @OneToMany(() => LikePage, (likePage) => likePage.page)
+  likePages: LikePage[];
 
   @ManyToOne(() => Project, (project) => project.pages, {
     onDelete: "CASCADE",

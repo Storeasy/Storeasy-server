@@ -9,7 +9,7 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities/User';
 import { Auth } from 'src/entities/Auth';
-import { LikeIssue } from 'src/entities/LikeIssue';
+import { LikePage } from 'src/entities/LikePage';
 import { Page } from 'src/entities/Page';
 import { Agreement } from 'src/entities/Agreement';
 import { LikeUser } from 'src/entities/LikeUser';
@@ -41,7 +41,7 @@ import { ProfileRepository } from 'src/repositories/profile.repository';
     TypeOrmModule.forFeature([
       User, 
       Auth, 
-      LikeIssue, 
+      LikePage, 
       Page, 
       Project, 
       ProjectColor, 
