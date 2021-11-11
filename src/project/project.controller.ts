@@ -3,7 +3,9 @@ import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestj
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { UpdateProfileRequestDto } from 'src/profile/dto/update-profile.request.dto';
+import { CreateProjectRequestDto } from './dto/create-project.request.dto';
 import { ProjectColorResponseDto } from './dto/project-color.response.dto';
+import { UpdateProjectRequestDto } from './dto/update-project.request.dto';
 import { ProjectService } from './project.service';
 
 @ApiTags('프로젝트')
