@@ -12,6 +12,8 @@ import { MailModule } from './mail/mail.module';
 import { ProfileController } from './profile/profile.controller';
 import { ProfileModule } from './profile/profile.module';
 import { TagModule } from './tag/tag.module';
+import { S3Service } from './s3/s3.service';
+import { S3Module } from './s3/s3.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -27,6 +29,7 @@ dotenv.config();
     MailModule,
     ProfileModule,
     TagModule,
+    S3Module,
   ],
   controllers: [AuthController, ProfileController],
   providers: [
@@ -42,6 +45,7 @@ dotenv.config();
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    S3Service,
   ],
 })
 export class AppModule {}

@@ -1,5 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { ResponseStatus } from 'src/config/res/response-status';
+import { Injectable } from '@nestjs/common';
 import { tagColorRepository } from 'src/repositories/tag-color.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
 import { TagRequestDto } from './dto/tag.request.dto';
@@ -24,7 +23,6 @@ export class TagService {
         })
       );
     }
-    console.log(tag);
     return TagResponseDto.ofTag(tag);
   }
 }
