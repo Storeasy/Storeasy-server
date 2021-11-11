@@ -11,9 +11,6 @@ export class TagColor {
   @Column("char", { name: "value", unique: true, length: 7 })
   value: string;
 
-  @OneToMany(() => Tag, (tag) => tag.tagColor)
-  tags: Tag[];
-
   @OneToMany(() => UserTag, (userTag) => userTag.tagColor)
   userTags: UserTag[];
 }

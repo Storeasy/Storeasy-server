@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { LikeIssue } from "./LikeIssue";
+import { LikePage } from "./LikePage";
 import { LikeUser } from "./LikeUser";
 import { Profile } from "./Profile";
 import { ProfileTag } from "./ProfileTag";
@@ -61,8 +61,8 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date | null;
 
-  @OneToMany(() => LikeIssue, (likeIssue) => likeIssue.senderUser)
-  likeIssues: LikeIssue[];
+  @OneToMany(() => LikePage, (likePage) => likePage.senderUser)
+  likePages: LikePage[];
 
   @OneToMany(() => LikeUser, (likeUser) => likeUser.senderUser)
   likeUsers: LikeUser[];

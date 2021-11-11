@@ -11,8 +11,8 @@ import { Page } from "./Page";
 
 @Index("page_id", ["pageId"], {})
 @Index("sender", ["sender"], {})
-@Entity("like_issue")
-export class LikeIssue {
+@Entity("like_page")
+export class LikePage {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;
 
@@ -22,14 +22,14 @@ export class LikeIssue {
   @Column("bigint", { name: "page_id" })
   pageId: string;
 
-  @ManyToOne(() => User, (user) => user.likeIssues, {
+  @ManyToOne(() => User, (user) => user.likePages, {
     onDelete: "CASCADE",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "sender", referencedColumnName: "id" }])
   senderUser: User;
 
-  @ManyToOne(() => Page, (page) => page.likeIssues, {
+  @ManyToOne(() => Page, (page) => page.likePages, {
     onDelete: "CASCADE",
     onUpdate: "NO ACTION",
   })

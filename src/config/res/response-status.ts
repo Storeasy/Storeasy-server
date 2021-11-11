@@ -5,7 +5,7 @@ import { Exclude, Expose } from 'class-transformer';
 
 @Enum()
 export class ResponseStatus extends EnumType<ResponseStatus>() {
-  static LOGIN_SUCCESS = new ResponseStatus(HttpStatus.OK, "로그인 성공");
+  static LOGIN_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "로그인 성공");
   static LOGIN_FAIL = new ResponseStatus(HttpStatus.UNAUTHORIZED, "로그인 실패");
   static SIGNUP_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "회원가입 성공");
   static CHECK_EMAIL_SUCCESS = new ResponseStatus(HttpStatus.OK, "이메일 중복 확인 성공");

@@ -26,7 +26,7 @@ export class TagResponseDto {
     return {
       id: +tag.id,
       tagName: tag.name,
-      tagColor: tag.tagColor.value
+      tagColor: "defalut"
     }
   }
 }
