@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { UpdateProfileRequestDto } from 'src/profile/dto/update-profile.request.dto';
+import { ProjectColorResponseDto } from './dto/project-color.response.dto';
 import { ProjectService } from './project.service';
 
 @ApiTags('프로젝트')
@@ -11,6 +12,14 @@ export class ProjectController {
   constructor(
     private readonly projectService: ProjectService
   ) {}
+
+  @ApiOperation({ summary: "프로젝트색 목록 조회" })
+  @ApiOkResponse({ type: ProjectColorResponseDto })
+  @Get('colors')
+  async getProjectColors() {
+    const data = await this.projectService.getProjectColors();
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_PROJECT_COLORS_SUCCESS, data);
+  }
 
   @ApiOperation({ summary: "프로젝트 생성" })
   @ApiCreatedResponse()
