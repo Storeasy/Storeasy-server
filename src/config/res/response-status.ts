@@ -23,6 +23,8 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static CREATE_PROFILE_TAG_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "프로필 태그 설정 성공");
   static READ_PROFILE_SUCCESS = new ResponseStatus(HttpStatus.OK, "프로필 조회 성공");
   static PROFILE_NOT_FOUND = new ResponseStatus(HttpStatus.NOT_FOUND, "해당 프로필을 찾을 수 없습니다");
+  static UPDATE_PROFILE_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "프로필 수정 성공");
+  static INVALID_FILE_ERROR = new ResponseStatus(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드할 수 있습니다");
   
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;
