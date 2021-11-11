@@ -20,7 +20,7 @@ export class TagRepository extends Repository<Tag> {
   }
 
   public async findByIds(ids: number[]) {
-    return await this.createQueryBuilder()
+    return await this.createQueryBuilder('tag')
       .whereInIds(ids)
       .getMany();
   }

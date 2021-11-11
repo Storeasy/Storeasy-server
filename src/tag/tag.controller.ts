@@ -14,7 +14,7 @@ export class TagController {
   ) {}
 
   @ApiBearerAuth('jwt')
-  @ApiOperation({ description: "태그 등록" })
+  @ApiOperation({ summary: "태그 등록" })
   @ApiCreatedResponse({ type: TagResponseDto })
   @Post()
   async createTag(@Body() tagRequestDto: TagRequestDto): Promise<ResponseEntity<TagResponseDto>> {
