@@ -16,7 +16,7 @@ export class TagRepository extends Repository<Tag> {
       where: {
         name: name
       }, 
-      relations: ['tagColor']});
+    });
   }
 
   public async findByIds(ids: number[]) {

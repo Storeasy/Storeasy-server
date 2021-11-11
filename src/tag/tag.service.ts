@@ -19,7 +19,6 @@ export class TagService {
       return TagResponseDto.ofTag(
         await this.tagRepository.save({
           name: tagReqeustDto.name,
-          tagColor: tagColor
         })
       );
     }

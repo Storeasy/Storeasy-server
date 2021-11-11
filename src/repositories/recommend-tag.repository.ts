@@ -6,7 +6,6 @@ export class RecommendTagRepository extends Repository<RecommendTag> {
   public async findAll() {
     return await this.createQueryBuilder('recommendTag')
       .innerJoinAndSelect('recommendTag.tag', 'tag')
-      .innerJoinAndSelect('tag.tagColor', 'tagColor')
       .getMany();
   }
 }
