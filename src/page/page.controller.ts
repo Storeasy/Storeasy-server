@@ -10,6 +10,7 @@ import { CreatePageRequestDto } from './dto/create-page.request.dto';
 import { S3Service } from 'src/s3/s3.service';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { UpdatePageRequestDto } from './dto/update-page.request.dto';
+import { PageResponseDto } from './dto/page.response.dto';
 
 dotenv.config();
 const s3 = new AWS.S3();
@@ -80,7 +81,7 @@ export class PageController {
   }
 
   @ApiOperation({ summary: "페이지 상세 조회" })
-  @ApiOkResponse()
+  @ApiOkResponse({ type: PageResponseDto })
   @Get(':pageId')
   async getPage(@Param('pageId') pageId: number) {
     const data = await this.pageService.getPage(pageId);
