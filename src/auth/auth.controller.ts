@@ -71,8 +71,8 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: '이메일 인증 번호 확인'})
-  @ApiOkResponse()
-  @Get('mail')
+  @ApiCreatedResponse()
+  @Post('mail')
   async checkAuthCode(@Body() checkAuthCodeRequestDto: CheckAuthCodeRequestDto) {
     await this.authService.checkAuthCode(checkAuthCodeRequestDto);
     return ResponseEntity.OK(ResponseStatus.CHECK_AUTH_CODE_SUCCESS);

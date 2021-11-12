@@ -20,7 +20,7 @@ export class MailService {
       },
     });
 
-    await this.authRepository.save({
+    const dd = await this.authRepository.save({
       email: to,
       code: code,
       attemptCount: 0,
