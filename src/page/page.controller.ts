@@ -8,6 +8,7 @@ import { imageFileFilter } from 'src/s3/image-file-filter';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { CreatePageRequestDto } from './dto/create-page.request.dto';
 import { S3Service } from 'src/s3/s3.service';
+import { ResponseEntity } from 'src/config/res/response-entity';
 
 dotenv.config();
 const s3 = new AWS.S3();
@@ -31,14 +32,17 @@ export class PageController {
       throw new BadRequestException(ResponseStatus.INVALID_FILE_ERROR);
     }
     if(pageImages) {
-      console.log(pageImages);
-      console.log(req.user);
-      console.log(req.user.userId)
-      const pageImagesUrl = await this.s3Service.uploadPageImages(pageImages);
-      console.log((await pageImagesUrl[0]).Location);
+      const pageImagesFiles = await this.s3Service.uploadPageImages(req.user.userId, pageImages);
+      const pageImagesUrls = await Promise.all(
+        pageImagesFiles.map((file) => {
+        return file.then((f) => f.Location);
+        })
+      );
+      await this.pageService.createPageWithImage(req.user.userId, pageImagesUrls, createPageRequestDto);
     } else {
-      
+      await this.pageService.createPage(req.user.userId, createPageRequestDto);
     }
+    return ResponseEntity.OK(ResponseStatus.CREATE_PAGE_SUCCESS);
   }
 
   @ApiOperation({ summary: "페이지 수정" })

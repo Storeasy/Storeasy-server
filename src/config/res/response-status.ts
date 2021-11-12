@@ -33,6 +33,7 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static UPDATE_PROJECT_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 프로젝트가 아닙니다");
   static DELETE_PROJECT_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 프로젝트가 아닙니다");
   static READ_ALL_TAG_COLORS_SUCCESS = new ResponseStatus(HttpStatus.OK, "태그색 목록 조회 성공");
+  static CREATE_PAGE_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "페이지 생성 성공");
   
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

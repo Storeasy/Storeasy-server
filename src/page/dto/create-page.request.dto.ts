@@ -36,4 +36,11 @@ export class CreatePageRequestDto {
   })
   @IsString()
   projectId?: string;
+
+  @ApiProperty({
+    example: "[1, 2, 3]",
+    description: "태그 ID"
+  })
+  @IsString()
+  tagIds: string;
 }

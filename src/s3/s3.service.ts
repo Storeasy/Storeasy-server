@@ -23,12 +23,12 @@ export class S3Service {
     }).promise();
   }
 
-  public async uploadPageImages(pageImages: Express.Multer.File[]) {
+  public async uploadPageImages(userId: number, pageImages: Express.Multer.File[]) {
     return pageImages.map((pageImage) => {
       return s3.upload({
         Bucket: process.env.AWS_S3_BUCKET_NAME,
         Body: pageImage.buffer,
-        Key: `pageImages/${uuidv4()}-${extname(pageImage.originalname)}`
+        Key: `pageImages/${uuidv4()}-${userId}${extname(pageImage.originalname)}`
       }).promise();
     })
   }
