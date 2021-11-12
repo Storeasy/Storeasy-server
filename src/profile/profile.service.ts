@@ -77,7 +77,6 @@ export class ProfileService {
 
       updateProfileRequestDto.profileImage = profileImageUrl;
       const {tagIds, ...newDto} = updateProfileRequestDto;
-      console.log(newDto);
       await this.profileRepository.update(userId, newDto);
     } else {
       updateProfileRequestDto.profileImage = profileImageUrl;
