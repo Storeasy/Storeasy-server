@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsNumber, IsString } from "class-validator";
+import { IsArray, IsDateString, IsNumber, IsString } from "class-validator";
 
 export class CreateProjectRequestDto {
   @ApiProperty({
@@ -36,4 +36,11 @@ export class CreateProjectRequestDto {
   })
   @IsNumber()
   projectColorId: number;
+
+  @ApiProperty({
+    example: [1, 2, 3],
+    description: "태그 ID"
+  })
+  @IsArray()
+  tagIds: number[];
 }

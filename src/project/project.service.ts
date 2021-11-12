@@ -1,7 +1,9 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { ProjectColorRepository } from 'src/repositories/project-color.repository';
+import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
+import { TagRepository } from 'src/repositories/tag.repository';
 import { UserRepository } from 'src/repositories/user.repository';
 import { CreateProjectRequestDto } from './dto/create-project.request.dto';
 import { ProjectColorResponseDto } from './dto/project-color.response.dto';
@@ -12,7 +14,9 @@ export class ProjectService {
   constructor(
     private readonly projectRepository: ProjectRepository,
     private readonly projectColorRepository: ProjectColorRepository,
-    private readonly userRepository: UserRepository
+    private readonly tagRepository: TagRepository,
+    private readonly projectTagRepository: ProjectTagRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async getProjectColors(): Promise<ProjectColorResponseDto[]> {
@@ -24,6 +28,17 @@ export class ProjectService {
     project.userId = userId;
 
     await this.projectRepository.save(project);
+
+    const tags = await this.tagRepository.findByIds(createProjectRequestDto.tagIds);
+    await Promise.all(
+      tags.map((tag, i) => {
+        this.projectTagRepository.save({
+          projectId: project.id,
+          tagId: tag.id,
+          orderNum: i+1
+        });
+      })
+    );
   }
 
   async updateProject(userId: number, projectId: number, updateProjectRequestDto: UpdateProjectRequestDto) {
@@ -36,7 +51,23 @@ export class ProjectService {
       throw new ForbiddenException(ResponseStatus.UPDATE_PROJECT_FAIL_FORBIDDEN);
     }
 
-    await this.projectRepository.update(project, updateProjectRequestDto);
+    if (updateProjectRequestDto.tagIds) {
+      await this.projectTagRepository.deleteAllByProjectId(projectId);
+      const tags = await this.tagRepository.findByIds(updateProjectRequestDto.tagIds);
+      await Promise.all(
+        tags.map((tag, i) => {
+          this.projectTagRepository.save({
+            projectId: projectId,
+            tagId: tag.id,
+            orderNum: i+1
+          });
+        })
+      );
+      const {tagIds, ...newDto} = updateProjectRequestDto;
+      await this.projectRepository.update(project, newDto);
+    } else {
+      await this.projectRepository.update(project, updateProjectRequestDto);
+    }
   }
 
   async deleteProject(userId: number, projectId: number) {

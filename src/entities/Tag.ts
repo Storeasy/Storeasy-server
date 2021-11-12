@@ -17,7 +17,7 @@ import { UserTag } from "./UserTag";
 @Entity("tag", { schema: "haecareer" })
 export class Tag {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("varchar", { name: "name", unique: true, length: 20 })
   name: string;
