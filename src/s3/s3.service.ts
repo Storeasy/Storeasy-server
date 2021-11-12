@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import * as dotenv from 'dotenv';
 import { extname } from 'path';
+import { PageImage } from 'src/entities/PageImage';
 import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
@@ -20,5 +21,15 @@ export class S3Service {
       Body: profileImage.buffer,
       Key: `profileImages/${uuidv4()}-${userId}${extname(profileImage.originalname)}`,
     }).promise();
+  }
+
+  public async uploadPageImages(pageImages: Express.Multer.File[]) {
+    return pageImages.map((pageImage) => {
+      return s3.upload({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Body: pageImage.buffer,
+        Key: `pageImages/${uuidv4()}-${extname(pageImage.originalname)}`
+      }).promise();
+    })
   }
 }

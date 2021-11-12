@@ -20,10 +20,10 @@ import { PageTag } from "./PageTag";import { User } from "./User";
 @Entity("page")
 export class Page {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("bigint", { name: "user_id" })
-  userId: string;
+  userId: number;
 
   @Column("varchar", { name: "title", length: 50 })
   title: string;
