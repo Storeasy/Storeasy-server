@@ -20,13 +20,15 @@ import { UserAgreement } from "./UserAgreement";
 import { UserTag } from "./UserTag";
 import { IsEmail } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
+import { Page } from "./Page";
+import { Project } from "./Project";
 
 @Index("email", ["email"], { unique: true })
 @Index("university_id", ["universityId"], {})
 @Entity("user")
 export class User {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("varchar", { name: "email", unique: true, length: 255 })
   email: string;
@@ -70,11 +72,17 @@ export class User {
   @OneToMany(() => LikeUser, (likeUser) => likeUser.receiverUser)
   likeUsers2: LikeUser[];
 
+  @OneToMany(() => Page, (page) => page.user)
+  pages: Page[];
+
   @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
 
   @OneToMany(() => ProfileTag, (profileTag) => profileTag.user)
   profileTags: ProfileTag[];
+
+  @OneToMany(() => Project, (project) => project.user)
+  projects: Project[];
 
   @ManyToOne(() => University, (university) => university.users, {
     onDelete: "NO ACTION",

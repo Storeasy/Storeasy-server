@@ -25,6 +25,14 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static PROFILE_NOT_FOUND = new ResponseStatus(HttpStatus.NOT_FOUND, "해당 프로필을 찾을 수 없습니다");
   static UPDATE_PROFILE_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "프로필 수정 성공");
   static INVALID_FILE_ERROR = new ResponseStatus(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드할 수 있습니다");
+  static CREATE_PROJECT_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "프로젝트 생성 성공");
+  static UPDATE_PROJECT_SUCCESS = new ResponseStatus(HttpStatus.CREATED, "프로젝트 수정 성공");
+  static DELETE_PROJECT_SUCCESS = new ResponseStatus(HttpStatus.OK, "프로젝트 삭제 성공");
+  static READ_ALL_PROJECT_COLORS_SUCCESS = new ResponseStatus(HttpStatus.OK, "프로젝트색 목록 조회 성공");
+  static PROJECT_NOT_FOUND = new ResponseStatus(HttpStatus.NOT_FOUND, "해당 프로젝트를 찾을 수 없습니다");
+  static UPDATE_PROJECT_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 프로젝트가 아닙니다");
+  static DELETE_PROJECT_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 프로젝트가 아닙니다");
+  static READ_ALL_TAG_COLORS_SUCCESS = new ResponseStatus(HttpStatus.OK, "태그색 목록 조회 성공");
   
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;
