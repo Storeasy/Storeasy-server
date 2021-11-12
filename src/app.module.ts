@@ -16,6 +16,7 @@ import { S3Service } from './s3/s3.service';
 import { S3Module } from './s3/s3.module';
 import { ProjectModule } from './project/project.module';
 import { PageModule } from './page/page.module';
+import { UserModule } from './user/user.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -34,6 +35,7 @@ dotenv.config();
     S3Module,
     ProjectModule,
     PageModule,
+    UserModule,
   ],
   controllers: [AuthController, ProfileController],
   providers: [
