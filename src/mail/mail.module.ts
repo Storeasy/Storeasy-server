@@ -30,7 +30,7 @@ import { AuthRepository } from 'src/repositories/auth.repository';
           from: `"No Reply" <${config.get('MAIL_FROM')}>`,
         },
         template: {
-          dir: join(__dirname, '/templates'),
+          dir: 'dist/mail/templates',
           adapter: new EjsAdapter(),
           options: {
             strict: true,
