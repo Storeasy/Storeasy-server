@@ -40,6 +40,7 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static UPDATE_PAGE_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 페이지가 아닙니다");
   static DELETE_PAGE_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 페이지가 아닙니다");
   static READ_PAGE_SUCCESS = new ResponseStatus(HttpStatus.OK, "페이지 상세 조회 성공");
+  static READ_ALL_STORY_SUCCESS = new ResponseStatus(HttpStatus.OK, "스토리 조회 성공");
   
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

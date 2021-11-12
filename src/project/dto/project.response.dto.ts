@@ -1,0 +1,59 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { Project } from "src/entities/Project";
+import { TagResponseDto } from "src/tag/dto/tag.response.dto";
+
+export class ProjectResponseDto {
+  @ApiProperty({
+    example: 1,
+    description: "사용자 ID"
+  })
+  userId: number;
+
+  @ApiProperty({
+    example: 1,
+    description: "프로젝트 ID"
+  })
+  projectId: number;
+
+  @ApiProperty({
+    example: "red",
+    description: "프로젝트색 값"
+  })
+  projectColor: string;
+
+  @ApiProperty({
+    example: "테스트 프로젝트",
+    description: "프로젝트명"
+  })
+  title: string;
+
+  @ApiProperty({
+    example: "테스트 프로젝트입니다",
+    description: "프로젝트 설명"
+  })
+  description: string;
+
+  @ApiProperty({
+    example: "2021-11-01",
+    description: "프로젝트 시작 날짜"
+  })
+  startDate: string;
+
+  @ApiProperty({
+    example: "2021-11-10",
+    description: "프로젝트 종료 날짜"
+  })
+  endDate: string;
+
+  @ApiProperty({
+    example: [],
+    description: "프로젝트 태그"
+  })
+  tags: TagResponseDto[];
+
+  public static ofProject(project: Project) {
+    return {
+      
+    }
+  }
+}

@@ -25,6 +25,12 @@ export class PageResponseDto {
   projectTitle: string;
 
   @ApiProperty({
+    example: 1,
+    description: "페이지 ID"
+  })
+  pageId: number;
+
+  @ApiProperty({
     example: "테스트 페이지",
     description: "페이지명"
   })
@@ -56,15 +62,16 @@ export class PageResponseDto {
 
   @ApiProperty({
     example: ["imageUrl1", "imageUrl2", "imageUrl3"],
-    description: "사용자 ID"
+    description: "페이지 이미지 URL"
   })
   images: string[];
 
   public static ofPage(page: Page, images: PageImage[], tags: any[]) {
     return {
-      userId: page.userId,
-      projectId: page.project.id,
+      userId: +page.userId,
+      projectId: +page.project.id,
       projectTitle: page.project.title,
+      pageId: +page.id,
       title: page.title,
       content: page.content,
       startDate: page.startDate,
