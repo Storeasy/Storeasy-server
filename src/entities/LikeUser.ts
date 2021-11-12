@@ -8,30 +8,30 @@ import {
 } from "typeorm";
 import { User } from "./User";
 
-@Index("receiver", ["receiver"], {})
 @Index("sender", ["sender"], {})
-@Entity("like_user")
+@Index("receiver", ["receiver"], {})
+@Entity("like_user", { schema: "storeasy" })
 export class LikeUser {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("bigint", { name: "sender" })
-  sender: string;
+  sender: number;
 
   @Column("bigint", { name: "receiver" })
-  receiver: string;
+  receiver: number;
 
   @ManyToOne(() => User, (user) => user.likeUsers, {
     onDelete: "CASCADE",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "sender", referencedColumnName: "id" }])
-  senderUser: User;
+  sender2: User;
 
   @ManyToOne(() => User, (user) => user.likeUsers2, {
     onDelete: "CASCADE",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "receiver", referencedColumnName: "id" }])
-  receiverUser: User;
+  receiver2: User;
 }

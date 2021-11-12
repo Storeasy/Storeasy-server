@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany } from "typeorm";
 import { UserAgreement } from "./UserAgreement";
 
-@Entity("agreement")
+@Entity("agreement", { schema: "storeasy" })
 export class Agreement {
   @Column("int", { primary: true, name: "id" })
   id: number;

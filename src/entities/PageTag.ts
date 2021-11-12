@@ -1,15 +1,16 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Page } from "./Page";
 import { Tag } from "./Tag";
+import { UserTag } from "./UserTag";
 
 @Index("tag_id", ["tagId"], {})
-@Entity("page_tag")
+@Entity("page_tag", { schema: "storeasy" })
 export class PageTag {
   @Column("bigint", { primary: true, name: "page_id" })
-  pageId: string;
+  pageId: number;
 
   @Column("bigint", { primary: true, name: "tag_id" })
-  tagId: string;
+  tagId: number;
 
   @Column("int", { name: "order_num", nullable: true })
   orderNum: number | null;
@@ -27,4 +28,11 @@ export class PageTag {
   })
   @JoinColumn([{ name: "tag_id", referencedColumnName: "id" }])
   tag: Tag;
+
+  @ManyToOne(() => UserTag, (userTag) => userTag.pageTags, {
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "tag_id", referencedColumnName: "tagId" }])
+  userTag: UserTag;
 }

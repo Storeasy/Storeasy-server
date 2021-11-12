@@ -1,7 +1,5 @@
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -9,23 +7,20 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from "typeorm";
 import { LikePage } from "./LikePage";
 import { LikeUser } from "./LikeUser";
+import { Page } from "./Page";
 import { Profile } from "./Profile";
 import { ProfileTag } from "./ProfileTag";
+import { Project } from "./Project";
 import { University } from "./University";
 import { UserAgreement } from "./UserAgreement";
 import { UserTag } from "./UserTag";
-import { IsEmail } from 'class-validator';
-import { ApiProperty } from "@nestjs/swagger";
-import { Page } from "./Page";
-import { Project } from "./Project";
 
 @Index("email", ["email"], { unique: true })
 @Index("university_id", ["universityId"], {})
-@Entity("user")
+@Entity("user", { schema: "storeasy" })
 export class User {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: number;
@@ -45,31 +40,35 @@ export class User {
   @Column("year", { name: "admission_year" })
   admissionYear: number;
 
-  @Column("int", { name: "university_id" })
-  universityId: number;
-
-  @Column("varchar", { name: "university_name", length: 255})
+  @Column("varchar", { name: "university_name", length: 255 })
   universityName: string;
+
+  @Column("int", { name: "university_id", nullable: true })
+  universityId: number | null;
 
   @Column("varchar", { name: "department", length: 255 })
   department: string;
 
-  @CreateDateColumn()
+  @Column("datetime", {
+    name: "created_at",
+    nullable: true,
+    default: () => "CURRENT_TIMESTAMP",
+  })
   createdAt: Date | null;
 
-  @UpdateDateColumn()
+  @Column("datetime", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
-  @DeleteDateColumn()
+  @Column("datetime", { name: "deleted_at", nullable: true })
   deletedAt: Date | null;
 
-  @OneToMany(() => LikePage, (likePage) => likePage.senderUser)
+  @OneToMany(() => LikePage, (likePage) => likePage.sender2)
   likePages: LikePage[];
 
-  @OneToMany(() => LikeUser, (likeUser) => likeUser.senderUser)
+  @OneToMany(() => LikeUser, (likeUser) => likeUser.sender2)
   likeUsers: LikeUser[];
 
-  @OneToMany(() => LikeUser, (likeUser) => likeUser.receiverUser)
+  @OneToMany(() => LikeUser, (likeUser) => likeUser.receiver2)
   likeUsers2: LikeUser[];
 
   @OneToMany(() => Page, (page) => page.user)

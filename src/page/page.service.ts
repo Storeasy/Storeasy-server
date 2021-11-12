@@ -1,10 +1,12 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { create } from 'domain';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
 import { CreatePageRequestDto } from './dto/create-page.request.dto';
+import { PageResponseDto } from './dto/page.response.dto';
 import { UpdatePageRequestDto } from './dto/update-page.request.dto';
 
 @Injectable()
@@ -17,7 +19,10 @@ export class PageService {
   ) {}
 
   async createPageWithImage(userId: number, pageImages: string[], createPageRequestDto: CreatePageRequestDto) {
-    const page = this.pageRepository.create(createPageRequestDto);
+    console.log(createPageRequestDto);
+    const { tagIds, ...newDto } = createPageRequestDto;
+    console.log(newDto);
+    const page = this.pageRepository.create(newDto);
     page.userId = userId;
 
     await this.pageRepository.save(page);
@@ -32,27 +37,34 @@ export class PageService {
 
     const tagIdsStr = createPageRequestDto.tagIds.substring(1, createPageRequestDto.tagIds.length-1).split(',');
     const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
+    console.log(tagIdsNum);
     const tags = await this.tagRepository.findByIds(tagIdsNum);
+    console.log(tags);
     await Promise.all(
       tags.map((tag, i) => {
         this.pageTagRepository.save({
-          page: page,
-          tag: tag,
-          orderNum: i+1
+          pageId: page.id,
+          tagId: tag.id,
+          orderNum: i+1,
         });
       })
     );
   }
     
   async createPage(userId: number, createPageRequestDto: CreatePageRequestDto) {
-    const page = this.pageRepository.create(createPageRequestDto);
+    console.log(createPageRequestDto);
+    const { tagIds, ...newDto } = createPageRequestDto;
+    console.log(newDto);
+    const page = this.pageRepository.create(newDto);
     page.userId = userId;
 
     await this.pageRepository.save(page);
 
     const tagIdsStr = createPageRequestDto.tagIds.substring(1, createPageRequestDto.tagIds.length-1).split(',');
     const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
+    console.log(tagIdsNum);
     const tags = await this.tagRepository.findByIds(tagIdsNum);
+    console.log(tags);
     await Promise.all(
       tags.map((tag, i) => {
         this.pageTagRepository.save({
@@ -158,5 +170,13 @@ export class PageService {
     }
 
     await this.pageRepository.delete(page);
+  }
+
+  async getPage(pageId: number) {
+    const page = await this.pageRepository.findOneByPageId(pageId);
+    const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
+    const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
+    
+    return PageResponseDto.ofPage(page, pageImages, pageTags);
   }
 }

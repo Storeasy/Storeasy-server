@@ -9,25 +9,25 @@ import {
 import { User } from "./User";
 import { Page } from "./Page";
 
-@Index("page_id", ["pageId"], {})
 @Index("sender", ["sender"], {})
-@Entity("like_page")
+@Index("page_id", ["pageId"], {})
+@Entity("like_page", { schema: "storeasy" })
 export class LikePage {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("bigint", { name: "sender" })
-  sender: string;
+  sender: number;
 
   @Column("bigint", { name: "page_id" })
-  pageId: string;
+  pageId: number;
 
   @ManyToOne(() => User, (user) => user.likePages, {
     onDelete: "CASCADE",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "sender", referencedColumnName: "id" }])
-  senderUser: User;
+  sender2: User;
 
   @ManyToOne(() => Page, (page) => page.likePages, {
     onDelete: "CASCADE",

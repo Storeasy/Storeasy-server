@@ -9,13 +9,13 @@ import {
 import { Page } from "./Page";
 
 @Index("page_id", ["pageId"], {})
-@Entity("page_image")
+@Entity("page_image", { schema: "storeasy" })
 export class PageImage {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("bigint", { name: "page_id" })
-  pageId: string;
+  pageId: number;
 
   @Column("varchar", { name: "image_url", length: 255 })
   imageUrl: string;

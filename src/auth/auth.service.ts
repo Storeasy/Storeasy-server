@@ -67,7 +67,8 @@ export class AuthService {
     // 프로필 생성, 저장
     await this.profileRepository.save({
       userId: user.id,
-      nickname: user.name
+      nickname: user.name,
+      profileImage: 'https://storeasy.s3.ap-northeast-2.amazonaws.com/profileImages/profile_image.png',
     });
 
     // 유저 약관 동의 생성, 저장

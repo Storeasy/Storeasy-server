@@ -34,8 +34,11 @@ export class TagService {
 
   async createTagWithColor(userId: number, tagColorRequestDto: TagColorRequestDto): Promise<TagResponseDto> {
     const user = await this.userRepository.findOne(userId);
+    console.log(user);
     const tag = await this.tagRepository.findOneByName(tagColorRequestDto.name);
+    console.log(tag);
     const tagColor = await this.tagColorRepository.findOne(tagColorRequestDto.tagColorId);
+    console.log(tagColor);
     if (!tag) {
       await this.tagRepository.save({
         name: tagColorRequestDto.name,

@@ -28,14 +28,14 @@ export class CreatePageRequestDto {
     description: "페이지 종료 날짜"
   })
   @IsDateString()
-  endDate: string;
+  endDate?: string;
 
   @ApiProperty({
     example: "1",
     description: "프로젝트 ID"
   })
   @IsString()
-  projectId?: string;
+  projectId?: number;
 
   @ApiProperty({
     example: "[1, 2, 3]",

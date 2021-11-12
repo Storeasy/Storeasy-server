@@ -39,6 +39,7 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static PAGE_NOT_FOUND = new ResponseStatus(HttpStatus.NOT_FOUND, "해당 페이지를 찾을 수 없습니다");
   static UPDATE_PAGE_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 페이지가 아닙니다");
   static DELETE_PAGE_FAIL_FORBIDDEN = new ResponseStatus(HttpStatus.FORBIDDEN, "본인의 페이지가 아닙니다");
+  static READ_PAGE_SUCCESS = new ResponseStatus(HttpStatus.OK, "페이지 상세 조회 성공");
   
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

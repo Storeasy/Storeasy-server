@@ -1,21 +1,20 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from "typeorm";
 import { Page } from "./Page";
-import { ProjectColor } from "./ProjectColor";
 import { User } from "./User";
+import { ProjectColor } from "./ProjectColor";
+import { ProjectTag } from "./ProjectTag";
 
-@Index("project_color_id", ["projectColorId"], {})
 @Index("user_id", ["userId"], {})
-@Entity("project")
+@Index("project_color_id", ["projectColorId"], {})
+@Entity("project", { schema: "storeasy" })
 export class Project {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: number;
@@ -38,10 +37,14 @@ export class Project {
   @Column("int", { name: "project_color_id", nullable: true })
   projectColorId: number | null;
 
-  @CreateDateColumn()
+  @Column("datetime", {
+    name: "created_at",
+    nullable: true,
+    default: () => "CURRENT_TIMESTAMP",
+  })
   createdAt: Date | null;
 
-  @UpdateDateColumn()
+  @Column("datetime", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
   @OneToMany(() => Page, (page) => page.project)
@@ -55,9 +58,12 @@ export class Project {
   user: User;
 
   @ManyToOne(() => ProjectColor, (projectColor) => projectColor.projects, {
-    onDelete: "NO ACTION",
+    onDelete: "SET NULL",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "project_color_id", referencedColumnName: "id" }])
   projectColor: ProjectColor;
+
+  @OneToMany(() => ProjectTag, (projectTag) => projectTag.project)
+  projectTags: ProjectTag[];
 }

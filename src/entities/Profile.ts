@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { User } from "./User";
 
-@Entity("profile")
+@Entity("profile", { schema: "storeasy" })
 export class Profile {
   @Column("bigint", { primary: true, name: "user_id" })
   userId: number;

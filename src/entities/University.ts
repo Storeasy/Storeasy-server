@@ -2,7 +2,7 @@ import { Column, Entity, Index, OneToMany } from "typeorm";
 import { User } from "./User";
 
 @Index("name", ["name"], { unique: true })
-@Entity("university")
+@Entity("university", { schema: "storeasy" })
 export class University {
   @Column("int", { primary: true, name: "id" })
   id: number;

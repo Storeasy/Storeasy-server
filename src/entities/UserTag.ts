@@ -1,11 +1,20 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
+import { PageTag } from "./PageTag";
+import { ProjectTag } from "./ProjectTag";
 import { User } from "./User";
 import { Tag } from "./Tag";
 import { TagColor } from "./TagColor";
 
-@Index("tag_color_id", ["tagColorId"], {})
 @Index("tag_id", ["tagId"], {})
-@Entity("user_tag")
+@Index("tag_color_id", ["tagColorId"], {})
+@Entity("user_tag", { schema: "storeasy" })
 export class UserTag {
   @Column("bigint", { primary: true, name: "user_id" })
   userId: number;
@@ -18,6 +27,12 @@ export class UserTag {
 
   @Column("int", { name: "tag_color_id", nullable: true })
   tagColorId: number | null;
+
+  @OneToMany(() => PageTag, (pageTag) => pageTag.userTag)
+  pageTags: PageTag[];
+
+  @OneToMany(() => ProjectTag, (projectTag) => projectTag.userTag)
+  projectTags: ProjectTag[];
 
   @ManyToOne(() => User, (user) => user.userTags, {
     onDelete: "CASCADE",

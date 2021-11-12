@@ -1,5 +1,4 @@
 import { Profile } from "src/entities/Profile";
-import { ProfileTag } from "src/entities/ProfileTag";
 import { EntityRepository, Repository } from "typeorm";
 
 @EntityRepository(Profile)

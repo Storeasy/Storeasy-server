@@ -3,13 +3,13 @@ import { User } from "./User";
 import { Tag } from "./Tag";
 
 @Index("tag_id", ["tagId"], {})
-@Entity("profile_tag")
+@Entity("profile_tag", { schema: "storeasy" })
 export class ProfileTag {
   @Column("bigint", { primary: true, name: "user_id" })
-  userId: string;
+  userId: number;
 
   @Column("bigint", { primary: true, name: "tag_id" })
-  tagId: string;
+  tagId: number;
 
   @Column("int", { name: "order_num", nullable: true })
   orderNum: number | null;

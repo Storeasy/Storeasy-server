@@ -1,20 +1,24 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { User } from "./User";
 import { Agreement } from "./Agreement";
 
 @Index("agreement_id", ["agreementId"], {})
-@Entity("user_agreement")
+@Entity("user_agreement", { schema: "storeasy" })
 export class UserAgreement {
   @Column("bigint", { primary: true, name: "user_id" })
-  userId: string;
+  userId: number;
 
   @Column("int", { primary: true, name: "agreement_id" })
   agreementId: number;
 
-  @CreateDateColumn()
+  @Column("datetime", {
+    name: "created_at",
+    nullable: true,
+    default: () => "CURRENT_TIMESTAMP",
+  })
   createdAt: Date | null;
 
-  @UpdateDateColumn()
+  @Column("datetime", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.userAgreements, {

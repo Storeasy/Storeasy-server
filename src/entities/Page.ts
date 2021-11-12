@@ -1,23 +1,21 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from "typeorm";
 import { LikePage } from "./LikePage";
+import { User } from "./User";
 import { Project } from "./Project";
 import { PageImage } from "./PageImage";
-import { PageTag } from "./PageTag";import { User } from "./User";
-;
+import { PageTag } from "./PageTag";
 
-@Index("project_id", ["projectId"], {})
 @Index("user_id", ["userId"], {})
-@Entity("page")
+@Index("project_id", ["projectId"], {})
+@Entity("page", { schema: "storeasy" })
 export class Page {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: number;
@@ -38,12 +36,16 @@ export class Page {
   endDate: string;
 
   @Column("bigint", { name: "project_id", nullable: true })
-  projectId: string | null;
+  projectId: number | null;
 
-  @CreateDateColumn()
+  @Column("datetime", {
+    name: "created_at",
+    nullable: true,
+    default: () => "CURRENT_TIMESTAMP",
+  })
   createdAt: Date | null;
 
-  @UpdateDateColumn()
+  @Column("datetime", { name: "updated_at", nullable: true })
   updatedAt: Date | null;
 
   @OneToMany(() => LikePage, (likePage) => likePage.page)
