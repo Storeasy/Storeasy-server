@@ -28,7 +28,7 @@ import { Project } from "./Project";
 @Entity("user")
 export class User {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("varchar", { name: "email", unique: true, length: 255 })
   email: string;

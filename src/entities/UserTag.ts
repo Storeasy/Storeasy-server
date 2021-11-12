@@ -8,10 +8,10 @@ import { TagColor } from "./TagColor";
 @Entity("user_tag")
 export class UserTag {
   @Column("bigint", { primary: true, name: "user_id" })
-  userId: string;
+  userId: number;
 
   @Column("bigint", { primary: true, name: "tag_id" })
-  tagId: string;
+  tagId: number;
 
   @Column("int", { name: "order_num", nullable: true })
   orderNum: number | null;

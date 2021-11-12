@@ -19,7 +19,7 @@ export class ProjectService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async getProjectColors(): Promise<ProjectColorResponseDto[]> {
+  async getProjectColors() {
     return await this.projectColorRepository.find();
   }
 

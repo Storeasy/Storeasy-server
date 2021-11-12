@@ -4,7 +4,7 @@ import { User } from "./User";
 @Entity("profile")
 export class Profile {
   @Column("bigint", { primary: true, name: "user_id" })
-  userId: string;
+  userId: number;
 
   @Column("varchar", { name: "profile_image", nullable: true, length: 255 })
   profileImage: string | null;

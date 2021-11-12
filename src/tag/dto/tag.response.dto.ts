@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsString } from "class-validator";
 import { RecommendTag } from "src/entities/RecommendTag";
 import { Tag } from "src/entities/Tag";
+import { TagColor } from "src/entities/TagColor";
 
 export class TagResponseDto {
   @ApiProperty({
@@ -24,9 +25,17 @@ export class TagResponseDto {
 
   public static ofTag(tag: Tag): TagResponseDto {
     return {
-      id: +tag.id,
+      id: tag.id,
       tagName: tag.name,
       tagColor: "defalut"
+    }
+  }
+
+  public static ofTagColor(tag: Tag, tagColor: TagColor): TagResponseDto {
+    return {
+      id: tag.id,
+      tagName: tag.name,
+      tagColor: tagColor.value
     }
   }
 }
