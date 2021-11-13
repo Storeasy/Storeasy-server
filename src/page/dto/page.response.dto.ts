@@ -68,10 +68,25 @@ export class PageResponseDto {
 
   public static ofPage(page: Page, images: PageImage[], tags: any[]) {
     return {
-      userId: +page.userId,
-      projectId: +page.project.id,
+      userId: page.userId,
+      projectId: page.project.id,
       projectTitle: page.project.title,
-      pageId: +page.id,
+      pageId: page.id,
+      title: page.title,
+      content: page.content,
+      startDate: page.startDate,
+      endDate: page.endDate,
+      images: images.map((image) => image.imageUrl),
+      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
+    }
+  }
+
+  public static ofSinglePage(page: Page, images: PageImage[], tags: any[]) {
+    return {
+      userId: page.userId,
+      projectId: null,
+      projectTitle: null,
+      pageId: page.id,
       title: page.title,
       content: page.content,
       startDate: page.startDate,

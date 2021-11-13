@@ -33,6 +33,7 @@ export class UserController {
   @ApiOkResponse()
   @Get('story')
   async getMyStory(@Req() req) {
+    console.log(req.user);
     const data = await this.userService.getStory(req.user.userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STORY_SUCCESS, data);
   }

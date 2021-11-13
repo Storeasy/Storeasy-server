@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Project } from "src/entities/Project";
+import { ProjectTag } from "src/entities/ProjectTag";
+import { Tag } from "src/entities/Tag";
 import { TagResponseDto } from "src/tag/dto/tag.response.dto";
 
 export class ProjectResponseDto {
@@ -51,9 +53,16 @@ export class ProjectResponseDto {
   })
   tags: TagResponseDto[];
 
-  public static ofProject(project: Project) {
+  public static ofProject(project: Project, tags: any[]) {
     return {
-      
+      userId: +project.userId,
+      projectId: +project.id,
+      projectColor: project.projectColor.value,
+      title: project.title,
+      description: project.description,
+      startDate: project.startDate,
+      endDate: project.endDate,
+      tags: tags.map((tag) => TagResponseDto.ofProjectTag(tag)),
     }
   }
 }

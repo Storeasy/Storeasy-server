@@ -34,13 +34,11 @@ export class CreatePageRequestDto {
     example: "1",
     description: "프로젝트 ID"
   })
-  @IsString()
   projectId?: number;
 
   @ApiProperty({
     example: "[1, 2, 3]",
     description: "태그 ID"
   })
-  @IsString()
-  tagIds: string;
+  tagIds?: string;
 }
