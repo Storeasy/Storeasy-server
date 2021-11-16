@@ -12,15 +12,15 @@ import { User } from "./User";
 import { Tag } from "./Tag";
 import { TagColor } from "./TagColor";
 
-@Index("tag_id", ["tagId"], {})
 @Index("tag_color_id", ["tagColorId"], {})
+@Index("tag_id", ["tagId"], {})
 @Entity("user_tag", { schema: "storeasy" })
 export class UserTag {
   @Column("bigint", { primary: true, name: "user_id" })
-  userId: number;
+  userId: string;
 
   @Column("bigint", { primary: true, name: "tag_id" })
-  tagId: number;
+  tagId: string;
 
   @Column("int", { name: "order_num", nullable: true })
   orderNum: number | null;

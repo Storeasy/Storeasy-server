@@ -1,5 +1,7 @@
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -7,15 +9,22 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
+import { CoverletterAnswer } from "./CoverletterAnswer";
+import { CoverletterQuestion } from "./CoverletterQuestion";
 import { LikePage } from "./LikePage";
 import { LikeUser } from "./LikeUser";
+import { Message } from "./Message";
+import { MessageRoom } from "./MessageRoom";
+import { Notification } from "./Notification";
 import { Page } from "./Page";
+import { Payment } from "./Payment";
 import { Profile } from "./Profile";
 import { ProfileTag } from "./ProfileTag";
 import { Project } from "./Project";
-import { University } from "./University";
 import { UserAgreement } from "./UserAgreement";
+import { University } from "./University";
 import { UserTag } from "./UserTag";
 
 @Index("email", ["email"], { unique: true })
@@ -49,18 +58,36 @@ export class User {
   @Column("varchar", { name: "department", length: 255 })
   department: string;
 
-  @Column("datetime", {
-    name: "created_at",
-    nullable: true,
-    default: () => "CURRENT_TIMESTAMP",
+  @Column("tinyint", { name: "is_public", width: 1, default: () => "'1'" })
+  isPublic: boolean;
+
+  @Column("tinyint", {
+    name: "message_acceptable",
+    width: 1,
+    default: () => "'1'",
   })
+  messageAcceptable: boolean;
+
+  @CreateDateColumn()
   createdAt: Date | null;
 
-  @Column("datetime", { name: "updated_at", nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date | null;
 
-  @Column("datetime", { name: "deleted_at", nullable: true })
+  @DeleteDateColumn()
   deletedAt: Date | null;
+
+  @OneToMany(
+    () => CoverletterAnswer,
+    (coverletterAnswer) => coverletterAnswer.user
+  )
+  coverletterAnswers: CoverletterAnswer[];
+
+  @OneToMany(
+    () => CoverletterQuestion,
+    (coverletterQuestion) => coverletterQuestion.user
+  )
+  coverletterQuestions: CoverletterQuestion[];
 
   @OneToMany(() => LikePage, (likePage) => likePage.sender2)
   likePages: LikePage[];
@@ -71,8 +98,23 @@ export class User {
   @OneToMany(() => LikeUser, (likeUser) => likeUser.receiver2)
   likeUsers2: LikeUser[];
 
+  @OneToMany(() => Message, (message) => message.user)
+  messages: Message[];
+
+  @OneToMany(() => MessageRoom, (messageRoom) => messageRoom.sender2)
+  messageRooms: MessageRoom[];
+
+  @OneToMany(() => MessageRoom, (messageRoom) => messageRoom.receiver2)
+  messageRooms2: MessageRoom[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
+
   @OneToMany(() => Page, (page) => page.user)
   pages: Page[];
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
 
   @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
@@ -83,15 +125,15 @@ export class User {
   @OneToMany(() => Project, (project) => project.user)
   projects: Project[];
 
+  @OneToMany(() => UserAgreement, (userAgreement) => userAgreement.user)
+  userAgreements: UserAgreement[];
+
   @ManyToOne(() => University, (university) => university.users, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "university_id", referencedColumnName: "id" }])
   university: University;
-
-  @OneToMany(() => UserAgreement, (userAgreement) => userAgreement.user)
-  userAgreements: UserAgreement[];
 
   @OneToMany(() => UserTag, (userTag) => userTag.user)
   userTags: UserTag[];

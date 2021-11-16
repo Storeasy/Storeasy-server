@@ -7,7 +7,7 @@ export class TagColor {
   @Column("int", { primary: true, name: "id" })
   id: number;
 
-  @Column("char", { name: "value", unique: true, length: 7 })
+  @Column("varchar", { name: "value", unique: true, length: 30 })
   value: string;
 
   @OneToMany(() => UserTag, (userTag) => userTag.tagColor)

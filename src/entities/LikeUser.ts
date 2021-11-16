@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -8,8 +9,8 @@ import {
 } from "typeorm";
 import { User } from "./User";
 
-@Index("sender", ["sender"], {})
 @Index("receiver", ["receiver"], {})
+@Index("sender", ["sender"], {})
 @Entity("like_user", { schema: "storeasy" })
 export class LikeUser {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
@@ -20,6 +21,9 @@ export class LikeUser {
 
   @Column("bigint", { name: "receiver" })
   receiver: number;
+
+  @CreateDateColumn()
+  createdAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.likeUsers, {
     onDelete: "CASCADE",

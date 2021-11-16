@@ -12,6 +12,12 @@ export class Profile {
   @Column("varchar", { name: "nickname", nullable: true, length: 20 })
   nickname: string | null;
 
+  @Column("varchar", { name: "university_name", length: 255 })
+  universityName: string;
+
+  @Column("varchar", { name: "department", length: 255 })
+  department: string;
+
   @Column("varchar", { name: "contact", nullable: true, length: 255 })
   contact: string | null;
 

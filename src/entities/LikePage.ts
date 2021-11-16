@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -9,8 +10,8 @@ import {
 import { User } from "./User";
 import { Page } from "./Page";
 
-@Index("sender", ["sender"], {})
 @Index("page_id", ["pageId"], {})
+@Index("sender", ["sender"], {})
 @Entity("like_page", { schema: "storeasy" })
 export class LikePage {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
@@ -21,6 +22,9 @@ export class LikePage {
 
   @Column("bigint", { name: "page_id" })
   pageId: number;
+
+  @CreateDateColumn()
+  createdAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.likePages, {
     onDelete: "CASCADE",

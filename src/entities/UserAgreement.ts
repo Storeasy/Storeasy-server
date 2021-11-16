@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
 import { User } from "./User";
 import { Agreement } from "./Agreement";
 
@@ -6,19 +6,15 @@ import { Agreement } from "./Agreement";
 @Entity("user_agreement", { schema: "storeasy" })
 export class UserAgreement {
   @Column("bigint", { primary: true, name: "user_id" })
-  userId: number;
+  userId: string;
 
   @Column("int", { primary: true, name: "agreement_id" })
   agreementId: number;
 
-  @Column("datetime", {
-    name: "created_at",
-    nullable: true,
-    default: () => "CURRENT_TIMESTAMP",
-  })
+  @CreateDateColumn()
   createdAt: Date | null;
 
-  @Column("datetime", { name: "updated_at", nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.userAgreements, {

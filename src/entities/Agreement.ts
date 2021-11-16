@@ -6,6 +6,9 @@ export class Agreement {
   @Column("int", { primary: true, name: "id" })
   id: number;
 
+  @Column("varchar", { name: "title", length: 255 })
+  title: string;
+
   @Column("varchar", { name: "content", length: 255 })
   content: string;
 

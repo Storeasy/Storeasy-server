@@ -1,19 +1,21 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Page } from "./Page";
 import { User } from "./User";
 import { ProjectColor } from "./ProjectColor";
 import { ProjectTag } from "./ProjectTag";
 
-@Index("user_id", ["userId"], {})
 @Index("project_color_id", ["projectColorId"], {})
+@Index("user_id", ["userId"], {})
 @Entity("project", { schema: "storeasy" })
 export class Project {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
@@ -34,17 +36,16 @@ export class Project {
   @Column("date", { name: "end_date" })
   endDate: string;
 
+  @Column("tinyint", { name: "is_public", width: 1, default: () => "'1'" })
+  isPublic: boolean;
+
   @Column("int", { name: "project_color_id", nullable: true })
   projectColorId: number | null;
 
-  @Column("datetime", {
-    name: "created_at",
-    nullable: true,
-    default: () => "CURRENT_TIMESTAMP",
-  })
+  @CreateDateColumn()
   createdAt: Date | null;
 
-  @Column("datetime", { name: "updated_at", nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date | null;
 
   @OneToMany(() => Page, (page) => page.project)
