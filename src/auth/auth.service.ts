@@ -75,6 +75,8 @@ export class AuthService {
       nickname: user.name,
       profileImage:
         'https://storeasy.s3.ap-northeast-2.amazonaws.com/profileImages/profile_image.png',
+      universityName: signupRequestDto.universityName,
+      department: signupRequestDto.department,
     });
 
     // 유저 약관 동의 생성, 저장
