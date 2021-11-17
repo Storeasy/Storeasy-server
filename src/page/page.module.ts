@@ -15,9 +15,9 @@ import { PageService } from './page.service';
       PageImageRepository,
       PageTagRepository,
       TagRepository,
-    ])
+    ]),
   ],
   controllers: [PageController],
-  providers: [PageService, S3Service]
+  providers: [PageService, S3Service],
 })
 export class PageModule {}

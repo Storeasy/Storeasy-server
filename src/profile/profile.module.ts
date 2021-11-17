@@ -1,5 +1,4 @@
-import { Inject, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Profile } from 'src/entities/Profile';
 import { RecommendTag } from 'src/entities/RecommendTag';
@@ -28,6 +27,6 @@ import { ProfileService } from './profile.service';
   ],
   providers: [ProfileService, S3Service],
   controllers: [ProfileController],
-  exports: [ProfileService]
+  exports: [ProfileService],
 })
 export class ProfileModule {}

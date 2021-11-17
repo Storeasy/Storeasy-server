@@ -5,20 +5,19 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { PageTag } from "./PageTag";
-import { ProfileTag } from "./ProfileTag";
-import { ProjectTag } from "./ProjectTag";
-import { RecommendTag } from "./RecommendTag";
-import { UserTag } from "./UserTag";
+} from 'typeorm';
+import { PageTag } from './PageTag';
+import { ProfileTag } from './ProfileTag';
+import { ProjectTag } from './ProjectTag';
+import { RecommendTag } from './RecommendTag';
+import { UserTag } from './UserTag';
 
-@Index("name", ["name"], { unique: true })
-@Entity("tag", { schema: "storeasy" })
+@Entity('tag')
 export class Tag {
-  @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
-  @Column("varchar", { name: "name", unique: true, length: 20 })
+  @Column('varchar', { name: 'name', unique: true, length: 20 })
   name: string;
 
   @OneToMany(() => PageTag, (pageTag) => pageTag.tag)

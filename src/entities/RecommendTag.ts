@@ -1,15 +1,15 @@
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
-import { Tag } from "./Tag";
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Tag } from './Tag';
 
-@Entity("recommend_tag", { schema: "storeasy" })
+@Entity('recommend_tag')
 export class RecommendTag {
-  @Column("bigint", { primary: true, name: "tag_id" })
+  @Column('bigint', { primary: true, name: 'tag_id' })
   tagId: number;
 
   @OneToOne(() => Tag, (tag) => tag.recommendTag, {
-    onDelete: "CASCADE",
-    onUpdate: "NO ACTION",
+    onDelete: 'CASCADE',
+    onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: "tag_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: 'tag_id', referencedColumnName: 'id' }])
   tag: Tag;
 }

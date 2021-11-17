@@ -10,59 +10,57 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
-import { CoverletterAnswer } from "./CoverletterAnswer";
-import { CoverletterQuestion } from "./CoverletterQuestion";
-import { LikePage } from "./LikePage";
-import { LikeUser } from "./LikeUser";
-import { Message } from "./Message";
-import { MessageRoom } from "./MessageRoom";
-import { Notification } from "./Notification";
-import { Page } from "./Page";
-import { Payment } from "./Payment";
-import { Profile } from "./Profile";
-import { ProfileTag } from "./ProfileTag";
-import { Project } from "./Project";
-import { UserAgreement } from "./UserAgreement";
-import { University } from "./University";
-import { UserTag } from "./UserTag";
+} from 'typeorm';
+import { CoverletterAnswer } from './CoverletterAnswer';
+import { CoverletterQuestion } from './CoverletterQuestion';
+import { LikePage } from './LikePage';
+import { LikeUser } from './LikeUser';
+import { Message } from './Message';
+import { MessageRoom } from './MessageRoom';
+import { Notification } from './Notification';
+import { Page } from './Page';
+import { Payment } from './Payment';
+import { Profile } from './Profile';
+import { ProfileTag } from './ProfileTag';
+import { Project } from './Project';
+import { UserAgreement } from './UserAgreement';
+import { University } from './University';
+import { UserTag } from './UserTag';
 
-@Index("email", ["email"], { unique: true })
-@Index("university_id", ["universityId"], {})
-@Entity("user", { schema: "storeasy" })
+@Entity('user')
 export class User {
-  @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
-  @Column("varchar", { name: "email", unique: true, length: 255 })
+  @Column('varchar', { name: 'email', unique: true, length: 255 })
   email: string;
 
-  @Column("varchar", { name: "password", length: 255 })
+  @Column('varchar', { name: 'password', length: 255 })
   password: string;
 
-  @Column("varchar", { name: "name", length: 20 })
+  @Column('varchar', { name: 'name', length: 20 })
   name: string;
 
-  @Column("date", { name: "birth_date" })
+  @Column('date', { name: 'birth_date' })
   birthDate: string;
 
-  @Column("year", { name: "admission_year" })
+  @Column('year', { name: 'admission_year' })
   admissionYear: number;
 
-  @Column("varchar", { name: "university_name", length: 255 })
+  @Column('varchar', { name: 'university_name', length: 255 })
   universityName: string;
 
-  @Column("int", { name: "university_id", nullable: true })
+  @Column('int', { name: 'university_id', nullable: true })
   universityId: number | null;
 
-  @Column("varchar", { name: "department", length: 255 })
+  @Column('varchar', { name: 'department', length: 255 })
   department: string;
 
-  @Column("tinyint", { name: "is_public", width: 1, default: () => "'1'" })
+  @Column('tinyint', { name: 'is_public', width: 1, default: () => "'1'" })
   isPublic: boolean;
 
-  @Column("tinyint", {
-    name: "message_acceptable",
+  @Column('tinyint', {
+    name: 'message_acceptable',
     width: 1,
     default: () => "'1'",
   })
@@ -79,13 +77,13 @@ export class User {
 
   @OneToMany(
     () => CoverletterAnswer,
-    (coverletterAnswer) => coverletterAnswer.user
+    (coverletterAnswer) => coverletterAnswer.user,
   )
   coverletterAnswers: CoverletterAnswer[];
 
   @OneToMany(
     () => CoverletterQuestion,
-    (coverletterQuestion) => coverletterQuestion.user
+    (coverletterQuestion) => coverletterQuestion.user,
   )
   coverletterQuestions: CoverletterQuestion[];
 
@@ -129,10 +127,10 @@ export class User {
   userAgreements: UserAgreement[];
 
   @ManyToOne(() => University, (university) => university.users, {
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: "university_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: 'university_id', referencedColumnName: 'id' }])
   university: University;
 
   @OneToMany(() => UserTag, (userTag) => userTag.user)

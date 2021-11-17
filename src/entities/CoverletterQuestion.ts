@@ -8,20 +8,19 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
-import { CoverletterAnswer } from "./CoverletterAnswer";
-import { User } from "./User";
+} from 'typeorm';
+import { CoverletterAnswer } from './CoverletterAnswer';
+import { User } from './User';
 
-@Index("user_id", ["userId"], {})
-@Entity("coverletter_question", { schema: "storeasy" })
+@Entity('coverletter_question')
 export class CoverletterQuestion {
-  @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
-  @Column("bigint", { name: "user_id" })
+  @Column('bigint', { name: 'user_id' })
   userId: number;
 
-  @Column("varchar", { name: "content", length: 255 })
+  @Column('varchar', { name: 'content', length: 255 })
   content: string;
 
   @CreateDateColumn()
@@ -32,14 +31,14 @@ export class CoverletterQuestion {
 
   @OneToMany(
     () => CoverletterAnswer,
-    (coverletterAnswer) => coverletterAnswer.question
+    (coverletterAnswer) => coverletterAnswer.coverletterQuestion,
   )
   coverletterAnswers: CoverletterAnswer[];
 
   @ManyToOne(() => User, (user) => user.coverletterQuestions, {
-    onDelete: "CASCADE",
-    onUpdate: "NO ACTION",
+    onDelete: 'CASCADE',
+    onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 }

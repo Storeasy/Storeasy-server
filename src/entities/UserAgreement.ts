@@ -1,14 +1,21 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
-import { User } from "./User";
-import { Agreement } from "./Agreement";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  UpdateDateColumn,
+} from 'typeorm';
+import { User } from './User';
+import { Agreement } from './Agreement';
 
-@Index("agreement_id", ["agreementId"], {})
-@Entity("user_agreement", { schema: "storeasy" })
+@Entity('user_agreement')
 export class UserAgreement {
-  @Column("bigint", { primary: true, name: "user_id" })
+  @Column('bigint', { primary: true, name: 'user_id' })
   userId: string;
 
-  @Column("int", { primary: true, name: "agreement_id" })
+  @Column('int', { primary: true, name: 'agreement_id' })
   agreementId: number;
 
   @CreateDateColumn()
@@ -18,16 +25,16 @@ export class UserAgreement {
   updatedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.userAgreements, {
-    onDelete: "CASCADE",
-    onUpdate: "NO ACTION",
+    onDelete: 'CASCADE',
+    onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 
   @ManyToOne(() => Agreement, (agreement) => agreement.userAgreements, {
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: "agreement_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: 'agreement_id', referencedColumnName: 'id' }])
   agreement: Agreement;
 }

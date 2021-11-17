@@ -1,5 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { create } from 'domain';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
@@ -18,7 +21,11 @@ export class PageService {
     private readonly tagRepository: TagRepository,
   ) {}
 
-  async createPageWithImage(userId: number, pageImages: string[], createPageRequestDto: CreatePageRequestDto) {
+  async createPageWithImage(
+    userId: number,
+    pageImages: string[],
+    createPageRequestDto: CreatePageRequestDto,
+  ) {
     console.log(createPageRequestDto);
     const { tagIds, ...newDto } = createPageRequestDto;
     console.log(newDto);
@@ -31,11 +38,13 @@ export class PageService {
       this.pageImageRepository.save({
         page: page,
         imageUrl: pageImage,
-        orderNum: i+1
-      })
-    })
+        orderNum: i + 1,
+      });
+    });
 
-    const tagIdsStr = createPageRequestDto.tagIds.substring(1, createPageRequestDto.tagIds.length-1).split(',');
+    const tagIdsStr = createPageRequestDto.tagIds
+      .substring(1, createPageRequestDto.tagIds.length - 1)
+      .split(',');
     const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
     console.log(tagIdsNum);
     const tags = await this.tagRepository.findByIds(tagIdsNum);
@@ -45,12 +54,12 @@ export class PageService {
         this.pageTagRepository.save({
           pageId: page.id,
           tagId: tag.id,
-          orderNum: i+1,
+          orderNum: i + 1,
         });
-      })
+      }),
     );
   }
-    
+
   async createPage(userId: number, createPageRequestDto: CreatePageRequestDto) {
     console.log(createPageRequestDto);
     const { tagIds, ...newDto } = createPageRequestDto;
@@ -60,7 +69,9 @@ export class PageService {
 
     await this.pageRepository.save(page);
 
-    const tagIdsStr = createPageRequestDto.tagIds.substring(1, createPageRequestDto.tagIds.length-1).split(',');
+    const tagIdsStr = createPageRequestDto.tagIds
+      .substring(1, createPageRequestDto.tagIds.length - 1)
+      .split(',');
     const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
     console.log(tagIdsNum);
     const tags = await this.tagRepository.findByIds(tagIdsNum);
@@ -70,13 +81,18 @@ export class PageService {
         this.pageTagRepository.save({
           page: page,
           tag: tag,
-          orderNum: i+1
+          orderNum: i + 1,
         });
-      })
+      }),
     );
   }
 
-  async updatePageWithImage(userId: number, pageId: number, pageImages: string[], updatePageRequestDto: UpdatePageRequestDto) {
+  async updatePageWithImage(
+    userId: number,
+    pageId: number,
+    pageImages: string[],
+    updatePageRequestDto: UpdatePageRequestDto,
+  ) {
     const page = await this.pageRepository.findOne(pageId);
 
     if (!page) {
@@ -92,12 +108,14 @@ export class PageService {
         this.pageImageRepository.save({
           page: page,
           imageUrl: pageImage,
-          orderNum: i+1
-        })
-      })
-  
+          orderNum: i + 1,
+        });
+      });
+
       await this.pageTagRepository.deleteAllByPageId(pageId);
-      const tagIdsStr = updatePageRequestDto.tagIds.substring(1, updatePageRequestDto.tagIds.length-1).split(',');
+      const tagIdsStr = updatePageRequestDto.tagIds
+        .substring(1, updatePageRequestDto.tagIds.length - 1)
+        .split(',');
       const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
       const tags = await this.tagRepository.findByIds(tagIdsNum);
       await Promise.all(
@@ -105,12 +123,12 @@ export class PageService {
           this.pageTagRepository.save({
             page: page,
             tag: tag,
-            orderNum: i+1
+            orderNum: i + 1,
           });
-        })
+        }),
       );
 
-      const {tagIds, ...newDto} = updatePageRequestDto;
+      const { tagIds, ...newDto } = updatePageRequestDto;
       await this.pageRepository.update(page, newDto);
     } else {
       await this.pageImageRepository.deleteAllByPageId(pageId);
@@ -118,16 +136,20 @@ export class PageService {
         this.pageImageRepository.save({
           page: page,
           imageUrl: pageImage,
-          orderNum: i+1
-        })
-      })
+          orderNum: i + 1,
+        });
+      });
 
-      const {tagIds, ...newDto} = updatePageRequestDto;
+      const { tagIds, ...newDto } = updatePageRequestDto;
       await this.pageRepository.update(page, newDto);
     }
   }
 
-  async updatePage(userId: number, pageId: number, updatePageRequestDto: UpdatePageRequestDto) {
+  async updatePage(
+    userId: number,
+    pageId: number,
+    updatePageRequestDto: UpdatePageRequestDto,
+  ) {
     const page = await this.pageRepository.findOne(pageId);
 
     if (!page) {
@@ -139,7 +161,9 @@ export class PageService {
 
     if (updatePageRequestDto.tagIds) {
       await this.pageTagRepository.deleteAllByPageId(pageId);
-      const tagIdsStr = updatePageRequestDto.tagIds.substring(1, updatePageRequestDto.tagIds.length-1).split(',');
+      const tagIdsStr = updatePageRequestDto.tagIds
+        .substring(1, updatePageRequestDto.tagIds.length - 1)
+        .split(',');
       const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
       const tags = await this.tagRepository.findByIds(tagIdsNum);
       await Promise.all(
@@ -147,15 +171,15 @@ export class PageService {
           this.pageTagRepository.save({
             page: page,
             tag: tag,
-            orderNum: i+1
+            orderNum: i + 1,
           });
-        })
+        }),
       );
 
-      const {tagIds, ...newDto} = updatePageRequestDto;
+      const { tagIds, ...newDto } = updatePageRequestDto;
       await this.pageRepository.update(page, newDto);
     } else {
-      const {tagIds, ...newDto} = updatePageRequestDto;
+      const { tagIds, ...newDto } = updatePageRequestDto;
       await this.pageRepository.update(page, newDto);
     }
   }
@@ -176,7 +200,7 @@ export class PageService {
     const page = await this.pageRepository.findOneByPageId(pageId);
     const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
     const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
-    
+
     return PageResponseDto.ofPage(page, pageImages, pageTags);
   }
 }

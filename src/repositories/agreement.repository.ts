@@ -1,5 +1,5 @@
-import { Agreement } from "src/entities/Agreement";
-import { EntityRepository, Repository } from "typeorm";
+import { Agreement } from 'src/entities/Agreement';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Agreement)
 export class AgreementRepository extends Repository<Agreement> {
@@ -11,7 +11,7 @@ export class AgreementRepository extends Repository<Agreement> {
     return await this.findOne({
       where: {
         id: agreementId,
-      }
+      },
     });
   }
 }

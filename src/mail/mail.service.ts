@@ -6,7 +6,7 @@ import { AuthRepository } from 'src/repositories/auth.repository';
 export class MailService {
   constructor(
     private readonly authRepository: AuthRepository,
-    private readonly mailerService: MailerService
+    private readonly mailerService: MailerService,
   ) {}
 
   async sendAuthMail(to: string) {
@@ -20,7 +20,7 @@ export class MailService {
       },
     });
 
-    const dd = await this.authRepository.save({
+    await this.authRepository.save({
       email: to,
       code: code,
       attemptCount: 0,
@@ -28,8 +28,8 @@ export class MailService {
   }
 
   createCode(): string {
-    let code: string = '';
-    for (let i=0; i<6; i++) {
+    let code = '';
+    for (let i = 0; i < 6; i++) {
       const num = Math.floor(Math.random() * 10).toString();
       code += num;
     }

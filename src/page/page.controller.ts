@@ -1,5 +1,22 @@
-import { BadRequestException, Body, ConsoleLogger, Controller, Delete, Get, Param, Post, Req, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  BadRequestException,
+  Body,
+  ConsoleLogger,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PageService } from './page.service';
 import * as AWS from 'aws-sdk';
 import * as dotenv from 'dotenv';
@@ -23,56 +40,88 @@ export class PageController {
     private readonly pageService: PageService,
   ) {}
 
-  @ApiOperation({ summary: "페이지 생성" })
+  @ApiOperation({ summary: '페이지 생성' })
   @ApiCreatedResponse()
-  @UseInterceptors(FilesInterceptor('pageImages', 5, {
-    fileFilter: imageFileFilter
-  }))
+  @UseInterceptors(
+    FilesInterceptor('pageImages', 5, {
+      fileFilter: imageFileFilter,
+    }),
+  )
   @Post()
-  async createPage(@Req() req, @UploadedFiles() pageImages: Express.Multer.File[], @Body() createPageRequestDto: CreatePageRequestDto) {
-    if(req.fileValidationError) {
+  async createPage(
+    @Req() req,
+    @UploadedFiles() pageImages: Express.Multer.File[],
+    @Body() createPageRequestDto: CreatePageRequestDto,
+  ) {
+    if (req.fileValidationError) {
       throw new BadRequestException(ResponseStatus.INVALID_FILE_ERROR);
     }
-    if(pageImages) {
-      const pageImagesFiles = await this.s3Service.uploadPageImages(req.user.userId, pageImages);
+    if (pageImages) {
+      const pageImagesFiles = await this.s3Service.uploadPageImages(
+        req.user.userId,
+        pageImages,
+      );
       const pageImagesUrls = await Promise.all(
         pageImagesFiles.map((file) => {
-        return file.then((f) => f.Location);
-        })
+          return file.then((f) => f.Location);
+        }),
       );
-      await this.pageService.createPageWithImage(req.user.userId, pageImagesUrls, createPageRequestDto);
+      await this.pageService.createPageWithImage(
+        req.user.userId,
+        pageImagesUrls,
+        createPageRequestDto,
+      );
     } else {
       await this.pageService.createPage(req.user.userId, createPageRequestDto);
     }
     return ResponseEntity.OK(ResponseStatus.CREATE_PAGE_SUCCESS);
   }
 
-  @ApiOperation({ summary: "페이지 수정" })
+  @ApiOperation({ summary: '페이지 수정' })
   @ApiCreatedResponse()
-  @UseInterceptors(FilesInterceptor('pageImages', 5, {
-    fileFilter: imageFileFilter
-  }))
+  @UseInterceptors(
+    FilesInterceptor('pageImages', 5, {
+      fileFilter: imageFileFilter,
+    }),
+  )
   @Post(':pageId')
-  async updatePage(@Req() req, @Param('pageId') pageId: number, @UploadedFiles() pageImages: Express.Multer.File[], @Body() updatePageRequestDto: UpdatePageRequestDto) {
-    if(req.fileValidationError) {
+  async updatePage(
+    @Req() req,
+    @Param('pageId') pageId: number,
+    @UploadedFiles() pageImages: Express.Multer.File[],
+    @Body() updatePageRequestDto: UpdatePageRequestDto,
+  ) {
+    if (req.fileValidationError) {
       throw new BadRequestException(ResponseStatus.INVALID_FILE_ERROR);
     }
-    if(pageImages) {
-      const pageImagesFiles = await this.s3Service.uploadPageImages(req.user.userId, pageImages);
+    if (pageImages) {
+      const pageImagesFiles = await this.s3Service.uploadPageImages(
+        req.user.userId,
+        pageImages,
+      );
       const pageImagesUrls = await Promise.all(
         pageImagesFiles.map((file) => {
-        return file.then((f) => f.Location);
-        })
+          return file.then((f) => f.Location);
+        }),
       );
-      await this.pageService.updatePageWithImage(req.user.userId, pageId, pageImagesUrls, updatePageRequestDto);
+      await this.pageService.updatePageWithImage(
+        req.user.userId,
+        pageId,
+        pageImagesUrls,
+        updatePageRequestDto,
+      );
     } else {
       console.log('withoutImage');
-      await this.pageService.updatePage(req.user.userId, pageId, updatePageRequestDto);
+      await this.pageService.updatePage(
+        req.user.userId,
+        pageId,
+        updatePageRequestDto,
+      );
     }
     return ResponseEntity.OK(ResponseStatus.UPDATE_PAGE_SUCCESS);
   }
 
-  @ApiOperation({ summary: "페이지 삭제" })
+  @ApiOperation({ summary: '페이지 삭제' })
   @ApiOkResponse()
   @Delete(':pageId')
   async deletePage(@Req() req, @Param('pageId') pageId: number) {
@@ -80,7 +129,7 @@ export class PageController {
     return ResponseEntity.OK(ResponseStatus.DELETE_PAGE_SUCCESS);
   }
 
-  @ApiOperation({ summary: "페이지 상세 조회" })
+  @ApiOperation({ summary: '페이지 상세 조회' })
   @ApiOkResponse({ type: PageResponseDto })
   @Get(':pageId')
   async getPage(@Param('pageId') pageId: number) {

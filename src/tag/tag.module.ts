@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Tag } from 'src/entities/Tag';
-import { TagColor } from 'src/entities/TagColor';
 import { TagColorRepository } from 'src/repositories/tag-color.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
 import { UserTagRepository } from 'src/repositories/user-tag.repository';
@@ -15,10 +13,10 @@ import { TagService } from './tag.service';
       TagRepository,
       TagColorRepository,
       UserRepository,
-      UserTagRepository
-    ])
+      UserTagRepository,
+    ]),
   ],
   controllers: [TagController],
-  providers: [TagService]
+  providers: [TagService],
 })
 export class TagModule {}

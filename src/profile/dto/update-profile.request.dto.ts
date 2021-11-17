@@ -1,5 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
-
 export class UpdateProfileRequestDto {
   profileImage?: string;
   readonly nickname?: string;

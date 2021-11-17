@@ -7,29 +7,13 @@ import { jwtConstants } from './strategy/constants';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/entities/User';
-import { Auth } from 'src/entities/Auth';
-import { LikePage } from 'src/entities/LikePage';
-import { Page } from 'src/entities/Page';
-import { Agreement } from 'src/entities/Agreement';
-import { LikeUser } from 'src/entities/LikeUser';
-import { PageImage } from 'src/entities/PageImage';
-import { PageTag } from 'src/entities/PageTag';
-import { Profile } from 'src/entities/Profile';
-import { ProfileTag } from 'src/entities/ProfileTag';
-import { Project } from 'src/entities/Project';
-import { ProjectColor } from 'src/entities/ProjectColor';
-import { Tag } from 'src/entities/Tag';
-import { TagColor } from 'src/entities/TagColor';
-import { University } from 'src/entities/University';
-import { UserAgreement } from 'src/entities/UserAgreement';
-import { UserTag } from 'src/entities/UserTag';
 import { UserRepository } from 'src/repositories/user.repository';
 import { UserAgreementRepository } from 'src/repositories/user-agreement.repository';
 import { AgreementRepository } from 'src/repositories/agreement.repository';
 import { MailModule } from 'src/mail/mail.module';
 import { AuthRepository } from 'src/repositories/auth.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
+import { CoverletterAnswer } from 'src/entities/CoverletterAnswer';
 
 @Module({
   imports: [
@@ -39,23 +23,7 @@ import { ProfileRepository } from 'src/repositories/profile.repository';
       signOptions: { expiresIn: '30d' },
     }),
     TypeOrmModule.forFeature([
-      User, 
-      Auth, 
-      LikePage, 
-      Page, 
-      Project, 
-      ProjectColor, 
-      PageImage,
-      PageTag,
-      Tag,
-      ProfileTag,
-      TagColor,
-      UserTag,
-      LikeUser,
-      Profile,
-      University,
-      UserAgreement,
-      Agreement,
+      CoverletterAnswer,
       UserRepository,
       ProfileRepository,
       AgreementRepository,
