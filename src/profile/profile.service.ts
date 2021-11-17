@@ -49,8 +49,8 @@ export class ProfileService {
   }
 
   async getProfile(userId: number) {
-    const profile = await this.profileRepository.findOneJoinUser(userId);
-    const tags = await this.profileTagRepository.findAllJoinTag(userId);
+    const profile = await this.profileRepository.findOne(userId);
+    const tags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
 
     const resTags = await Promise.all(
       tags.map((profileTag) => {

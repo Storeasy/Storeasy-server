@@ -53,7 +53,7 @@ export class ProfileResponseDto {
       userId: +profile.userId,
       profileImage: profile.profileImage,
       nickname: profile.nickname,
-      universityName: profile.user.universityName,
+      universityName: profile.universityName,
       contact: profile.contact,
       bio: profile.bio,
       tags: tags,
