@@ -22,7 +22,7 @@ export class TagController {
   @ApiOkResponse({ type: TagColorResponseDto })
   @Get('colors')
   async getTagColors() {
-    const data = this.tagService.getTagColors();
+    const data = await this.tagService.getTagColors();
     return ResponseEntity.OK_WITH(
       ResponseStatus.READ_ALL_TAG_COLORS_SUCCESS,
       data,

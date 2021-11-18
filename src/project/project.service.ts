@@ -22,10 +22,16 @@ export class ProjectService {
     private readonly userRepository: UserRepository,
   ) {}
 
+  // 프로젝트색 목록 조회
   async getProjectColors() {
-    return await this.projectColorRepository.find();
+    return await this.projectColorRepository.find({
+      order: {
+        id: "ASC",
+      }
+    });
   }
 
+  // 프로젝트 생성
   async createProject(
     userId: number,
     createProjectRequestDto: CreateProjectRequestDto,
@@ -49,6 +55,7 @@ export class ProjectService {
     );
   }
 
+  // 프로젝트 수정
   async updateProject(
     userId: number,
     projectId: number,
@@ -86,6 +93,7 @@ export class ProjectService {
     }
   }
 
+  // 프로젝트 삭제
   async deleteProject(userId: number, projectId: number) {
     const project = await this.projectRepository.findOne(projectId);
     if (!project) {

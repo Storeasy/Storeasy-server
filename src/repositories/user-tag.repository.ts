@@ -9,4 +9,11 @@ export class UserTagRepository extends Repository<UserTag> {
       relations: ['tag', 'tagColor'],
     });
   }
+
+  public async getOneMaxOrderNumByUserId(userId: number) {
+    return await this.createQueryBuilder('userTag')
+      .select('MAX(userTag.orderNum) as max')
+      .where('userTag.userId = :userId', { userId: userId })
+      .getRawOne();
+  }
 }
