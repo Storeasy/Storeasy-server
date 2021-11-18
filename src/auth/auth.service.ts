@@ -80,7 +80,7 @@ export class AuthService {
     });
 
     // 유저 약관 동의 생성, 저장
-    const agreements = await this.agreementRepository.findAll();
+    const agreements = await this.agreementRepository.find();
     await Promise.all(
       agreements.map((agreement) => {
         this.userAgreementRepository.save({
@@ -98,13 +98,11 @@ export class AuthService {
   }
 
   async getAgreements(): Promise<AgreementResponseDto[]> {
-    return await this.agreementRepository.findAll();
+    return await this.agreementRepository.find();
   }
 
   async getAgreement(agreementId: number): Promise<AgreementResponseDto> {
-    const agreement = await this.agreementRepository.findOneByAgreementId(
-      agreementId,
-    );
+    const agreement = await this.agreementRepository.findOne(agreementId);
     if (!agreement) {
       throw new NotFoundException(ResponseStatus.AGREEMENT_NOT_FOUND);
     }
