@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsString } from 'class-validator';
 
 export class CreatePageRequestDto {
   @ApiProperty({
@@ -28,13 +28,19 @@ export class CreatePageRequestDto {
     description: '페이지 종료 날짜',
   })
   @IsDateString()
-  endDate?: string;
+  endDate: string;
+
+  @ApiProperty({
+    example: true,
+    description: '페이지 공개 여부',
+  })
+  @IsString()
+  isPublic: string;
 
   @ApiProperty({
     example: '1',
     description: '프로젝트 ID',
   })
-  @IsString()
   projectId?: number;
 
   @ApiProperty({

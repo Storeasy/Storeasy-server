@@ -14,6 +14,8 @@ const s3 = new AWS.S3();
 
 @Injectable()
 export class S3Service {
+  constructor() {}
+
   public async uploadProfileImage(
     userId: number,
     profileImage: Express.Multer.File,

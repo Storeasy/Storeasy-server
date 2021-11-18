@@ -56,7 +56,7 @@ export class PageController {
     if (req.fileValidationError) {
       throw new BadRequestException(ResponseStatus.INVALID_FILE_ERROR);
     }
-    if (pageImages) {
+    if (pageImages[0]) {
       const pageImagesFiles = await this.s3Service.uploadPageImages(
         req.user.userId,
         pageImages,
@@ -94,7 +94,7 @@ export class PageController {
     if (req.fileValidationError) {
       throw new BadRequestException(ResponseStatus.INVALID_FILE_ERROR);
     }
-    if (pageImages) {
+    if (pageImages[0]) {
       const pageImagesFiles = await this.s3Service.uploadPageImages(
         req.user.userId,
         pageImages,

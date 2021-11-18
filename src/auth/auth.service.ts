@@ -97,10 +97,12 @@ export class AuthService {
     }
   }
 
+  // 약관 목록 조회
   async getAgreements(): Promise<AgreementResponseDto[]> {
     return await this.agreementRepository.find();
   }
 
+  // 약관 상세 조회
   async getAgreement(agreementId: number): Promise<AgreementResponseDto> {
     const agreement = await this.agreementRepository.findOne(agreementId);
     if (!agreement) {
