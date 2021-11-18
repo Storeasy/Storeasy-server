@@ -81,7 +81,7 @@ export class ProjectService {
         tags.map((tag, i) => {
           this.projectTagRepository.save({
             projectId: projectId,
-            tagId: tag.id,
+            tagId: +tag.id,
             orderNum: i + 1,
           });
         }),

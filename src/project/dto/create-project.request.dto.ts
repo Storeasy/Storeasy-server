@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsDateString, IsNumber, IsString } from 'class-validator';
 
 export class CreateProjectRequestDto {
   @ApiProperty({
@@ -29,6 +29,13 @@ export class CreateProjectRequestDto {
   })
   @IsDateString()
   endDate: string;
+
+  @ApiProperty({
+    example: true,
+    description: '프로젝트 공개 여부',
+  })
+  @IsBoolean()
+  isPublic: boolean;
 
   @ApiProperty({
     example: 1,
