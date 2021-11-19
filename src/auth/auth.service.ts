@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entities/User';
 import * as bcrypt from 'bcrypt';
@@ -38,12 +43,12 @@ export class AuthService {
   }
 
   async login(user: User): Promise<LoginResponseDto> {
-    const payload = { username: user.email, sub: user.id};
+    const payload = { username: user.email, sub: user.id };
     const accessToken = this.jwtService.sign(payload);
 
     return {
       accessToken: accessToken,
-    }
+    };
   }
 
   async signup(signupRequestDto: SignupRequestDto) {
@@ -53,7 +58,7 @@ export class AuthService {
     // 비밀번호 암호화
     const hashedPassword = await bcrypt.hash(signupRequestDto.password, 12);
 
-    // 유저 생성, 저장  
+    // 유저 생성, 저장
     const user = await this.userRepository.save({
       email: signupRequestDto.email,
       password: hashedPassword,
@@ -61,25 +66,28 @@ export class AuthService {
       birthDate: signupRequestDto.birthDate,
       admissionYear: signupRequestDto.admissionYear,
       universityName: signupRequestDto.universityName,
-      department: signupRequestDto.department
+      department: signupRequestDto.department,
     });
 
     // 프로필 생성, 저장
     await this.profileRepository.save({
       userId: user.id,
       nickname: user.name,
-      profileImage: 'https://storeasy.s3.ap-northeast-2.amazonaws.com/profileImages/profile_image.png',
+      profileImage:
+        'https://storeasy.s3.ap-northeast-2.amazonaws.com/profileImages/profile_image.png',
+      universityName: signupRequestDto.universityName,
+      department: signupRequestDto.department,
     });
 
     // 유저 약관 동의 생성, 저장
-    const agreements = await this.agreementRepository.findAll();
+    const agreements = await this.agreementRepository.find();
     await Promise.all(
       agreements.map((agreement) => {
         this.userAgreementRepository.save({
           user: user,
-          agreement: agreement
+          agreement: agreement,
         });
-      })
+      }),
     );
   }
 
@@ -89,12 +97,14 @@ export class AuthService {
     }
   }
 
+  // 약관 목록 조회
   async getAgreements(): Promise<AgreementResponseDto[]> {
-    return await this.agreementRepository.findAll();;
+    return await this.agreementRepository.find();
   }
-  
+
+  // 약관 상세 조회
   async getAgreement(agreementId: number): Promise<AgreementResponseDto> {
-    const agreement = await this.agreementRepository.findOneByAgreementId(agreementId);
+    const agreement = await this.agreementRepository.findOne(agreementId);
     if (!agreement) {
       throw new NotFoundException(ResponseStatus.AGREEMENT_NOT_FOUND);
     }
@@ -102,7 +112,9 @@ export class AuthService {
   }
 
   async checkAuthCode(checkAuthCodeRequestDto: CheckAuthCodeRequestDto) {
-    const auth = await this.authRepository.findOneByEmail(checkAuthCodeRequestDto.email);
+    const auth = await this.authRepository.findOneByEmail(
+      checkAuthCodeRequestDto.email,
+    );
     if (!auth) {
       throw new NotFoundException(ResponseStatus.AUTH_NOT_FOUND);
     }

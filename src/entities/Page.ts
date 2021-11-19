@@ -1,68 +1,67 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { LikePage } from "./LikePage";
-import { User } from "./User";
-import { Project } from "./Project";
-import { PageImage } from "./PageImage";
-import { PageTag } from "./PageTag";
+  UpdateDateColumn,
+} from 'typeorm';
+import { LikePage } from './LikePage';
+import { User } from './User';
+import { Project } from './Project';
+import { PageImage } from './PageImage';
+import { PageTag } from './PageTag';
 
-@Index("user_id", ["userId"], {})
-@Index("project_id", ["projectId"], {})
-@Entity("page", { schema: "storeasy" })
+@Entity('page')
 export class Page {
-  @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
-  @Column("bigint", { name: "user_id" })
+  @Column('bigint', { name: 'user_id' })
   userId: number;
 
-  @Column("varchar", { name: "title", length: 50 })
+  @Column('varchar', { name: 'title', length: 50 })
   title: string;
 
-  @Column("varchar", { name: "content", length: 3000 })
+  @Column('varchar', { name: 'content', length: 3000 })
   content: string;
 
-  @Column("date", { name: "start_date" })
+  @Column('date', { name: 'start_date' })
   startDate: string;
 
-  @Column("date", { name: "end_date" })
+  @Column('date', { name: 'end_date' })
   endDate: string;
 
-  @Column("bigint", { name: "project_id", nullable: true })
+  @Column('tinyint', { name: 'is_public', width: 1, default: () => "'1'" })
+  isPublic: boolean;
+
+  @Column('bigint', { name: 'project_id', nullable: true })
   projectId: number | null;
 
-  @Column("datetime", {
-    name: "created_at",
-    nullable: true,
-    default: () => "CURRENT_TIMESTAMP",
-  })
+  @CreateDateColumn()
   createdAt: Date | null;
 
-  @Column("datetime", { name: "updated_at", nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date | null;
 
   @OneToMany(() => LikePage, (likePage) => likePage.page)
   likePages: LikePage[];
 
   @ManyToOne(() => User, (user) => user.pages, {
-    onDelete: "CASCADE",
-    onUpdate: "NO ACTION",
+    onDelete: 'CASCADE',
+    onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 
   @ManyToOne(() => Project, (project) => project.pages, {
-    onDelete: "CASCADE",
-    onUpdate: "NO ACTION",
+    onDelete: 'CASCADE',
+    onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: "project_id", referencedColumnName: "id" }])
+  @JoinColumn([{ name: 'project_id', referencedColumnName: 'id' }])
   project: Project;
 
   @OneToMany(() => PageImage, (pageImage) => pageImage.page)

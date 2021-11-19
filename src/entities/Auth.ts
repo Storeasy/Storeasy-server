@@ -1,19 +1,16 @@
-import { Column, Entity } from "typeorm";
+import { Column, CreateDateColumn, Entity } from 'typeorm';
 
-@Entity("auth", { schema: "storeasy" })
+@Entity('auth')
 export class Auth {
-  @Column("varchar", { primary: true, name: "email", length: 255 })
+  @Column('varchar', { primary: true, name: 'email', length: 255 })
   email: string;
 
-  @Column("char", { name: "code", nullable: true, length: 6 })
+  @Column('char', { name: 'code', nullable: true, length: 6 })
   code: string | null;
 
-  @Column("int", { name: "attempt_count", default: () => "'0'" })
+  @Column('int', { name: 'attempt_count', default: () => "'0'" })
   attemptCount: number;
 
-  @Column("datetime", {
-    name: "request_time",
-    default: () => "CURRENT_TIMESTAMP",
-  })
+  @CreateDateColumn()
   requestTime: Date;
 }

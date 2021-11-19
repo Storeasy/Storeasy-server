@@ -1,12 +1,14 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { ProjectColorRepository } from 'src/repositories/project-color.repository';
 import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
-import { UserRepository } from 'src/repositories/user.repository';
 import { CreateProjectRequestDto } from './dto/create-project.request.dto';
-import { ProjectColorResponseDto } from './dto/project-color.response.dto';
 import { UpdateProjectRequestDto } from './dto/update-project.request.dto';
 
 @Injectable()
@@ -16,14 +18,22 @@ export class ProjectService {
     private readonly projectColorRepository: ProjectColorRepository,
     private readonly tagRepository: TagRepository,
     private readonly projectTagRepository: ProjectTagRepository,
-    private readonly userRepository: UserRepository,
   ) {}
 
+  // 프로젝트색 목록 조회
   async getProjectColors() {
-    return await this.projectColorRepository.find();
+    return await this.projectColorRepository.find({
+      order: {
+        id: "ASC",
+      }
+    });
   }
 
-  async createProject(userId: number, createProjectRequestDto: CreateProjectRequestDto) {
+  // 프로젝트 생성
+  async createProject(
+    userId: number,
+    createProjectRequestDto: CreateProjectRequestDto,
+  ) {
     const project = this.projectRepository.create(createProjectRequestDto);
     project.userId = userId;
 
@@ -35,15 +45,20 @@ export class ProjectService {
         this.projectTagRepository.save({
           projectId: project.id,
           tagId: tag.id,
-          orderNum: i+1
+          orderNum: i + 1,
         });
-      })
+      }),
     );
   }
 
-  async updateProject(userId: number, projectId: number, updateProjectRequestDto: UpdateProjectRequestDto) {
+  // 프로젝트 수정
+  async updateProject(
+    userId: number,
+    projectId: number,
+    updateProjectRequestDto: UpdateProjectRequestDto,
+  ) {
     const project = await this.projectRepository.findOne(projectId);
-    
+
     if (!project) {
       throw new NotFoundException(ResponseStatus.PROJECT_NOT_FOUND);
     }
@@ -53,30 +68,35 @@ export class ProjectService {
 
     if (updateProjectRequestDto.tagIds) {
       await this.projectTagRepository.deleteAllByProjectId(projectId);
-      const tags = await this.tagRepository.findByIds(updateProjectRequestDto.tagIds);
+      const tags = await this.tagRepository.findByIds(
+        updateProjectRequestDto.tagIds,
+      );
       await Promise.all(
         tags.map((tag, i) => {
           this.projectTagRepository.save({
             projectId: projectId,
-            tagId: tag.id,
-            orderNum: i+1
+            tagId: +tag.id,
+            orderNum: i + 1,
           });
-        })
+        }),
       );
-      const {tagIds, ...newDto} = updateProjectRequestDto;
+      const { tagIds, ...newDto } = updateProjectRequestDto;
       await this.projectRepository.update(project, newDto);
     } else {
       await this.projectRepository.update(project, updateProjectRequestDto);
     }
   }
 
+  // 프로젝트 삭제
   async deleteProject(userId: number, projectId: number) {
     const project = await this.projectRepository.findOne(projectId);
     if (!project) {
       throw new NotFoundException(ResponseStatus.PROJECT_NOT_FOUND);
     }
     if (project.userId != userId) {
-      throw new ForbiddenException(ResponseStatus.DELETE_PROJECT_FAIL_FORBIDDEN);
+      throw new ForbiddenException(
+        ResponseStatus.DELETE_PROJECT_FAIL_FORBIDDEN,
+      );
     }
 
     await this.projectRepository.delete(project);

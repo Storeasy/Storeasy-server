@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { OmitType } from '@nestjs/swagger';
-import { Tag } from 'src/entities/Tag';
 import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
 import { RecommendTagRepository } from 'src/repositories/recommend-tag.repository';
@@ -18,7 +16,7 @@ export class ProfileService {
     private readonly userRepository: UserRepository,
     private readonly tagRepository: TagRepository,
     private readonly profileTagRepository: ProfileTagRepository,
-    private readonly profileRepository: ProfileRepository
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   async getRecommendTags(): Promise<TagResponseDto[]> {
@@ -26,83 +24,64 @@ export class ProfileService {
     return await Promise.all(
       recommendTags.map((recommendTag) => {
         return TagResponseDto.ofTag(recommendTag.tag);
-      })
+      }),
     );
   }
 
-  async createProfileTags(userId: number, createProfileTagRequestDto: CreateProfileTagRequestDto) {
+  async createProfileTags(
+    userId: number,
+    createProfileTagRequestDto: CreateProfileTagRequestDto,
+  ) {
     const user = await this.userRepository.findOne(userId);
-    const tags = await this.tagRepository.findByIds(createProfileTagRequestDto.tags);
+    const tags = await this.tagRepository.findByIds(
+      createProfileTagRequestDto.tags,
+    );
 
     await Promise.all(
       tags.map((tag, i) => {
         this.profileTagRepository.save({
           user: user,
           tag: tag,
-          orderNum: i+1,
+          orderNum: i + 1,
         });
-      })
+      }),
     );
   }
 
   async getProfile(userId: number) {
-    const profile = await this.profileRepository.findOneJoinUser(userId);
-    const tags = await this.profileTagRepository.findAllJoinTag(userId);
+    const profile = await this.profileRepository.findOne(userId);
+    const tags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
 
     const resTags = await Promise.all(
       tags.map((profileTag) => {
         return TagResponseDto.ofTag(profileTag.tag);
-      })
-    )
-  
+      }),
+    );
+
     return ProfileResponseDto.ofProfile(profile, resTags);
   }
 
-  async updateProfileWithImage(userId: number, profileImageUrl: string, updateProfileRequestDto: UpdateProfileRequestDto) {
+  async updateProfile(
+    userId: number,
+    updateProfileRequestDto: UpdateProfileRequestDto,
+  ) {
     if (updateProfileRequestDto.tagIds) {
+      const { tagIds, ...newDto } = updateProfileRequestDto;
+      await this.profileRepository.update(userId, newDto);
+
       await this.profileTagRepository.deleteAllByUserId(userId);
       const user = await this.userRepository.findOne(userId);
-      const tagIdsStr = updateProfileRequestDto.tagIds.substring(1, updateProfileRequestDto.tagIds.length-1).split(',');
-      const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
+      const tagIdsNum = updateProfileRequestDto.tagIds;
       const tags = await this.tagRepository.findByIds(tagIdsNum);
       await Promise.all(
         tags.map((tag, i) => {
           this.profileTagRepository.save({
             user: user,
             tag: tag,
-            orderNum: i+1,
+            orderNum: i + 1,
           });
-        })
-      )
-
-      updateProfileRequestDto.profileImage = profileImageUrl;
-      const {tagIds, ...newDto} = updateProfileRequestDto;
-      await this.profileRepository.update(userId, newDto);
-    } else {
-      updateProfileRequestDto.profileImage = profileImageUrl;
-      await this.profileRepository.update(userId, updateProfileRequestDto);
-    }
-  }
-
-  async updateProfile(userId: number, updateProfileRequestDto: UpdateProfileRequestDto) {
-    if (updateProfileRequestDto.tagIds) {
-      await this.profileTagRepository.deleteAllByUserId(userId);
-      const user = await this.userRepository.findOne(userId);
-      const tagIdsStr = updateProfileRequestDto.tagIds.substring(1, updateProfileRequestDto.tagIds.length-1).split(',');
-      const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
-      const tags = await this.tagRepository.findByIds(tagIdsNum);
-      await Promise.all(
-        tags.map((tag, i) => {
-          this.profileTagRepository.save({
-            user: user,
-            tag: tag,
-            orderNum: i+1,
-          });
-        })
-      )
-
-      const {tagIds, ...newDto} = updateProfileRequestDto;
-      await this.profileRepository.update(userId, newDto);
+        }),
+      );
     } else {
       await this.profileRepository.update(userId, updateProfileRequestDto);
     }

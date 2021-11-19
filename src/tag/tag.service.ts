@@ -13,13 +13,19 @@ export class TagService {
     private readonly tagRepository: TagRepository,
     private readonly tagColorRepository: TagColorRepository,
     private readonly userRepository: UserRepository,
-    private readonly userTagRepository: UserTagRepository
+    private readonly userTagRepository: UserTagRepository,
   ) {}
 
+  // 태그색 목록 조회
   async getTagColors() {
-    return await this.tagColorRepository.find();
+    return await this.tagColorRepository.find({
+      order: {
+        id: "ASC",
+      }
+    });
   }
 
+  // 태그 등록
   async createTag(tagRequestDto: TagRequestDto): Promise<TagResponseDto> {
     const tag = await this.tagRepository.findOneByName(tagRequestDto.name);
     if (!tag) {
@@ -32,29 +38,45 @@ export class TagService {
     return TagResponseDto.ofTag(tag);
   }
 
-  async createTagWithColor(userId: number, tagColorRequestDto: TagColorRequestDto): Promise<TagResponseDto> {
+  // 태그 등록 With Color
+  async createTagWithColor(
+    userId: number,
+    tagColorRequestDto: TagColorRequestDto,
+  ): Promise<TagResponseDto> {
     const user = await this.userRepository.findOne(userId);
-    console.log(user);
     const tag = await this.tagRepository.findOneByName(tagColorRequestDto.name);
-    console.log(tag);
-    const tagColor = await this.tagColorRepository.findOne(tagColorRequestDto.tagColorId);
-    console.log(tagColor);
+    const tagColor = await this.tagColorRepository.findOne(
+      tagColorRequestDto.tagColorId,
+    );
+
+    const max = await this.userTagRepository.getOneMaxOrderNumByUserId(userId) == undefined ? 0 : await this.userTagRepository.getOneMaxOrderNumByUserId(userId);
+    
     if (!tag) {
-      await this.tagRepository.save({
+      const newTag = await this.tagRepository.save({
         name: tagColorRequestDto.name,
-      })
+      });
       await this.userTagRepository.save({
         userId: user.id,
-        tagId: tag.id,
-        tagColorId: tagColor.id
-      })
-      return TagResponseDto.ofTagColor(tag, tagColor);
+        tagId: newTag.id,
+        orderNum: +(max.max)+1,
+        tagColorId: tagColor.id,
+      });
+      return TagResponseDto.ofTagColor(newTag, tagColor);
     } else {
+      const userTag = await this.userTagRepository.findOne({
+        where: { userId: userId, tagId: tag.id },
+        relations: [ 'tag', 'tagColor' ],
+      });
+      if (userTag) {
+        return TagResponseDto.ofTagColor(userTag.tag, userTag.tagColor);
+      }
+
       await this.userTagRepository.save({
         userId: user.id,
         tagId: tag.id,
-        tagColorId: tagColor.id
-      })
+        orderNum: +(max.max)+1,
+        tagColorId: tagColor.id,
+      });
       return TagResponseDto.ofTagColor(tag, tagColor);
     }
   }

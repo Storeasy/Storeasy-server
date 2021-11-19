@@ -1,5 +1,5 @@
-import { ProjectTag } from "src/entities/ProjectTag";
-import { EntityRepository, Repository } from "typeorm";
+import { ProjectTag } from 'src/entities/ProjectTag';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(ProjectTag)
 export class ProjectTagRepository extends Repository<ProjectTag> {

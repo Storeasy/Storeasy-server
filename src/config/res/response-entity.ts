@@ -1,5 +1,7 @@
-import { ApiOkResponse, ApiProperty, ApiResponse, ApiResponseProperty } from '@nestjs/swagger';
-import { ResponseStatus } from "./response-status";
+import {
+  ApiProperty
+} from '@nestjs/swagger';
+import { ResponseStatus } from './response-status';
 import { Exclude, Expose } from 'class-transformer';
 
 export class ResponseEntity<T> {
@@ -22,7 +24,10 @@ export class ResponseEntity<T> {
     return new ResponseEntity<string>(responseStatus, null);
   }
 
-  static OK_WITH<T>(responseStatus: ResponseStatus, data: T): ResponseEntity<T> {
+  static OK_WITH<T>(
+    responseStatus: ResponseStatus,
+    data: T,
+  ): ResponseEntity<T> {
     return new ResponseEntity<T>(responseStatus, data);
   }
 
@@ -30,7 +35,10 @@ export class ResponseEntity<T> {
     return new ResponseEntity<string>(responseStatus, null);
   }
 
-  static ERROR_WITH<T>(responseStatus: ResponseStatus, data: T): ResponseEntity<T> {
+  static ERROR_WITH<T>(
+    responseStatus: ResponseStatus,
+    data: T,
+  ): ResponseEntity<T> {
     return new ResponseEntity<T>(responseStatus, data);
   }
 

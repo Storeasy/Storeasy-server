@@ -1,5 +1,5 @@
-import { RecommendTag } from "src/entities/RecommendTag";
-import { EntityRepository, Repository } from "typeorm";
+import { RecommendTag } from 'src/entities/RecommendTag';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(RecommendTag)
 export class RecommendTagRepository extends Repository<RecommendTag> {

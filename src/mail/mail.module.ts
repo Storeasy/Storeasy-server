@@ -9,9 +9,7 @@ import { AuthRepository } from 'src/repositories/auth.repository';
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      AuthRepository,
-    ]),
+    TypeOrmModule.forFeature([AuthRepository]),
     MailerModule.forRootAsync({
       // imports: [ConfigModule], // import module if not enabled globally
       useFactory: async (config: ConfigService) => ({
