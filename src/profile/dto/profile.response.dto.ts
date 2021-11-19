@@ -10,6 +10,12 @@ export class ProfileResponseDto {
   userId: number;
 
   @ApiProperty({
+    example: true,
+    description: '공개 여부',
+  })
+  isPublic: boolean;
+
+  @ApiProperty({
     example: 'http://어쩌구저쩌구',
     description: '프로필 이미지 URL',
   })
@@ -51,6 +57,7 @@ export class ProfileResponseDto {
   ): ProfileResponseDto {
     return {
       userId: +profile.userId,
+      isPublic: profile.isPublic,
       profileImage: profile.profileImage,
       nickname: profile.nickname,
       universityName: profile.universityName,

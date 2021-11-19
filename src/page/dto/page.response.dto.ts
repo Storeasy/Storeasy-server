@@ -11,6 +11,12 @@ export class PageResponseDto {
   userId: number;
 
   @ApiProperty({
+    example: true,
+    description: '공개 여부',
+  })
+  isPublic: boolean;
+
+  @ApiProperty({
     example: 1,
     description: '프로젝트 ID',
   })
@@ -67,6 +73,7 @@ export class PageResponseDto {
   public static ofPage(page: Page, images: PageImage[], tags: any[]) {
     return {
       userId: +page.userId,
+      isPublic: page.isPublic,
       projectId: +page.project.id,
       projectTitle: page.project.title,
       pageId: +page.id,

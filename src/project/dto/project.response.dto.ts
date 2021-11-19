@@ -12,6 +12,12 @@ export class ProjectResponseDto {
   userId: number;
 
   @ApiProperty({
+    example: true,
+    description: '공개 여부',
+  })
+  isPublic: boolean;
+
+  @ApiProperty({
     example: 1,
     description: "프로젝트 ID"
   })
@@ -56,6 +62,7 @@ export class ProjectResponseDto {
   public static ofProject(project: Project, tags: any[]) {
     return {
       userId: +project.userId,
+      isPublic: project.isPublic,
       projectId: +project.id,
       projectColor: project.projectColor.value,
       title: project.title,

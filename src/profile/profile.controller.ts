@@ -19,7 +19,6 @@ import { CreateProfileTagRequestDto } from './dto/create-profile-tag.request.dto
 import { ProfileResponseDto } from './dto/profile.response.dto';
 import { ProfileService } from './profile.service';
 import { UpdateProfileRequestDto } from './dto/update-profile.request.dto';
-import { S3Service } from 'src/s3/s3.service';
 
 @ApiTags('프로필')
 @Controller('api/profile')
