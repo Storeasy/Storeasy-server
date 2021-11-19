@@ -98,7 +98,8 @@ export class PageService {
     await this.pageRepository.update(page, newDto);
   }
 
-  async deletePage(userId: number, pageId: number) {
+  // 페이지 삭제
+  public async deletePage(userId: number, pageId: number) {
     const page = await this.pageRepository.findOne(pageId);
     if (!page) {
       throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
@@ -112,7 +113,8 @@ export class PageService {
     await this.pageRepository.delete(page);
   }
 
-  async getPage(pageId: number) {
+  // 페이지 상세 조회
+  public async getPage(pageId: number) {
     const page = await this.pageRepository.findOneByPageId(pageId);
     const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
     const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
