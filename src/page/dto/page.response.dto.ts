@@ -11,6 +11,12 @@ export class PageResponseDto {
   userId: number;
 
   @ApiProperty({
+    example: true,
+    description: '공개 여부',
+  })
+  isPublic: boolean;
+
+  @ApiProperty({
     example: 1,
     description: '프로젝트 ID',
   })
@@ -23,8 +29,14 @@ export class PageResponseDto {
   projectTitle: string;
 
   @ApiProperty({
-    example: '테스트 페이지',
-    description: '페이지명',
+    example: 1,
+    description: "페이지 ID",
+  })
+  pageId: number;
+
+  @ApiProperty({
+    example: "테스트 페이지",
+    description: "페이지명",
   })
   title: string;
 
@@ -60,15 +72,17 @@ export class PageResponseDto {
 
   public static ofPage(page: Page, images: PageImage[], tags: any[]) {
     return {
-      userId: page.userId,
-      projectId: page.project.id,
+      userId: +page.userId,
+      isPublic: page.isPublic,
+      projectId: +page.project.id,
       projectTitle: page.project.title,
+      pageId: +page.id,
       title: page.title,
       content: page.content,
       startDate: page.startDate,
       endDate: page.endDate,
       images: images.map((image) => image.imageUrl),
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
-    };
+    }
   }
 }

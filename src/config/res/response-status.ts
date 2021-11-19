@@ -158,7 +158,14 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.BAD_REQUEST,
     '페이지 이미지 업로드 실패',
   );
-
+  static READ_ALL_STORY_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '스토리 조회 성공',
+  );
+  static READ_ALL_USER_TAG_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '사용자 태그 목록 조회 성공',
+  );
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

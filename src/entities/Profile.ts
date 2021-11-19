@@ -6,6 +6,9 @@ export class Profile {
   @Column('bigint', { primary: true, name: 'user_id' })
   userId: number;
 
+  @Column('tinyint', { name: 'is_public', width: 1, default: () => "'1'" })
+  isPublic: boolean;
+
   @Column('varchar', { name: 'profile_image', nullable: true, length: 255 })
   profileImage: string | null;
 
