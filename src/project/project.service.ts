@@ -8,7 +8,6 @@ import { ProjectColorRepository } from 'src/repositories/project-color.repositor
 import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
-import { UserRepository } from 'src/repositories/user.repository';
 import { CreateProjectRequestDto } from './dto/create-project.request.dto';
 import { UpdateProjectRequestDto } from './dto/update-project.request.dto';
 
@@ -19,7 +18,6 @@ export class ProjectService {
     private readonly projectColorRepository: ProjectColorRepository,
     private readonly tagRepository: TagRepository,
     private readonly projectTagRepository: ProjectTagRepository,
-    private readonly userRepository: UserRepository,
   ) {}
 
   // 프로젝트색 목록 조회
@@ -41,9 +39,7 @@ export class ProjectService {
 
     await this.projectRepository.save(project);
 
-    const tags = await this.tagRepository.findByIds(
-      createProjectRequestDto.tagIds,
-    );
+    const tags = await this.tagRepository.findByIds(createProjectRequestDto.tagIds);
     await Promise.all(
       tags.map((tag, i) => {
         this.projectTagRepository.save({
@@ -67,9 +63,7 @@ export class ProjectService {
       throw new NotFoundException(ResponseStatus.PROJECT_NOT_FOUND);
     }
     if (project.userId != userId) {
-      throw new ForbiddenException(
-        ResponseStatus.UPDATE_PROJECT_FAIL_FORBIDDEN,
-      );
+      throw new ForbiddenException(ResponseStatus.UPDATE_PROJECT_FAIL_FORBIDDEN);
     }
 
     if (updateProjectRequestDto.tagIds) {
