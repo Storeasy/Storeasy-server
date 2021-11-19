@@ -26,7 +26,7 @@ export class TagResponseDto {
 
   public static ofTag(tag: Tag): TagResponseDto {
     return {
-      id: tag.id,
+      id: +tag.id,
       tagName: tag.name,
       tagColor: 'defalut',
     };
@@ -34,7 +34,7 @@ export class TagResponseDto {
 
   public static ofTagColor(tag: Tag, tagColor: TagColor): TagResponseDto {
     return {
-      id: tag.id,
+      id: +tag.id,
       tagName: tag.name,
       tagColor: tagColor.value,
     };
@@ -42,9 +42,17 @@ export class TagResponseDto {
 
   public static ofPageTag(pageTag: any): TagResponseDto {
     return {
-      id: pageTag.id,
+      id: +pageTag.id,
       tagName: pageTag.name,
       tagColor: pageTag.value,
     };
+  }
+
+  public static ofProjectTag(projectTag: any): TagResponseDto {
+    return {
+      id: +projectTag.id,
+      tagName: projectTag.name,
+      tagColor: projectTag.value
+    }
   }
 }

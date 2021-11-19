@@ -23,8 +23,14 @@ export class PageResponseDto {
   projectTitle: string;
 
   @ApiProperty({
-    example: '테스트 페이지',
-    description: '페이지명',
+    example: 1,
+    description: "페이지 ID",
+  })
+  pageId: number;
+
+  @ApiProperty({
+    example: "테스트 페이지",
+    description: "페이지명",
   })
   title: string;
 
@@ -53,8 +59,13 @@ export class PageResponseDto {
   tags: TagResponseDto[];
 
   @ApiProperty({
+<<<<<<< HEAD
     example: ['imageUrl1', 'imageUrl2', 'imageUrl3'],
     description: '사용자 ID',
+=======
+    example: ["imageUrl1", "imageUrl2", "imageUrl3"],
+    description: "페이지 이미지 URL"
+>>>>>>> 1797e8656a492f22e3812430210adef97572a49c
   })
   images: string[];
 
@@ -63,6 +74,22 @@ export class PageResponseDto {
       userId: page.userId,
       projectId: page.project.id,
       projectTitle: page.project.title,
+      pageId: page.id,
+      title: page.title,
+      content: page.content,
+      startDate: page.startDate,
+      endDate: page.endDate,
+      images: images.map((image) => image.imageUrl),
+      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
+    }
+  }
+
+  public static ofSinglePage(page: Page, images: PageImage[], tags: any[]) {
+    return {
+      userId: page.userId,
+      projectId: null,
+      projectTitle: null,
+      pageId: page.id,
       title: page.title,
       content: page.content,
       startDate: page.startDate,

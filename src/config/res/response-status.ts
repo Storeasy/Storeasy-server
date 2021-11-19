@@ -163,7 +163,6 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     '스토리 조회 성공',
   );
 
-
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;
   private constructor(httpStatus: HttpStatus, message: string) {
