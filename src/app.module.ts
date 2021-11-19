@@ -47,6 +47,7 @@ import { Payment } from './entities/Payment';
 import { Profile } from './entities/Profile';
 import { Notification } from './entities/Notification';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { StoryModule } from './story/story.module';
 
 dotenv.config();
 @Module({
@@ -109,6 +110,7 @@ dotenv.config();
     ProjectModule,
     PageModule,
     UserModule,
+    StoryModule,
   ],
   providers: [
     {
