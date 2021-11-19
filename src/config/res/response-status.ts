@@ -142,6 +142,23 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.OK,
     '페이지 상세 조회 성공',
   );
+  static UPLOAD_PROFILE_IMAGE_SUCCESS = new ResponseStatus(
+    HttpStatus.CREATED,
+    '프로필 이미지 업로드 성공',
+  );
+  static UPLOAD_PROFILE_IMAGE_FAIL = new ResponseStatus(
+    HttpStatus.BAD_REQUEST,
+    '프로필 이미지 업로드 실패',
+  );
+  static UPLOAD_PAGE_IMAGES_SUCCESS = new ResponseStatus(
+    HttpStatus.CREATED,
+    '페이지 이미지 업로드 성공',
+  );
+  static UPLOAD_PAGE_IMAGES_FAIL = new ResponseStatus(
+    HttpStatus.BAD_REQUEST,
+    '페이지 이미지 업로드 실패',
+  );
+
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

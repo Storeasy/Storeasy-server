@@ -21,100 +21,16 @@ export class PageService {
     private readonly tagRepository: TagRepository,
   ) {}
 
-  // 프로젝트 생성 With Image
-  async createPageWithImage(
-    userId: number,
-    pageImages: string[],
-    createPageRequestDto: CreatePageRequestDto,
-  ) {
-    const { tagIds, isPublic, ...newDto } = createPageRequestDto;
+  // 페이지 생성
+  public async createPage(userId: number, createPageRequestDto: CreatePageRequestDto) {
+    const { tagIds, pageImages, ...newDto } = createPageRequestDto;
 
     const page = this.pageRepository.create(newDto);
     page.userId = userId;
-    page.isPublic = createPageRequestDto.isPublic == 'true' ? true : false;
     await this.pageRepository.save(page);
 
-    pageImages.map((pageImage, i) => {
-      this.pageImageRepository.save({
-        page: page,
-        imageUrl: pageImage,
-        orderNum: i + 1,
-      });
-    });
-
-    const tagIdsStr = createPageRequestDto.tagIds
-      .substring(1, createPageRequestDto.tagIds.length - 1)
-      .split(',');
-    const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
-    const tags = await this.tagRepository.findByIds(tagIdsNum);
-    await Promise.all(
-      tags.map((tag, i) => {
-        this.pageTagRepository.save({
-          pageId: page.id,
-          tagId: tag.id,
-          orderNum: i + 1,
-        });
-      }),
-    );
-  }
-
-  // 프로젝트 생성
-  async createPage(userId: number, createPageRequestDto: CreatePageRequestDto) {
-    const { tagIds, isPublic, ...newDto } = createPageRequestDto;
-
-    const page = this.pageRepository.create(newDto);
-    page.userId = userId;
-    page.isPublic = createPageRequestDto.isPublic == 'true' ? true : false;
-    await this.pageRepository.save(page);
-
-    const tagIdsStr = createPageRequestDto.tagIds
-      .substring(1, createPageRequestDto.tagIds.length - 1)
-      .split(',');
-    const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
-    const tags = await this.tagRepository.findByIds(tagIdsNum);
-    await Promise.all(
-      tags.map((tag, i) => {
-        this.pageTagRepository.save({
-          pageId: page.id,
-          tagId: tag.id,
-          orderNum: i + 1,
-        });
-      }),
-    );
-  }
-
-  // 프로젝트 수정 With Image
-  async updatePageWithImage(
-    userId: number,
-    pageId: number,
-    pageImages: string[],
-    updatePageRequestDto: UpdatePageRequestDto,
-  ) {
-    console.log('updatePageWithImage');
-    const page = await this.pageRepository.findOne(pageId);
-
-    if (!page) {
-      throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
-    }
-    if (page.userId != userId) {
-      throw new ForbiddenException(ResponseStatus.UPDATE_PAGE_FAIL_FORBIDDEN);
-    }
-
-    if (updatePageRequestDto.tagIds) {
-      await this.pageImageRepository.deleteAllByPageId(pageId);
-      pageImages.map((pageImage, i) => {
-        this.pageImageRepository.save({
-          page: page,
-          imageUrl: pageImage,
-          orderNum: i + 1,
-        });
-      });
-
-      await this.pageTagRepository.deleteAllByPageId(pageId);
-      const tagIdsStr = updatePageRequestDto.tagIds
-        .substring(1, updatePageRequestDto.tagIds.length - 1)
-        .split(',');
-      const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
+    if (createPageRequestDto.tagIds) {
+      const tagIdsNum = createPageRequestDto.tagIds;
       const tags = await this.tagRepository.findByIds(tagIdsNum);
       await Promise.all(
         tags.map((tag, i) => {
@@ -125,42 +41,25 @@ export class PageService {
           });
         }),
       );
-
-      page.isPublic = updatePageRequestDto.isPublic == 'true' ? true : false;
-      const { tagIds, isPublic, ...newDto } = updatePageRequestDto;
-      await this.pageRepository.update(page, newDto);
-    } else {
-      await this.pageImageRepository.deleteAllByPageId(pageId);
-      pageImages.map((pageImage, i) => {
-        this.pageImageRepository.save({
-          page: page,
-          imageUrl: pageImage,
-          orderNum: i + 1,
-        });
-      });
-
-      const { tagIds, isPublic, ...newDto } = updatePageRequestDto;
-      console.log(page);
-      console.log(newDto);
-      await this.pageRepository.update(page, newDto);
+    }
     
-      if(updatePageRequestDto.isPublic) {
-        page.isPublic = updatePageRequestDto.isPublic == 'true' ? true : false;
+    if (createPageRequestDto.pageImages) {
+      for (const [i, v] of createPageRequestDto.pageImages.entries()) {
+        await this.pageImageRepository.save({
+          page: page,
+          imageUrl: v,
+          orderNum: i+1,
+        })
       }
-
-      console.log(page);
-      const hell = await this.pageRepository.save(page);
-      console.log(hell);
     }
   }
 
-  // 프로젝트 수정 
-  async updatePage(
+  // 페이지 수정 
+  public async updatePage(
     userId: number,
     pageId: number,
     updatePageRequestDto: UpdatePageRequestDto,
   ) {
-    console.log('updatePageWithOutImage');
     const page = await this.pageRepository.findOne(pageId);
 
     if (!page) {
@@ -172,27 +71,31 @@ export class PageService {
 
     if (updatePageRequestDto.tagIds) {
       await this.pageTagRepository.deleteAllByPageId(pageId);
-      const tagIdsStr = updatePageRequestDto.tagIds
-        .substring(1, updatePageRequestDto.tagIds.length - 1)
-        .split(',');
-      const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
+      const tagIdsNum = updatePageRequestDto.tagIds;
       const tags = await this.tagRepository.findByIds(tagIdsNum);
       await Promise.all(
         tags.map((tag, i) => {
           this.pageTagRepository.save({
-            page: page,
-            tag: tag,
+            pageId: page.id,
+            tagId: tag.id,
             orderNum: i + 1,
           });
         }),
-      );
-
-      const { tagIds, ...newDto } = updatePageRequestDto;
-      await this.pageRepository.update(page, newDto);
-    } else {
-      const { tagIds, ...newDto } = updatePageRequestDto;
-      await this.pageRepository.update(page, newDto);
+      );    
+    } 
+    if (updatePageRequestDto.pageImages) {
+      await this.pageImageRepository.deleteAllByPageId(pageId);
+      for (const [i, v] of updatePageRequestDto.pageImages.entries()) {
+        await this.pageImageRepository.save({
+          page: page,
+          imageUrl: v,
+          orderNum: i+1,
+        })
+      }
     }
+
+    const { tagIds, pageImages, ...newDto } = updatePageRequestDto;
+    await this.pageRepository.update(page, newDto);
   }
 
   async deletePage(userId: number, pageId: number) {
@@ -204,6 +107,8 @@ export class PageService {
       throw new ForbiddenException(ResponseStatus.DELETE_PAGE_FAIL_FORBIDDEN);
     }
 
+    await this.pageImageRepository.deleteAllByPageId(pageId);
+    await this.pageTagRepository.deleteAllByPageId(pageId);
     await this.pageRepository.delete(page);
   }
 

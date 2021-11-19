@@ -61,49 +61,17 @@ export class ProfileService {
     return ProfileResponseDto.ofProfile(profile, resTags);
   }
 
-  async updateProfileWithImage(
-    userId: number,
-    profileImageUrl: string,
-    updateProfileRequestDto: UpdateProfileRequestDto,
-  ) {
-    if (updateProfileRequestDto.tagIds) {
-      await this.profileTagRepository.deleteAllByUserId(userId);
-      const user = await this.userRepository.findOne(userId);
-      const tagIdsStr = updateProfileRequestDto.tagIds
-        .substring(1, updateProfileRequestDto.tagIds.length - 1)
-        .split(',');
-      const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
-      const tags = await this.tagRepository.findByIds(tagIdsNum);
-      await Promise.all(
-        tags.map((tag, i) => {
-          this.profileTagRepository.save({
-            user: user,
-            tag: tag,
-            orderNum: i + 1,
-          });
-        }),
-      );
-
-      updateProfileRequestDto.profileImage = profileImageUrl;
-      const { tagIds, ...newDto } = updateProfileRequestDto;
-      await this.profileRepository.update(userId, newDto);
-    } else {
-      updateProfileRequestDto.profileImage = profileImageUrl;
-      await this.profileRepository.update(userId, updateProfileRequestDto);
-    }
-  }
-
   async updateProfile(
     userId: number,
     updateProfileRequestDto: UpdateProfileRequestDto,
   ) {
     if (updateProfileRequestDto.tagIds) {
+      const { tagIds, ...newDto } = updateProfileRequestDto;
+      await this.profileRepository.update(userId, newDto);
+
       await this.profileTagRepository.deleteAllByUserId(userId);
       const user = await this.userRepository.findOne(userId);
-      const tagIdsStr = updateProfileRequestDto.tagIds
-        .substring(1, updateProfileRequestDto.tagIds.length - 1)
-        .split(',');
-      const tagIdsNum = tagIdsStr.map((tagIds) => +tagIds);
+      const tagIdsNum = updateProfileRequestDto.tagIds;
       const tags = await this.tagRepository.findByIds(tagIdsNum);
       await Promise.all(
         tags.map((tag, i) => {
@@ -114,9 +82,6 @@ export class ProfileService {
           });
         }),
       );
-
-      const { tagIds, ...newDto } = updateProfileRequestDto;
-      await this.profileRepository.update(userId, newDto);
     } else {
       await this.profileRepository.update(userId, updateProfileRequestDto);
     }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsDateString, IsNumber, IsString } from 'class-validator';
 
 export class CreatePageRequestDto {
   @ApiProperty({
@@ -34,8 +34,8 @@ export class CreatePageRequestDto {
     example: true,
     description: '페이지 공개 여부',
   })
-  @IsString()
-  isPublic: string;
+  @IsBoolean()
+  isPublic: boolean;
 
   @ApiProperty({
     example: '1',
@@ -44,9 +44,14 @@ export class CreatePageRequestDto {
   projectId?: number;
 
   @ApiProperty({
-    example: '[1, 2, 3]',
+    example: [1, 2, 3],
     description: '태그 ID',
   })
-  @IsString()
-  tagIds: string;
+  tagIds?: number[];
+
+  @ApiProperty({
+    example: ['http://~', 'http://~'],
+    description: '페이지 이미지 URL',
+  })
+  pageImages?: string[];
 }
