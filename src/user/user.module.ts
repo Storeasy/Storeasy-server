@@ -11,9 +11,6 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
 @Module({
-<<<<<<< HEAD
-  imports: [TypeOrmModule.forFeature([UserTagRepository])],
-=======
   imports: [
     TypeOrmModule.forFeature([
       UserTagRepository,
@@ -24,7 +21,6 @@ import { UserService } from './user.service';
       PageTagRepository,
     ])
   ],
->>>>>>> 1797e8656a492f22e3812430210adef97572a49c
   controllers: [UserController],
   providers: [UserService],
 })

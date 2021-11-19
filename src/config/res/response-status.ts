@@ -162,6 +162,10 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.OK,
     '스토리 조회 성공',
   );
+  static READ_ALL_USER_TAG_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '사용자 태그 목록 조회 성공',
+  );
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

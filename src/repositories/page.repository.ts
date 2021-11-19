@@ -8,4 +8,13 @@ export class PageRepository extends Repository<Page> {
       .leftJoinAndSelect('page.project', 'project')
       .getOne();
   }
+
+  public async findAllSinglePageByUserId(userId: number) {
+    return await this.find({
+      where: {
+        userId: userId,
+        projectId: null,
+      }
+    });
+  }
 }

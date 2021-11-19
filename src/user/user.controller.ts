@@ -17,7 +17,7 @@ export class UserController {
   async getMyTags(@Req() req) {
     const data = await this.userService.getMyTags(req.user.userId);
     return ResponseEntity.OK_WITH(
-      ResponseStatus.READ_ALL_TAG_COLORS_SUCCESS,
+      ResponseStatus.READ_ALL_USER_TAG_SUCCESS,
       data,
     );
   }
@@ -28,7 +28,7 @@ export class UserController {
   async getTags(@Param('userId') userId: number) {
     const data = await this.userService.getTags(userId);
     return ResponseEntity.OK_WITH(
-      ResponseStatus.READ_ALL_TAG_COLORS_SUCCESS,
+      ResponseStatus.READ_ALL_USER_TAG_SUCCESS,
       data,
     );
   }

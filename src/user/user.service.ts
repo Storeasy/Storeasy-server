@@ -1,7 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectTag } from 'src/entities/ProjectTag';
-import { PageResponseDto } from 'src/page/dto/page.response.dto';
-import { ProjectResponseDto } from 'src/project/dto/project.response.dto';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
@@ -9,12 +6,10 @@ import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
 import { UserTagRepository } from 'src/repositories/user-tag.repository';
 import { TagResponseDto } from 'src/tag/dto/tag.response.dto';
+import { StoryResponseDto } from './dto/story.response.dto';
 
 @Injectable()
 export class UserService {
-<<<<<<< HEAD
-  constructor(private readonly userTagRepository: UserTagRepository) {}
-=======
   constructor(
     private readonly userTagRepository: UserTagRepository,
     private readonly projectRepository: ProjectRepository,
@@ -23,8 +18,8 @@ export class UserService {
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
   ) {}
->>>>>>> 1797e8656a492f22e3812430210adef97572a49c
-
+  
+  // 본인 태그 목록 조회
   async getMyTags(userId: number) {
     const userTags = await this.userTagRepository.findAllByUserId(userId);
     return userTags.map((userTag) => {
@@ -32,6 +27,7 @@ export class UserService {
     });
   }
 
+  // 태그 목록 조회
   async getTags(userId: number) {
     const userTags = await this.userTagRepository.findAllByUserId(userId);
     return userTags.map((userTag) => {
@@ -39,26 +35,41 @@ export class UserService {
     });
   }
 
+  // 스토리 조회
   async getStory(userId: number) {
     const projects = await this.projectRepository.findAllByUserId(userId);
     const projectData = await Promise.all(
       projects.map(async (project) => {
         const projectTags = await this.projectTagRepository.findAllJoinQuery(+project.id);
-        return ProjectResponseDto.ofProject(project, projectTags);
+        return StoryResponseDto.ofProject(project, projectTags);
       })
     );
 
-    console.log(projectData);
+    console.log('project', projectData);
     
     const pages = await this.pageRepository.findAllSinglePageByUserId(userId);
     const pageData = await Promise.all(
       pages.map(async (page) => {
-        const pageImages = await this.pageImageRepository.findAllByPageId(page.id);
         const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
-        return PageResponseDto.ofSinglePage(page, pageImages, pageTags);
+        return StoryResponseDto.ofPage(page, pageTags);
       })
     );
 
-    console.log(pageData);
+    console.log('page', pageData);
+    // Array.prototype.push.apply(projectData, pageData);
+    // Array.prototype.concat(projectData, pageData);
+    const data = [ ...projectData, ...pageData ];
+    console.log('data', data);
+
+    data.sort((a: StoryResponseDto, b: StoryResponseDto): number => {
+      const d1 = new Date(a.startDate);
+      const d2 = new Date(b.startDate);
+      if (d1 < d2) return 1;
+      else if (d1 > d2) return -1;
+      else return 0;
+    });
+    
+    console.log('sort data', data);
+    return data;
   }
 }
