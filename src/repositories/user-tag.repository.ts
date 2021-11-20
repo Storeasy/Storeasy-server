@@ -16,4 +16,12 @@ export class UserTagRepository extends Repository<UserTag> {
       .where('userTag.userId = :userId', { userId: userId })
       .getRawOne();
   }
+
+  public async findAllPagesByUserIdAndTagId(userId: number, tagId: number) {
+    return await this.createQueryBuilder('userTag')
+      .where('userTag.userId = :userId and userTag.tagId = :tagId', { userId: userId, tagId: tagId })
+      .leftJoinAndSelect('userTag.pageTags', 'pageTag')
+      .leftJoinAndSelect('pageTag.page', 'page')
+      .getOne();
+  }
 }

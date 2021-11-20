@@ -54,7 +54,7 @@ export class UserController {
   @ApiOkResponse()
   @Get('/page')
   async getPageByTag(@Req() req, @Query('tag') tag: number) {
-    const data = await this.userService.getPageByTag(req.user.userId, tag);
+    const data = await this.userService.getPagesByTag(req.user.userId, tag);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_PAGES_SUCCESS, data);
   }
 }

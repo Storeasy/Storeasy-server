@@ -72,12 +72,18 @@ export class StoryResponseDto {
   endDate: string;
 
   @ApiProperty({
+    example: 1,
+    description: "페이지 이미지 개수"
+  })
+  imageCount?: number;
+
+  @ApiProperty({
     example: [],
     description: "프로젝트/페이지 태그"
   })
   tags: TagResponseDto[];
 
-  public static ofProject(project: Project, tags: any[]) {
+  public static ofProject(project: Project, tags: any[]): StoryResponseDto {
     return {
       type: StoryType.PROJECT,
       userId: +project.userId,
@@ -92,7 +98,7 @@ export class StoryResponseDto {
     }
   }
 
-  public static ofPage(page: Page, tags: any[]) {
+  public static ofPage(page: Page, imageCount: number, tags: any[]): StoryResponseDto {
     return {
       type: StoryType.PAGE,
       userId: +page.userId,
@@ -102,6 +108,7 @@ export class StoryResponseDto {
       content: page.content,
       startDate: page.startDate,
       endDate: page.endDate,
+      imageCount: imageCount,
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };
   }
