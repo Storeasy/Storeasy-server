@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { ResponseStatus } from 'src/config/res/response-status';
@@ -48,5 +48,13 @@ export class UserController {
   async getStory(@Param('userId') userId: number) {
     const data = await this.userService.getStory(userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STORY_SUCCESS, data);
+  }
+
+  @ApiOperation({ summary: "본인 태그별 페이지 목록 조회" })
+  @ApiOkResponse()
+  @Get('/page')
+  async getPageByTag(@Req() req, @Query('tag') tag: number) {
+    const data = await this.userService.getPageByTag(req.user.userId, tag);
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_PAGES_SUCCESS, data);
   }
 }
