@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PageResponseDto } from 'src/page/dto/page.response.dto';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
@@ -50,8 +51,9 @@ export class UserService {
     const pages = await this.pageRepository.findAllSinglePageByUserId(userId);
     const pageData = await Promise.all(
       pages.map(async (page) => {
+        const pageImageCount = await this.pageImageRepository.getCountByPageId(page.id);
         const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
-        return StoryResponseDto.ofPage(page, pageTags);
+        return StoryResponseDto.ofPage(page, pageImageCount, pageTags);
       })
     );
 
@@ -71,5 +73,18 @@ export class UserService {
     
     console.log('sort data', data);
     return data;
+  }
+
+  // 본인 태그별 페이지 목록 조회
+  public async getPagesByTag(userId: number, tag: number) {
+    const userTag = await this.userTagRepository.findAllPagesByUserIdAndTagId(userId, tag);
+    const pageTags = userTag.pageTags;
+    return await Promise.all(
+      pageTags.map(async (pageTag) => {
+        const pageImageCount = await this.pageImageRepository.getCountByPageId(pageTag.page.id);
+        const pageTags = await this.pageTagRepository.findAllJoinQuery(pageTag.page.id);
+        return PageResponseDto.ofPageSimple(pageTag.page, pageImageCount, pageTags);
+      })
+    );
   }
 }

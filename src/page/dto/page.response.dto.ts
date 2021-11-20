@@ -66,16 +66,22 @@ export class PageResponseDto {
 
   @ApiProperty({
     example: ['imageUrl1', 'imageUrl2', 'imageUrl3'],
-    description: '사용자 ID',
+    description: '이미지 URL',
   })
-  images: string[];
+  images?: string[];
 
-  public static ofPage(page: Page, images: PageImage[], tags: any[]) {
+  @ApiProperty({
+    example: 1,
+    description: '이미지 개수',
+  })
+  imageCount?: number;
+
+  public static ofPage(page: Page, images: PageImage[], tags: any[]): PageResponseDto {
     return {
       userId: +page.userId,
       isPublic: page.isPublic,
-      projectId: +page.project.id,
-      projectTitle: page.project.title,
+      projectId: page.project == null ? null : +page.project.id,
+      projectTitle: page.project == null ? null : page.project.title,
       pageId: +page.id,
       title: page.title,
       content: page.content,
@@ -84,5 +90,21 @@ export class PageResponseDto {
       images: images.map((image) => image.imageUrl),
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     }
+  }
+
+  public static ofPageSimple(page: Page, imageCount: number, tags: any[]): PageResponseDto {
+    return {
+      userId: +page.userId,
+      isPublic: page.isPublic,
+      projectId: page.project == null ? null : +page.project.id,
+      projectTitle: page.project == null ? null : page.project.title,
+      pageId: +page.id,
+      title: page.title,
+      content: page.content,
+      startDate: page.startDate,
+      endDate: page.endDate,
+      imageCount: imageCount,
+      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
+    };
   }
 }
