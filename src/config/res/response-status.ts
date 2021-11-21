@@ -182,6 +182,14 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.FORBIDDEN,
     '페이지 조회 실패',
   );
+  static LIKE_USER_SUCCESS = new ResponseStatus(
+    HttpStatus.CREATED,
+    '사용자 좋아요 성공',
+  );
+  static LIKE_PAGE_SUCCESS = new ResponseStatus(
+    HttpStatus.CREATED,
+    '페이지 좋아요 성공',
+  );
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;
