@@ -2,8 +2,12 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { ResponseStatus } from 'src/config/res/response-status';
 import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { LikeUserRepository } from 'src/repositories/like-user.repository';
+import { PageImageRepository } from 'src/repositories/page-image.repository';
+import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
+import { ProfileRepository } from 'src/repositories/profile.repository';
 import { UserRepository } from 'src/repositories/user.repository';
+import { LikePageResponseDto } from './dto/like-page.response.dto';
 
 @Injectable()
 export class LikeService {
@@ -12,6 +16,9 @@ export class LikeService {
     private readonly likePageRepository: LikePageRepository,
     private readonly userRepository: UserRepository,
     private readonly pageRepository: PageRepository,
+    private readonly profileRepository: ProfileRepository,
+    private readonly pageImageRepository: PageImageRepository,
+    private readonly pageTagRepository: PageTagRepository,
   ) {}
 
   public async likeUser(sender: number, receiver: number) {
@@ -41,5 +48,27 @@ export class LikeService {
       sender: sender,
       pageId: pageId,
     });
+  }
+
+  public async getLikeUsers(userId: number) {
+    
+  }
+
+  public async getLikePages(userId: number) {
+    const likePages = await this.likePageRepository.findAllPagesByUserId(userId);
+    const pages = likePages.map(like => {
+      return like.page;
+    });
+
+    return await Promise.all(
+      pages.map(async (page) => {
+        const profile = await this.profileRepository.findOne(page.userId);
+        const pageImageCount = await this.pageImageRepository.getCountByPageId(
+          page.id,
+        );
+        const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
+        return LikePageResponseDto.ofLikePageSimple(profile, page, pageImageCount, pageTags);
+      })
+    );
   }
 }

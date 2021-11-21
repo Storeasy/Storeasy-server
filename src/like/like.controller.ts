@@ -39,7 +39,7 @@ export class LikeController {
   @ApiOkResponse()
   @Get('page')
   async getLikePages(@Req() req) {
-    const data = await this.likeService.getLikePsges(req.user.userId);
+    const data = await this.likeService.getLikePages(req.user.userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_LIKE_PAGES_SUCCESS, data);
   }
 }
