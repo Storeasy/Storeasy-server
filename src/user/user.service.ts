@@ -41,10 +41,12 @@ export class UserService {
     const projects = await this.projectRepository.findAllByUserId(userId);
     const projectData = await Promise.all(
       projects.map(async (project) => {
-        const projectTags = await this.projectTagRepository.findAllJoinQuery(
-          +project.id,
-        );
-        return StoryResponseDto.ofProject(project, projectTags);
+        if(project.isPublic) {
+          const projectTags = await this.projectTagRepository.findAllJoinQuery(
+            +project.id,
+          );
+          return StoryResponseDto.ofProject(project, projectTags);
+        }
       }),
     );
 
@@ -53,11 +55,13 @@ export class UserService {
     const pages = await this.pageRepository.findAllSinglePageByUserId(userId);
     const pageData = await Promise.all(
       pages.map(async (page) => {
-        const pageImageCount = await this.pageImageRepository.getCountByPageId(
-          page.id,
-        );
-        const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
-        return StoryResponseDto.ofPage(page, pageImageCount, pageTags);
+        if(page.isPublic) {
+          const pageImageCount = await this.pageImageRepository.getCountByPageId(
+            page.id,
+          );
+          const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
+          return StoryResponseDto.ofPage(page, pageImageCount, pageTags);
+        }
       }),
     );
 
@@ -68,8 +72,8 @@ export class UserService {
     console.log('data', data);
 
     data.sort((a: StoryResponseDto, b: StoryResponseDto): number => {
-      const d1 = new Date(a.startDate);
-      const d2 = new Date(b.startDate);
+      const d1 = new Date(a.project != null ? a.project.startDate : a.page.startDate);
+      const d2 = new Date(b.project != null ? b.project.startDate : b.page.startDate);
       if (d1 < d2) return 1;
       else if (d1 > d2) return -1;
       else return 0;
