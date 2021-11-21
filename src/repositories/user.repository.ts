@@ -14,4 +14,12 @@ export class UserRepository extends Repository<User> {
     }
     return true;
   }
+
+  public async existsByUserId(userId: number): Promise<boolean> {
+    const user = await this.findOne(userId);
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
 }

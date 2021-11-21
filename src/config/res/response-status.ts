@@ -190,6 +190,18 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.CREATED,
     '페이지 좋아요 성공',
   );
+  static LIKE_USER_FAIL_SELF = new ResponseStatus(
+    HttpStatus.FORBIDDEN,
+    '본인을 좋아요할 수 없습니다',
+  )
+  static LIKE_PAGE_FAIL_SELF = new ResponseStatus(
+    HttpStatus.FORBIDDEN,
+    '본인의 페이지를 좋아요할 수 없습니다',
+  )
+  static USER_NOT_FOUND = new ResponseStatus(
+    HttpStatus.NOT_FOUND,
+    '해당 사용자를 찾을 수 없습니다',
+  );
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;
