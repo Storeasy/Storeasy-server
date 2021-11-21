@@ -30,13 +30,13 @@ export class PageResponseDto {
 
   @ApiProperty({
     example: 1,
-    description: "페이지 ID",
+    description: '페이지 ID',
   })
   pageId: number;
 
   @ApiProperty({
-    example: "테스트 페이지",
-    description: "페이지명",
+    example: '테스트 페이지',
+    description: '페이지명',
   })
   title: string;
 
@@ -76,7 +76,11 @@ export class PageResponseDto {
   })
   imageCount?: number;
 
-  public static ofPage(page: Page, images: PageImage[], tags: any[]): PageResponseDto {
+  public static ofPage(
+    page: Page,
+    images: PageImage[],
+    tags: any[],
+  ): PageResponseDto {
     return {
       userId: +page.userId,
       isPublic: page.isPublic,
@@ -89,10 +93,14 @@ export class PageResponseDto {
       endDate: page.endDate,
       images: images.map((image) => image.imageUrl),
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
-    }
+    };
   }
 
-  public static ofPageSimple(page: Page, imageCount: number, tags: any[]): PageResponseDto {
+  public static ofPageSimple(
+    page: Page,
+    imageCount: number,
+    tags: any[],
+  ): PageResponseDto {
     return {
       userId: +page.userId,
       isPublic: page.isPublic,

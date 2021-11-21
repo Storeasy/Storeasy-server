@@ -19,7 +19,7 @@ export class UserService {
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
   ) {}
-  
+
   // 본인 태그 목록 조회
   async getMyTags(userId: number) {
     const userTags = await this.userTagRepository.findAllByUserId(userId);
@@ -41,26 +41,30 @@ export class UserService {
     const projects = await this.projectRepository.findAllByUserId(userId);
     const projectData = await Promise.all(
       projects.map(async (project) => {
-        const projectTags = await this.projectTagRepository.findAllJoinQuery(+project.id);
+        const projectTags = await this.projectTagRepository.findAllJoinQuery(
+          +project.id,
+        );
         return StoryResponseDto.ofProject(project, projectTags);
-      })
+      }),
     );
 
     console.log('project', projectData);
-    
+
     const pages = await this.pageRepository.findAllSinglePageByUserId(userId);
     const pageData = await Promise.all(
       pages.map(async (page) => {
-        const pageImageCount = await this.pageImageRepository.getCountByPageId(page.id);
+        const pageImageCount = await this.pageImageRepository.getCountByPageId(
+          page.id,
+        );
         const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
         return StoryResponseDto.ofPage(page, pageImageCount, pageTags);
-      })
+      }),
     );
 
     console.log('page', pageData);
     // Array.prototype.push.apply(projectData, pageData);
     // Array.prototype.concat(projectData, pageData);
-    const data = [ ...projectData, ...pageData ];
+    const data = [...projectData, ...pageData];
     console.log('data', data);
 
     data.sort((a: StoryResponseDto, b: StoryResponseDto): number => {
@@ -70,21 +74,32 @@ export class UserService {
       else if (d1 > d2) return -1;
       else return 0;
     });
-    
+
     console.log('sort data', data);
     return data;
   }
 
   // 본인 태그별 페이지 목록 조회
   public async getPagesByTag(userId: number, tag: number) {
-    const userTag = await this.userTagRepository.findAllPagesByUserIdAndTagId(userId, tag);
+    const userTag = await this.userTagRepository.findAllPagesByUserIdAndTagId(
+      userId,
+      tag,
+    );
     const pageTags = userTag.pageTags;
     return await Promise.all(
       pageTags.map(async (pageTag) => {
-        const pageImageCount = await this.pageImageRepository.getCountByPageId(pageTag.page.id);
-        const pageTags = await this.pageTagRepository.findAllJoinQuery(pageTag.page.id);
-        return PageResponseDto.ofPageSimple(pageTag.page, pageImageCount, pageTags);
-      })
+        const pageImageCount = await this.pageImageRepository.getCountByPageId(
+          pageTag.page.id,
+        );
+        const pageTags = await this.pageTagRepository.findAllJoinQuery(
+          pageTag.page.id,
+        );
+        return PageResponseDto.ofPageSimple(
+          pageTag.page,
+          pageImageCount,
+          pageTags,
+        );
+      }),
     );
   }
 }

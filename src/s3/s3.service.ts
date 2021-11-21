@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import * as dotenv from 'dotenv';
 import { extname } from 'path';
-import { PageImageRepository } from 'src/repositories/page-image.repository';
-import { ProfileRepository } from 'src/repositories/profile.repository';
 import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
@@ -16,8 +14,6 @@ const s3 = new AWS.S3();
 
 @Injectable()
 export class S3Service {
-  constructor() {}
-
   public async uploadProfileImage(
     userId: number,
     profileImage: Express.Multer.File,

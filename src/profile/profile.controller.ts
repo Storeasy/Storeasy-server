@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -23,9 +16,7 @@ import { UpdateProfileRequestDto } from './dto/update-profile.request.dto';
 @ApiTags('프로필')
 @Controller('api/profile')
 export class ProfileController {
-  constructor(
-    private readonly profileService: ProfileService,
-  ) {}
+  constructor(private readonly profileService: ProfileService) {}
 
   @ApiOperation({ summary: '추천 태그 목록 조회' })
   @ApiOkResponse({ type: TagResponseDto })

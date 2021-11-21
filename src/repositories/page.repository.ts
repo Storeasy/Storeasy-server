@@ -7,7 +7,7 @@ export class PageRepository extends Repository<Page> {
     return await this.findOne({
       where: { id: pageId },
       relations: ['project'],
-    })
+    });
   }
 
   public async findAllSinglePageByUserId(userId: number) {
@@ -15,7 +15,7 @@ export class PageRepository extends Repository<Page> {
       where: {
         userId: userId,
         projectId: null,
-      }
+      },
     });
   }
 }

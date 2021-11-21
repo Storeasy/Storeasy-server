@@ -1,5 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { ResponseEntity } from 'src/config/res/response-entity';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';

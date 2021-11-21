@@ -1,7 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
-import { PageTag } from 'src/entities/PageTag';
-import { RecommendTag } from 'src/entities/RecommendTag';
 import { Tag } from 'src/entities/Tag';
 import { TagColor } from 'src/entities/TagColor';
 
@@ -52,7 +49,7 @@ export class TagResponseDto {
     return {
       id: +projectTag.id,
       tagName: projectTag.name,
-      tagColor: projectTag.value
-    }
+      tagColor: projectTag.value,
+    };
   }
 }

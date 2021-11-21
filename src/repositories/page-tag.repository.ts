@@ -4,7 +4,8 @@ import { EntityRepository, Repository } from 'typeorm';
 @EntityRepository(PageTag)
 export class PageTagRepository extends Repository<PageTag> {
   public async findAllJoinQuery(pageId: number) {
-    return await this.query(`
+    return await this.query(
+      `
       select * from page_tag
       left join tag on page_tag.tag_id = tag.id
       left join user_tag on page_tag.tag_id = user_tag.tag_id

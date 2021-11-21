@@ -20,8 +20,8 @@ export class TagService {
   async getTagColors() {
     return await this.tagColorRepository.find({
       order: {
-        id: "ASC",
-      }
+        id: 'ASC',
+      },
     });
   }
 
@@ -32,7 +32,7 @@ export class TagService {
       return TagResponseDto.ofTag(
         await this.tagRepository.save({
           name: tagRequestDto.name,
-        })
+        }),
       );
     }
     return TagResponseDto.ofTag(tag);
@@ -49,8 +49,12 @@ export class TagService {
       tagColorRequestDto.tagColorId,
     );
 
-    const max = await this.userTagRepository.getOneMaxOrderNumByUserId(userId) == undefined ? 0 : await this.userTagRepository.getOneMaxOrderNumByUserId(userId);
-    
+    const max =
+      (await this.userTagRepository.getOneMaxOrderNumByUserId(userId)) ==
+      undefined
+        ? 0
+        : await this.userTagRepository.getOneMaxOrderNumByUserId(userId);
+
     if (!tag) {
       const newTag = await this.tagRepository.save({
         name: tagColorRequestDto.name,
@@ -58,14 +62,14 @@ export class TagService {
       await this.userTagRepository.save({
         userId: user.id,
         tagId: newTag.id,
-        orderNum: +(max.max)+1,
+        orderNum: +max.max + 1,
         tagColorId: tagColor.id,
       });
       return TagResponseDto.ofTagColor(newTag, tagColor);
     } else {
       const userTag = await this.userTagRepository.findOne({
         where: { userId: userId, tagId: tag.id },
-        relations: [ 'tag', 'tagColor' ],
+        relations: ['tag', 'tagColor'],
       });
       if (userTag) {
         return TagResponseDto.ofTagColor(userTag.tag, userTag.tagColor);
@@ -74,7 +78,7 @@ export class TagService {
       await this.userTagRepository.save({
         userId: user.id,
         tagId: tag.id,
-        orderNum: +(max.max)+1,
+        orderNum: +max.max + 1,
         tagColorId: tagColor.id,
       });
       return TagResponseDto.ofTagColor(tag, tagColor);

@@ -12,7 +12,7 @@ export class PageImageRepository extends Repository<PageImage> {
   public async getCountByPageId(pageId: number) {
     return await this.count({
       where: { pageId: pageId },
-    })
+    });
   }
 
   public async deleteAllByPageId(pageId: number) {

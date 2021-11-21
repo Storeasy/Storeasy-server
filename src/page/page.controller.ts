@@ -23,9 +23,7 @@ import { PageResponseDto } from './dto/page.response.dto';
 @ApiTags('페이지')
 @Controller('api/page')
 export class PageController {
-  constructor(
-    private readonly pageService: PageService,
-  ) {}
+  constructor(private readonly pageService: PageService) {}
 
   @ApiOperation({ summary: '페이지 생성' })
   @ApiCreatedResponse()

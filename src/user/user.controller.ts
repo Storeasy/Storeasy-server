@@ -34,7 +34,7 @@ export class UserController {
     );
   }
 
-  @ApiOperation({ summary: "본인 스토리 조회" })
+  @ApiOperation({ summary: '본인 스토리 조회' })
   @ApiOkResponse({ type: StoryResponseDto })
   @Get('story')
   async getMyStory(@Req() req) {
@@ -43,7 +43,7 @@ export class UserController {
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STORY_SUCCESS, data);
   }
 
-  @ApiOperation({ summary: "스토리 조회" })
+  @ApiOperation({ summary: '스토리 조회' })
   @ApiOkResponse({ type: StoryResponseDto })
   @Get(':userId/story')
   async getStory(@Param('userId') userId: number) {
@@ -51,7 +51,7 @@ export class UserController {
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STORY_SUCCESS, data);
   }
 
-  @ApiOperation({ summary: "본인 태그별 페이지 목록 조회" })
+  @ApiOperation({ summary: '본인 태그별 페이지 목록 조회' })
   @ApiOkResponse({ type: PageResponseDto })
   @Get('/page')
   async getPageByTag(@Req() req, @Query('tag') tag: number) {

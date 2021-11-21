@@ -1,4 +1,12 @@
-import { BadRequestException, Controller, Post, Req, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Post,
+  Req,
+  UploadedFile,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { ResponseEntity } from 'src/config/res/response-entity';
@@ -8,10 +16,8 @@ import { S3Service } from './s3.service';
 
 @Controller('api/upload')
 export class S3Controller {
-  constructor(
-    private readonly s3Service: S3Service,
-  ) {}
-  
+  constructor(private readonly s3Service: S3Service) {}
+
   @ApiOperation({ summary: '프로필 이미지 업로드' })
   @ApiCreatedResponse()
   @UseInterceptors(
@@ -32,7 +38,10 @@ export class S3Controller {
         req.user.userId,
         profileImage,
       );
-      return ResponseEntity.OK_WITH(ResponseStatus.UPLOAD_PROFILE_IMAGE_SUCCESS, profileImageFile.Location);
+      return ResponseEntity.OK_WITH(
+        ResponseStatus.UPLOAD_PROFILE_IMAGE_SUCCESS,
+        profileImageFile.Location,
+      );
     } else {
       return ResponseEntity.OK(ResponseStatus.UPLOAD_PROFILE_IMAGE_FAIL);
     }
@@ -59,9 +68,12 @@ export class S3Controller {
         pageImages,
       );
       const pageImagesUrls = await Promise.all(
-        pageImagesFiles.map(file => file.then((f) => f.Location))
+        pageImagesFiles.map((file) => file.then((f) => f.Location)),
       );
-      return ResponseEntity.OK_WITH(ResponseStatus.UPLOAD_PAGE_IMAGES_SUCCESS, pageImagesUrls);
+      return ResponseEntity.OK_WITH(
+        ResponseStatus.UPLOAD_PAGE_IMAGES_SUCCESS,
+        pageImagesUrls,
+      );
     } else {
       return ResponseEntity.OK(ResponseStatus.UPLOAD_PAGE_IMAGES_FAIL);
     }

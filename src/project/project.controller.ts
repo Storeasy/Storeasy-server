@@ -79,7 +79,10 @@ export class ProjectController {
   @ApiOkResponse({ type: ProjectDetailResponseDto })
   @Get(':projectId')
   async getProject(@Req() req, @Param('projectId') projectId: number) {
-    const data = await this.projectService.getProject(req.user.userId, projectId);
+    const data = await this.projectService.getProject(
+      req.user.userId,
+      projectId,
+    );
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_PAGES_SUCCESS, data);
   }
 }
