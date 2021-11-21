@@ -170,6 +170,18 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.OK,
     '페이지 목록 조회 성공',
   );
+  static PROFILE_IS_NOT_PUBLIC = new ResponseStatus(
+    HttpStatus.FORBIDDEN,
+    '프로필 조회 실패',
+  );
+  static PROJECT_IS_NOT_PUBLIC = new ResponseStatus(
+    HttpStatus.FORBIDDEN,
+    '프로젝트 조회 실패',
+  );
+  static PAGE_IS_NOT_PUBLIC = new ResponseStatus(
+    HttpStatus.FORBIDDEN,
+    '페이지 조회 실패',
+  );
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

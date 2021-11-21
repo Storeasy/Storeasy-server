@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ResponseEntity } from 'src/config/res/response-entity';
+import { ResponseStatus } from 'src/config/res/response-status';
 import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
 import { RecommendTagRepository } from 'src/repositories/recommend-tag.repository';
@@ -48,8 +50,30 @@ export class ProfileService {
     );
   }
 
+  // 본인 프로필 조회
+  async getMyProfile(userId: number) {
+    const profile = await this.profileRepository.findOne(userId);
+    const tags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
+
+    const resTags = await Promise.all(
+      tags.map((profileTag) => {
+        return TagResponseDto.ofTag(profileTag.tag);
+      }),
+    );
+
+    return ProfileResponseDto.ofProfile(profile, resTags);
+  }
+
+  // 프로필 조회
   async getProfile(userId: number) {
     const profile = await this.profileRepository.findOne(userId);
+    if (!profile) {
+      throw new NotFoundException(ResponseStatus.PROFILE_NOT_FOUND);
+    }
+    if (!profile.isPublic) {
+      throw new ForbiddenException(ResponseStatus.PROFILE_IS_NOT_PUBLIC);
+    }
+
     const tags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
 
     const resTags = await Promise.all(

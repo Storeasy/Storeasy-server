@@ -56,7 +56,7 @@ export class ProfileController {
   @ApiOkResponse({ type: ProfileResponseDto })
   @Get()
   async getMyProfile(@Req() req) {
-    const data = await this.profileService.getProfile(req.user.userId);
+    const data = await this.profileService.getMyProfile(req.user.userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_PROFILE_SUCCESS, data);
   }
 
