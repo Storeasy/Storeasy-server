@@ -20,13 +20,13 @@ export class PageResponseDto {
     example: 1,
     description: '프로젝트 ID',
   })
-  projectId: number;
+  projectId?: number;
 
   @ApiProperty({
     example: '테스트 프로젝트',
     description: '프로젝트명',
   })
-  projectTitle: string;
+  projectTitle?: string;
 
   @ApiProperty({
     example: 1,

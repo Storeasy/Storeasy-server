@@ -9,4 +9,11 @@ export class ProjectRepository extends Repository<Project> {
       relations: ['projectColor']
     });
   }
+
+  public async findAllPagesByProjectId(projectId: number) {
+    return await this.findOne({
+      where: { id: projectId },
+      relations: ['projectColor', 'pages'],
+    })
+  }
 }

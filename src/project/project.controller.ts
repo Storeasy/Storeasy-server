@@ -17,6 +17,7 @@ import { ResponseEntity } from 'src/config/res/response-entity';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { CreateProjectRequestDto } from './dto/create-project.request.dto';
 import { ProjectColorResponseDto } from './dto/project-color.response.dto';
+import { ProjectDetailResponseDto } from './dto/project-detail.response.dto';
 import { UpdateProjectRequestDto } from './dto/update-project.request.dto';
 import { ProjectService } from './project.service';
 
@@ -72,5 +73,13 @@ export class ProjectController {
   async deleteProject(@Req() req, @Param('projectId') projectId: number) {
     await this.projectService.deleteProject(req.user.userId, projectId);
     return ResponseEntity.OK(ResponseStatus.DELETE_PROJECT_SUCCESS);
+  }
+
+  @ApiOperation({ summary: '프로젝트 상세 조회' })
+  @ApiOkResponse({ type: ProjectDetailResponseDto })
+  @Get(':projectId')
+  async getProject(@Req() req, @Param('projectId') projectId: number) {
+    const data = await this.projectService.getProject(req.user.userId, projectId);
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_PAGES_SUCCESS, data);
   }
 }
