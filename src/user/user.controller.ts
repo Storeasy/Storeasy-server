@@ -2,6 +2,7 @@ import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { ResponseStatus } from 'src/config/res/response-status';
+import { PageResponseDto } from 'src/page/dto/page.response.dto';
 import { TagResponseDto } from 'src/tag/dto/tag.response.dto';
 import { StoryResponseDto } from './dto/story.response.dto';
 import { UserService } from './user.service';
@@ -34,7 +35,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: "본인 스토리 조회" })
-  @ApiOkResponse()
+  @ApiOkResponse({ type: StoryResponseDto })
   @Get('story')
   async getMyStory(@Req() req) {
     console.log(req.user);
@@ -43,7 +44,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: "스토리 조회" })
-  @ApiOkResponse()
+  @ApiOkResponse({ type: StoryResponseDto })
   @Get(':userId/story')
   async getStory(@Param('userId') userId: number) {
     const data = await this.userService.getStory(userId);
@@ -51,7 +52,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: "본인 태그별 페이지 목록 조회" })
-  @ApiOkResponse()
+  @ApiOkResponse({ type: PageResponseDto })
   @Get('/page')
   async getPageByTag(@Req() req, @Query('tag') tag: number) {
     const data = await this.userService.getPagesByTag(req.user.userId, tag);
