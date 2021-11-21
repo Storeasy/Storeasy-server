@@ -45,6 +45,7 @@ import { Payment } from './entities/Payment';
 import { Profile } from './entities/Profile';
 import { Notification } from './entities/Notification';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { LikeModule } from './like/like.module';
 
 dotenv.config();
 @Module({
@@ -107,6 +108,7 @@ dotenv.config();
     ProjectModule,
     PageModule,
     UserModule,
+    LikeModule,
   ],
   providers: [
     {
