@@ -8,12 +8,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { imageFileFilter } from './image-file-filter';
 import { S3Service } from './s3.service';
 
+@ApiTags('업로드')
 @Controller('api/upload')
 export class S3Controller {
   constructor(private readonly s3Service: S3Service) {}
