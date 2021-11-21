@@ -22,7 +22,10 @@ export class PageService {
   ) {}
 
   // 페이지 생성
-  public async createPage(userId: number, createPageRequestDto: CreatePageRequestDto) {
+  public async createPage(
+    userId: number,
+    createPageRequestDto: CreatePageRequestDto,
+  ) {
     const { tagIds, pageImages, ...newDto } = createPageRequestDto;
 
     const page = this.pageRepository.create(newDto);
@@ -42,19 +45,19 @@ export class PageService {
         }),
       );
     }
-    
+
     if (createPageRequestDto.pageImages) {
       for (const [i, v] of createPageRequestDto.pageImages.entries()) {
         await this.pageImageRepository.save({
           page: page,
           imageUrl: v,
-          orderNum: i+1,
-        })
+          orderNum: i + 1,
+        });
       }
     }
   }
 
-  // 페이지 수정 
+  // 페이지 수정
   public async updatePage(
     userId: number,
     pageId: number,
@@ -81,16 +84,16 @@ export class PageService {
             orderNum: i + 1,
           });
         }),
-      );    
-    } 
+      );
+    }
     if (updatePageRequestDto.pageImages) {
       await this.pageImageRepository.deleteAllByPageId(pageId);
       for (const [i, v] of updatePageRequestDto.pageImages.entries()) {
         await this.pageImageRepository.save({
           page: page,
           imageUrl: v,
-          orderNum: i+1,
-        })
+          orderNum: i + 1,
+        });
       }
     }
 
@@ -114,8 +117,15 @@ export class PageService {
   }
 
   // 페이지 상세 조회
-  public async getPage(pageId: number) {
+  public async getPage(userId: number, pageId: number) {
     const page = await this.pageRepository.findOneByPageId(pageId);
+    if (!page) {
+      throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
+    }
+    if (page.userId != userId && !page.isPublic) {
+      throw new ForbiddenException(ResponseStatus.PAGE_IS_NOT_PUBLIC);
+    }
+
     const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
     const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
 

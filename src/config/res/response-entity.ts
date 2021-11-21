@@ -1,6 +1,4 @@
-import {
-  ApiProperty
-} from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { ResponseStatus } from './response-status';
 import { Exclude, Expose } from 'class-transformer';
 

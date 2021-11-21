@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsString } from 'class-validator';
 
 export class CreatePageRequestDto {
   @ApiProperty({

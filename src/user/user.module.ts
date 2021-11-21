@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PageImage } from 'src/entities/PageImage';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
@@ -19,7 +18,7 @@ import { UserService } from './user.service';
       PageRepository,
       PageImageRepository,
       PageTagRepository,
-    ])
+    ]),
   ],
   controllers: [UserController],
   providers: [UserService],

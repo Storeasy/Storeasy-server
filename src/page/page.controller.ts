@@ -23,9 +23,7 @@ import { PageResponseDto } from './dto/page.response.dto';
 @ApiTags('페이지')
 @Controller('api/page')
 export class PageController {
-  constructor(
-    private readonly pageService: PageService,
-  ) {}
+  constructor(private readonly pageService: PageService) {}
 
   @ApiOperation({ summary: '페이지 생성' })
   @ApiCreatedResponse()
@@ -65,8 +63,8 @@ export class PageController {
   @ApiOperation({ summary: '페이지 상세 조회' })
   @ApiOkResponse({ type: PageResponseDto })
   @Get(':pageId')
-  async getPage(@Param('pageId') pageId: number) {
-    const data = await this.pageService.getPage(pageId);
+  async getPage(@Req() req, @Param('pageId') pageId: number) {
+    const data = await this.pageService.getPage(req.user.userId, pageId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_PAGE_SUCCESS, data);
   }
 }

@@ -1,8 +1,8 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Page } from "src/entities/Page";
-import { Project } from "src/entities/Project";
-import { TagResponseDto } from "src/tag/dto/tag.response.dto";
-import { StoryType } from "./story-type.enum";
+import { ApiProperty } from '@nestjs/swagger';
+import { Page } from 'src/entities/Page';
+import { Project } from 'src/entities/Project';
+import { TagResponseDto } from 'src/tag/dto/tag.response.dto';
+import { StoryType } from './story-type.enum';
 
 export class StoryResponseDto {
   @ApiProperty({
@@ -13,7 +13,7 @@ export class StoryResponseDto {
 
   @ApiProperty({
     example: 1,
-    description: "사용자 ID"
+    description: '사용자 ID',
   })
   userId: number;
 
@@ -25,31 +25,31 @@ export class StoryResponseDto {
 
   @ApiProperty({
     example: 1,
-    description: "프로젝트 ID"
+    description: '프로젝트 ID',
   })
   projectId?: number;
 
   @ApiProperty({
-    example: "red",
-    description: "프로젝트색 값"
+    example: 'red',
+    description: '프로젝트색 값',
   })
   projectColor?: string;
 
   @ApiProperty({
     example: 1,
-    description: "페이지 ID",
+    description: '페이지 ID',
   })
   pageId?: number;
 
   @ApiProperty({
-    example: "테스트 프로젝트/페이지",
-    description: "프로젝트명/페이지명",
+    example: '테스트 프로젝트/페이지',
+    description: '프로젝트명/페이지명',
   })
   title: string;
 
   @ApiProperty({
-    example: "테스트 프로젝트입니다",
-    description: "프로젝트 설명"
+    example: '테스트 프로젝트입니다',
+    description: '프로젝트 설명',
   })
   description?: string;
 
@@ -60,26 +60,26 @@ export class StoryResponseDto {
   content?: string;
 
   @ApiProperty({
-    example: "2021-11-01",
-    description: "프로젝트/페이지 시작 날짜"
+    example: '2021-11-01',
+    description: '프로젝트/페이지 시작 날짜',
   })
   startDate: string;
 
   @ApiProperty({
-    example: "2021-11-01",
-    description: "프로젝트/페이지 종료 날짜"
+    example: '2021-11-01',
+    description: '프로젝트/페이지 종료 날짜',
   })
   endDate: string;
 
   @ApiProperty({
     example: 1,
-    description: "페이지 이미지 개수"
+    description: '페이지 이미지 개수',
   })
   imageCount?: number;
 
   @ApiProperty({
     example: [],
-    description: "프로젝트/페이지 태그"
+    description: '프로젝트/페이지 태그',
   })
   tags: TagResponseDto[];
 
@@ -95,10 +95,14 @@ export class StoryResponseDto {
       startDate: project.startDate,
       endDate: project.endDate,
       tags: tags.map((tag) => TagResponseDto.ofProjectTag(tag)),
-    }
+    };
   }
 
-  public static ofPage(page: Page, imageCount: number, tags: any[]): StoryResponseDto {
+  public static ofPage(
+    page: Page,
+    imageCount: number,
+    tags: any[],
+  ): StoryResponseDto {
     return {
       type: StoryType.PAGE,
       userId: +page.userId,
