@@ -114,8 +114,15 @@ export class PageService {
   }
 
   // 페이지 상세 조회
-  public async getPage(pageId: number) {
+  public async getPage(userId: number, pageId: number) {
     const page = await this.pageRepository.findOneByPageId(pageId);
+    if (!page) {
+      throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
+    }
+    if (page.userId != userId && !page.isPublic) {
+      throw new ForbiddenException(ResponseStatus.PAGE_IS_NOT_PUBLIC);
+    }
+
     const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
     const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
 

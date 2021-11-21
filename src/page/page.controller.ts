@@ -65,8 +65,8 @@ export class PageController {
   @ApiOperation({ summary: '페이지 상세 조회' })
   @ApiOkResponse({ type: PageResponseDto })
   @Get(':pageId')
-  async getPage(@Param('pageId') pageId: number) {
-    const data = await this.pageService.getPage(pageId);
+  async getPage(@Req() req, @Param('pageId') pageId: number) {
+    const data = await this.pageService.getPage(req.user.userId, pageId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_PAGE_SUCCESS, data);
   }
 }
