@@ -5,9 +5,11 @@ import { LikeUserRepository } from 'src/repositories/like-user.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
+import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
 import { UserRepository } from 'src/repositories/user.repository';
 import { LikePageResponseDto } from './dto/like-page.response.dto';
+import { LikeUserResponseDto } from './dto/like-user.response.dto';
 
 @Injectable()
 export class LikeService {
@@ -19,6 +21,7 @@ export class LikeService {
     private readonly profileRepository: ProfileRepository,
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
+    private readonly profileTagRepository: ProfileTagRepository,
   ) {}
 
   public async likeUser(sender: number, receiver: number) {
@@ -51,14 +54,23 @@ export class LikeService {
   }
 
   public async getLikeUsers(userId: number) {
-    
+    const likeUsers = await this.likeUserRepository.findAllUsersByUserId(userId);
+    console.log(likeUsers);
+    const profiles = likeUsers.map(like => like.receiverUser.profile);
+    console.log(profiles);
+
+    return await Promise.all(
+      profiles.map(async (profile) => {
+        const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(profile.userId);
+        const tags = profileTags.map(profileTag => profileTag.tag);
+        return  LikeUserResponseDto.ofLikeUser(profile, tags);
+      })
+    );
   }
 
   public async getLikePages(userId: number) {
     const likePages = await this.likePageRepository.findAllPagesByUserId(userId);
-    const pages = likePages.map(like => {
-      return like.page;
-    });
+    const pages = likePages.map(like => like.page);
 
     return await Promise.all(
       pages.map(async (page) => {

@@ -32,6 +32,7 @@ export class LikeController {
   @Get('user')
   async getLikeUsers(@Req() req) {
     const data = await this.likeService.getLikeUsers(req.user.userId);
+    console.log(data);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_LIKE_USERS_SUCCESS, data);
   }
 
