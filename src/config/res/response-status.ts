@@ -202,6 +202,14 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.NOT_FOUND,
     '해당 사용자를 찾을 수 없습니다',
   );
+  static READ_ALL_LIKE_USERS_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '좋아요한 사용자 목록 조회 성공',
+  );
+  static READ_ALL_LIKE_PAGES_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '좋아요한 페이지 목록 조회 성공',
+  );
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

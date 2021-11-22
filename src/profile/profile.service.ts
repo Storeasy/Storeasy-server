@@ -56,15 +56,10 @@ export class ProfileService {
   // 본인 프로필 조회
   async getMyProfile(userId: number) {
     const profile = await this.profileRepository.findOne(userId);
-    const tags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
+    const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
+    const tags = profileTags.map(profileTag => profileTag.tag);
 
-    const resTags = await Promise.all(
-      tags.map((profileTag) => {
-        return TagResponseDto.ofTag(profileTag.tag);
-      }),
-    );
-
-    return ProfileResponseDto.ofProfile(profile, resTags);
+    return ProfileResponseDto.ofProfile(profile, tags);
   }
 
   // 프로필 조회
@@ -77,15 +72,10 @@ export class ProfileService {
       throw new ForbiddenException(ResponseStatus.PROFILE_IS_NOT_PUBLIC);
     }
 
-    const tags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
-
-    const resTags = await Promise.all(
-      tags.map((profileTag) => {
-        return TagResponseDto.ofTag(profileTag.tag);
-      }),
-    );
-
-    return ProfileResponseDto.ofProfile(profile, resTags);
+    const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
+    const tags = profileTags.map(profileTag => profileTag.tag);
+    
+    return ProfileResponseDto.ofProfile(profile, tags);
   }
 
   async updateProfile(

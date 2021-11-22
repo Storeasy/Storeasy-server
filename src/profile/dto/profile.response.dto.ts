@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Profile } from 'src/entities/Profile';
+import { Tag } from 'src/entities/Tag';
 import { TagResponseDto } from 'src/tag/dto/tag.response.dto';
 
 export class ProfileResponseDto {
@@ -53,7 +54,7 @@ export class ProfileResponseDto {
 
   public static ofProfile(
     profile: Profile,
-    tags: TagResponseDto[],
+    tags: any[],
   ): ProfileResponseDto {
     return {
       userId: +profile.userId,
@@ -63,7 +64,7 @@ export class ProfileResponseDto {
       universityName: profile.universityName,
       contact: profile.contact,
       bio: profile.bio,
-      tags: tags,
+      tags: tags.map((tag) => TagResponseDto.ofTag(tag))
     };
   }
 }

@@ -27,12 +27,12 @@ export class LikeUser {
     onUpdate: 'NO ACTION',
   })
   @JoinColumn([{ name: 'sender', referencedColumnName: 'id' }])
-  sender2: User;
+  senderUser: User;
 
   @ManyToOne(() => User, (user) => user.likeUsers2, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
   @JoinColumn([{ name: 'receiver', referencedColumnName: 'id' }])
-  receiver2: User;
+  receiverUser: User;
 }

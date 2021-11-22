@@ -89,10 +89,10 @@ export class User {
   @OneToMany(() => LikePage, (likePage) => likePage.sender2)
   likePages: LikePage[];
 
-  @OneToMany(() => LikeUser, (likeUser) => likeUser.sender2)
+  @OneToMany(() => LikeUser, (likeUser) => likeUser.senderUser)
   likeUsers: LikeUser[];
 
-  @OneToMany(() => LikeUser, (likeUser) => likeUser.receiver2)
+  @OneToMany(() => LikeUser, (likeUser) => likeUser.receiverUser)
   likeUsers2: LikeUser[];
 
   @OneToMany(() => Message, (message) => message.user)
