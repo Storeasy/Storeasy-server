@@ -1,7 +1,7 @@
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Global, Module } from '@nestjs/common';
 import { MailService } from './mail.service';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthRepository } from 'src/repositories/auth.repository';
@@ -11,20 +11,21 @@ import { AuthRepository } from 'src/repositories/auth.repository';
   imports: [
     TypeOrmModule.forFeature([AuthRepository]),
     MailerModule.forRootAsync({
-      // imports: [ConfigModule], // import module if not enabled globally
-      useFactory: async (config: ConfigService) => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
         // transport: config.get("MAIL_TRANSPORT"),
         // or
         transport: {
-          host: config.get('MAIL_HOST'),
+          host: configService.get('mail.host'),
           secure: false,
           auth: {
-            user: config.get('MAIL_USER'),
-            pass: config.get('MAIL_PASSWORD'),
+            user: configService.get('mail.user'),
+            pass: configService.get('mail.password'),
           },
         },
         defaults: {
-          from: `"No Reply" <${config.get('MAIL_FROM')}>`,
+          from: `"No Reply" <${configService.get('mail.from')}>`,
         },
         template: {
           dir: 'dist/mail/templates',
@@ -34,7 +35,6 @@ import { AuthRepository } from 'src/repositories/auth.repository';
           },
         },
       }),
-      inject: [ConfigService],
     }),
   ],
   providers: [MailService],

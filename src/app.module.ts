@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MorganInterceptor, MorganModule } from 'nest-morgan';
 import { ClassSerializerInterceptor } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
-import * as ormconfig from '../ormconfig';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { MailModule } from './mail/mail.module';
 import { ProfileModule } from './profile/profile.module';
@@ -46,59 +45,68 @@ import { Profile } from './entities/Profile';
 import { Notification } from './entities/Notification';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { LikeModule } from './like/like.module';
+import configuration from './config/configuration';
+import databaseConfig from './config/database.config';
+import mailConfig from './config/mail.config';
 
 dotenv.config();
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'prod' ? '.env.prod' : '.env',
+      envFilePath: `${process.cwd()}/.${process.env.NODE_ENV}.env`,
+      load: [configuration, databaseConfig, mailConfig],
+      cache: true,
+      expandVariables: true,
     }),
     MorganModule,
-    // TypeOrmModule.forRoot(ormconfig),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: 3306,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_SCHEMA,
-      entities: [
-        Agreement,
-        Auth,
-        CoverletterAnswer,
-        CoverletterConsulting,
-        CoverletterQuestion,
-        LikePage,
-        LikeUser,
-        Message,
-        MessageRoom,
-        Notification,
-        Page,
-        PageImage,
-        PageTag,
-        Payment,
-        Profile,
-        Project,
-        ProjectColor,
-        ProjectTag,
-        RecommendConslutingQuestion,
-        RecommendTag,
-        RefreshToken,
-        SourceConsulting,
-        Tag,
-        TagColor,
-        University,
-        User,
-        UserAgreement,
-        UserTag,
-      ],
-      autoLoadEntities: true,
-      charset: 'utf8mb4',
-      synchronize: false,
-      logging: true,
-      keepConnectionAlive: true,
-      namingStrategy: new SnakeNamingStrategy(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('database.host'),
+        port: configService.get('database.port'),
+        username: configService.get('database.username'),
+        password: configService.get('database.password'),
+        database: configService.get('database.schema'),
+        entities: [
+          Agreement,
+          Auth,
+          CoverletterAnswer,
+          CoverletterConsulting,
+          CoverletterQuestion,
+          LikePage,
+          LikeUser,
+          Message,
+          MessageRoom,
+          Notification,
+          Page,
+          PageImage,
+          PageTag,
+          Payment,
+          Profile,
+          Project,
+          ProjectColor,
+          ProjectTag,
+          RecommendConslutingQuestion,
+          RecommendTag,
+          RefreshToken,
+          SourceConsulting,
+          Tag,
+          TagColor,
+          University,
+          User,
+          UserAgreement,
+          UserTag,
+        ],
+        autoLoadEntities: true,
+        charset: 'utf8mb4',
+        synchronize: false,
+        logging: true,
+        keepConnectionAlive: true,
+        namingStrategy: new SnakeNamingStrategy(),
+      }),
     }),
     AuthModule,
     MailModule,
@@ -123,7 +131,6 @@ dotenv.config();
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    S3Service,
   ],
 })
 export class AppModule {}

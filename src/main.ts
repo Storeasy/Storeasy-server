@@ -1,4 +1,5 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/exceptions/http-exceptions.filter';
@@ -23,8 +24,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const port = process.env.PORT || 3000;
-  // const env = process.env.NODE_ENV;
+  const configService = app.get(ConfigService);
+  const port = configService.get('port');
+  
   await app.listen(port);
   console.log(`listening on port ${port}`);
 

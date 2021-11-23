@@ -3,7 +3,6 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './strategy/local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './strategy/constants';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,13 +13,20 @@ import { MailModule } from 'src/mail/mail.module';
 import { AuthRepository } from 'src/repositories/auth.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
 import { CoverletterAnswer } from 'src/entities/CoverletterAnswer';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     PassportModule.register({ session: true }),
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '30d' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('jwt.secret'),
+        signOptions: {
+          expiresIn: '30d',
+        },
+      }),
     }),
     TypeOrmModule.forFeature([
       CoverletterAnswer,
