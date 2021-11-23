@@ -135,17 +135,22 @@ export class ProjectService {
     const projectData = ProjectResponseDto.ofProject(project, projectTags);
 
     const pages = project.pages;
+    const publicPages = pages.filter(page => {
+      if(page.isPublic) {
+        return true;
+      } else {
+        return false;
+      }
+    });
     const pageData = await Promise.all(
-      pages.map(async (page) => {
-        if (page.isPublic) {
-          const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
-          const pageImageCount =
-            await this.pageImageRepository.getCountByPageId(page.id);
-          const pageTags = await this.pageTagRepository.findAllJoinQuery(
-            page.id,
-          );
-          return PageResponseDto.ofPageSimple(page, isLiked, pageImageCount, pageTags);
-        }
+      publicPages.map(async (page) => {
+        const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
+        const pageImageCount =
+          await this.pageImageRepository.getCountByPageId(page.id);
+        const pageTags = await this.pageTagRepository.findAllJoinQuery(
+          page.id,
+        );
+        return PageResponseDto.ofPageSimple(page, isLiked, pageImageCount, pageTags);
       }),
     );
 
