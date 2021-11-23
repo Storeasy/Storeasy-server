@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { PageResponseDto } from 'src/page/dto/page.response.dto';
+import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { ProjectColorRepository } from 'src/repositories/project-color.repository';
@@ -25,6 +26,7 @@ export class ProjectService {
     private readonly projectTagRepository: ProjectTagRepository,
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
+    private readonly likePageRepository: LikePageRepository,
   ) {}
 
   // 프로젝트색 목록 조회
@@ -136,12 +138,13 @@ export class ProjectService {
     const pageData = await Promise.all(
       pages.map(async (page) => {
         if (page.isPublic) {
+          const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
           const pageImageCount =
             await this.pageImageRepository.getCountByPageId(page.id);
           const pageTags = await this.pageTagRepository.findAllJoinQuery(
             page.id,
           );
-          return PageResponseDto.ofPageSimple(page, pageImageCount, pageTags);
+          return PageResponseDto.ofPageSimple(page, isLiked, pageImageCount, pageTags);
         }
       }),
     );

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PageResponseDto } from 'src/page/dto/page.response.dto';
+import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
@@ -18,6 +19,7 @@ export class UserService {
     private readonly pageRepository: PageRepository,
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
+    private readonly likePageRepository: LikePageRepository,
   ) {}
 
   // 본인 태그 목록 조회
@@ -56,11 +58,12 @@ export class UserService {
     const pageData = await Promise.all(
       pages.map(async (page) => {
         if(page.isPublic) {
+          const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
           const pageImageCount = await this.pageImageRepository.getCountByPageId(
             page.id,
           );
           const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
-          return StoryResponseDto.ofPage(page, pageImageCount, pageTags);
+          return StoryResponseDto.ofPage(page, isLiked, pageImageCount, pageTags);
         }
       }),
     );
@@ -92,6 +95,7 @@ export class UserService {
     const pageTags = userTag.pageTags;
     return await Promise.all(
       pageTags.map(async (pageTag) => {
+        const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageTag.page.id);
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
           pageTag.page.id,
         );
@@ -100,6 +104,7 @@ export class UserService {
         );
         return PageResponseDto.ofPageSimple(
           pageTag.page,
+          isLiked,
           pageImageCount,
           pageTags,
         );

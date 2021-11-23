@@ -17,6 +17,12 @@ export class PageResponseDto {
   isPublic: boolean;
 
   @ApiProperty({
+    example: true,
+    description: '좋아요 여부',
+  })
+  isLiked: boolean;
+
+  @ApiProperty({
     example: 1,
     description: '프로젝트 ID',
   })
@@ -78,12 +84,14 @@ export class PageResponseDto {
 
   public static ofPage(
     page: Page,
+    isLiked: boolean,
     images: PageImage[],
     tags: any[],
   ): PageResponseDto {
     return {
       userId: +page.userId,
       isPublic: page.isPublic,
+      isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
       pageId: +page.id,
@@ -98,12 +106,14 @@ export class PageResponseDto {
 
   public static ofPageSimple(
     page: Page,
+    isLiked: boolean,
     imageCount: number,
     tags: any[],
   ): PageResponseDto {
     return {
       userId: +page.userId,
       isPublic: page.isPublic,
+      isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
       pageId: +page.id,
