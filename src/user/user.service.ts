@@ -101,6 +101,10 @@ export class UserService {
       userId,
       tag,
     );
+    if(!userTag) {
+      return null;
+    }
+
     const pageTags = userTag.pageTags;
     return await Promise.all(
       pageTags.map(async (pageTag) => {
