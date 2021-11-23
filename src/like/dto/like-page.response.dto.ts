@@ -131,7 +131,7 @@ export class LikePageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       imageCount: imageCount,
-      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
+      tags: tags.map((tag) => TagResponseDto.ofTag(tag)),
     };
   }
 }

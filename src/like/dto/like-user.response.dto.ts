@@ -46,7 +46,7 @@ export class LikeUserResponseDto {
       nickname: profile.nickname,
       universityName: profile.universityName,
       isLiked: true,
-      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
+      tags: tags.map((tag) => TagResponseDto.ofTag(tag)),
     }
   }
 }
