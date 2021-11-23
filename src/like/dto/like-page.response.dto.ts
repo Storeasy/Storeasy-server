@@ -108,7 +108,7 @@ export class LikePageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       images: images.map((image) => image.imageUrl),
-      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
+      tags: tags.map((tag) => TagResponseDto.ofTag(tag)),
     };
   }
 

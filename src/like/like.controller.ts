@@ -43,4 +43,12 @@ export class LikeController {
     const data = await this.likeService.getLikePages(req.user.userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_LIKE_PAGES_SUCCESS, data);
   }
+
+  @ApiOperation({ summary: '좋아요한 페이지 상세 조회' })
+  @ApiOkResponse()
+  @Get('page/:pageId')
+  async getLikePage(@Req() req, @Param('pageId') pageId: number) {
+    const data = await this.likeService.getLikePage(req.user.userId, pageId);
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_LIKE_PAGE_SUCCESS, data);
+  }
 }

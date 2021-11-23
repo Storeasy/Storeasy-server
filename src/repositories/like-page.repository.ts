@@ -18,4 +18,13 @@ export class LikePageRepository extends Repository<LikePage> {
       .leftJoinAndSelect('page.project', 'project')
       .getMany();
   }
+
+  public async findPageByUserIdAndPageId(userId: number, pageId: number) {
+    return await this.createQueryBuilder('likePage')
+      .where('likePage.sender = :userId', { userId: userId })
+      .andWhere('likePage.pageId = :pageId', { pageId: pageId })
+      .leftJoinAndSelect('likePage.page', 'page')
+      .leftJoinAndSelect('page.project', 'project')
+      .getOne();
+  }
 }

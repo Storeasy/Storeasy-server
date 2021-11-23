@@ -95,4 +95,21 @@ export class LikeService {
       })
     );
   }
+
+  public async getLikePage(userId: number, pageId: number) {
+    const likePage = await this.likePageRepository.findPageByUserIdAndPageId(userId, pageId);
+    console.log(likePage);
+
+    if (!likePage) {
+      throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
+    }
+    if (!likePage.page.isPublic) {
+      throw new ForbiddenException(ResponseStatus.PAGE_IS_NOT_PUBLIC);
+    }
+
+    const profile = await this.profileRepository.findOne(likePage.page.userId);
+    const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
+    const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
+    return LikePageResponseDto.ofLikePage(profile, likePage.page, pageImages, pageTags);
+  }
 }
