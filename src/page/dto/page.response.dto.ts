@@ -90,7 +90,7 @@ export class PageResponseDto {
   ): PageResponseDto {
     return {
       userId: +page.userId,
-      isPublic: page.isPublic,
+      isPublic: page.isPublic == true ? true : false,
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
@@ -112,7 +112,7 @@ export class PageResponseDto {
   ): PageResponseDto {
     return {
       userId: +page.userId,
-      isPublic: page.isPublic,
+      isPublic: page.isPublic == true ? true : false,
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,

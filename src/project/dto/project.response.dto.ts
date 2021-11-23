@@ -60,7 +60,7 @@ export class ProjectResponseDto {
   public static ofProject(project: Project, tags: any[]) {
     return {
       userId: +project.userId,
-      isPublic: project.isPublic,
+      isPublic: project.isPublic == true ? true : false,
       projectId: +project.id,
       projectColor: project.projectColor.value,
       title: project.title,
