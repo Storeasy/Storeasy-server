@@ -1,4 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ExploreService {}
+export class ExploreService {
+  constructor() {}
+
+  public async getRecommendPages(userId: number) {
+    
+  }
+}
