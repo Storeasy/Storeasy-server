@@ -14,7 +14,13 @@ export class ProfileResponseDto {
     example: true,
     description: '공개 여부',
   })
-  isPublic: boolean;
+  isPublic?: boolean;
+
+  @ApiProperty({
+    example: true,
+    description: '좋아요 여부',
+  })
+  isLiked?: boolean;
 
   @ApiProperty({
     example: 'http://어쩌구저쩌구',
@@ -52,13 +58,30 @@ export class ProfileResponseDto {
   })
   tags: TagResponseDto[];
 
-  public static ofProfile(
+  public static ofMyProfile(
     profile: Profile,
     tags: any[],
   ): ProfileResponseDto {
     return {
       userId: +profile.userId,
-      isPublic: profile.isPublic,
+      isPublic: profile.isPublic == true ? true : false,
+      profileImage: profile.profileImage,
+      nickname: profile.nickname,
+      universityName: profile.universityName,
+      contact: profile.contact,
+      bio: profile.bio,
+      tags: tags.map((tag) => TagResponseDto.ofTag(tag))
+    };
+  }
+
+  public static ofProfile(
+    profile: Profile,
+    isLiked: boolean,
+    tags: any[],
+  ): ProfileResponseDto {
+    return {
+      userId: +profile.userId,
+      isLiked: isLiked,
       profileImage: profile.profileImage,
       nickname: profile.nickname,
       universityName: profile.universityName,
