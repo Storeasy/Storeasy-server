@@ -46,18 +46,20 @@ export class ProjectService {
 
     await this.projectRepository.save(project);
 
-    const tags = await this.tagRepository.findByIds(
-      createProjectRequestDto.tagIds,
-    );
-    await Promise.all(
-      tags.map((tag, i) => {
-        this.projectTagRepository.save({
-          projectId: project.id,
-          tagId: tag.id,
-          orderNum: i + 1,
-        });
-      }),
-    );
+    if(createProjectRequestDto.tagIds) {
+      const tags = await this.tagRepository.findByIds(
+        createProjectRequestDto.tagIds,
+      );
+      await Promise.all(
+        tags.map((tag, i) => {
+          this.projectTagRepository.save({
+            projectId: project.id,
+            tagId: tag.id,
+            orderNum: i + 1,
+          });
+        }),
+      );
+    }
   }
 
   // 프로젝트 수정

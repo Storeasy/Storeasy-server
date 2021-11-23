@@ -54,6 +54,5 @@ export class CreateProjectRequestDto {
     example: [1, 2, 3],
     description: '태그 ID',
   })
-  @IsArray()
-  tagIds: number[];
+  tagIds?: number[];
 }
