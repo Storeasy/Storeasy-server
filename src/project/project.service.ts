@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { ResponseStatus } from 'src/config/res/response-status';
 import { PageResponseDto } from 'src/page/dto/page.response.dto';
+import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { ProjectColorRepository } from 'src/repositories/project-color.repository';
@@ -25,6 +26,7 @@ export class ProjectService {
     private readonly projectTagRepository: ProjectTagRepository,
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
+    private readonly likePageRepository: LikePageRepository,
   ) {}
 
   // 프로젝트색 목록 조회
@@ -46,18 +48,20 @@ export class ProjectService {
 
     await this.projectRepository.save(project);
 
-    const tags = await this.tagRepository.findByIds(
-      createProjectRequestDto.tagIds,
-    );
-    await Promise.all(
-      tags.map((tag, i) => {
-        this.projectTagRepository.save({
-          projectId: project.id,
-          tagId: tag.id,
-          orderNum: i + 1,
-        });
-      }),
-    );
+    if(createProjectRequestDto.tagIds) {
+      const tags = await this.tagRepository.findByIds(
+        createProjectRequestDto.tagIds,
+      );
+      await Promise.all(
+        tags.map((tag, i) => {
+          this.projectTagRepository.save({
+            projectId: project.id,
+            tagId: tag.id,
+            orderNum: i + 1,
+          });
+        }),
+      );
+    }
   }
 
   // 프로젝트 수정
@@ -131,16 +135,22 @@ export class ProjectService {
     const projectData = ProjectResponseDto.ofProject(project, projectTags);
 
     const pages = project.pages;
+    const publicPages = pages.filter(page => {
+      if(page.isPublic) {
+        return true;
+      } else {
+        return false;
+      }
+    });
     const pageData = await Promise.all(
-      pages.map(async (page) => {
-        if (page.isPublic) {
-          const pageImageCount =
-            await this.pageImageRepository.getCountByPageId(page.id);
-          const pageTags = await this.pageTagRepository.findAllJoinQuery(
-            page.id,
-          );
-          return PageResponseDto.ofPageSimple(page, pageImageCount, pageTags);
-        }
+      publicPages.map(async (page) => {
+        const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
+        const pageImageCount =
+          await this.pageImageRepository.getCountByPageId(page.id);
+        const pageTags = await this.pageTagRepository.findAllJoinQuery(
+          page.id,
+        );
+        return PageResponseDto.ofPageSimple(page, isLiked, pageImageCount, pageTags);
       }),
     );
 

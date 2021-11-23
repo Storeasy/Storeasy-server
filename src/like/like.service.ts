@@ -55,9 +55,14 @@ export class LikeService {
 
   public async getLikeUsers(userId: number) {
     const likeUsers = await this.likeUserRepository.findAllUsersByUserId(userId);
-    console.log(likeUsers);
     const profiles = likeUsers.map(like => like.receiverUser.profile);
-    console.log(profiles);
+    const publicProfiles = profiles.filter(profile => {
+      if(profile.isPublic) {
+        return true;
+      } else {
+        return false;
+      }
+    })
 
     return await Promise.all(
       profiles.map(async (profile) => {
@@ -71,9 +76,16 @@ export class LikeService {
   public async getLikePages(userId: number) {
     const likePages = await this.likePageRepository.findAllPagesByUserId(userId);
     const pages = likePages.map(like => like.page);
+    const publicPages = pages.filter(page => {
+      if(page.isPublic) {
+        return true;
+      } else {
+        return false;
+      }
+    });
 
     return await Promise.all(
-      pages.map(async (page) => {
+      publicPages.map(async (page) => {
         const profile = await this.profileRepository.findOne(page.userId);
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
           page.id,
@@ -82,5 +94,22 @@ export class LikeService {
         return LikePageResponseDto.ofLikePageSimple(profile, page, pageImageCount, pageTags);
       })
     );
+  }
+
+  public async getLikePage(userId: number, pageId: number) {
+    const likePage = await this.likePageRepository.findPageByUserIdAndPageId(userId, pageId);
+    console.log(likePage);
+
+    if (!likePage) {
+      throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
+    }
+    if (!likePage.page.isPublic) {
+      throw new ForbiddenException(ResponseStatus.PAGE_IS_NOT_PUBLIC);
+    }
+
+    const profile = await this.profileRepository.findOne(likePage.page.userId);
+    const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
+    const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
+    return LikePageResponseDto.ofLikePage(profile, likePage.page, pageImages, pageTags);
   }
 }

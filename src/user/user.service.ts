@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PageResponseDto } from 'src/page/dto/page.response.dto';
+import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
@@ -18,6 +19,7 @@ export class UserService {
     private readonly pageRepository: PageRepository,
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
+    private readonly likePageRepository: LikePageRepository,
   ) {}
 
   // 본인 태그 목록 조회
@@ -39,8 +41,15 @@ export class UserService {
   // 스토리 조회
   async getStory(userId: number) {
     const projects = await this.projectRepository.findAllByUserId(userId);
+    const publicProjects = projects.filter(project => {
+      if(project.isPublic) {
+        return true;
+      } else {
+        return false;
+      }
+    });
     const projectData = await Promise.all(
-      projects.map(async (project) => {
+      publicProjects.map(async (project) => {
         if(project.isPublic) {
           const projectTags = await this.projectTagRepository.findAllJoinQuery(
             +project.id,
@@ -50,26 +59,30 @@ export class UserService {
       }),
     );
 
-    console.log('project', projectData);
-
     const pages = await this.pageRepository.findAllSinglePageByUserId(userId);
+    const publicPages = pages.filter(page => {
+      if(page.isPublic) {
+        return true;
+      } else {
+        return false;
+      }
+    });
     const pageData = await Promise.all(
-      pages.map(async (page) => {
+      publicPages.map(async (page) => {
         if(page.isPublic) {
+          const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
           const pageImageCount = await this.pageImageRepository.getCountByPageId(
             page.id,
           );
           const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
-          return StoryResponseDto.ofPage(page, pageImageCount, pageTags);
+          return StoryResponseDto.ofPage(page, isLiked, pageImageCount, pageTags);
         }
       }),
     );
 
-    console.log('page', pageData);
     // Array.prototype.push.apply(projectData, pageData);
     // Array.prototype.concat(projectData, pageData);
     const data = [...projectData, ...pageData];
-    console.log('data', data);
 
     data.sort((a: StoryResponseDto, b: StoryResponseDto): number => {
       const d1 = new Date(a.project != null ? a.project.startDate : a.page.startDate);
@@ -79,7 +92,6 @@ export class UserService {
       else return 0;
     });
 
-    console.log('sort data', data);
     return data;
   }
 
@@ -89,9 +101,14 @@ export class UserService {
       userId,
       tag,
     );
+    if(!userTag) {
+      return null;
+    }
+
     const pageTags = userTag.pageTags;
     return await Promise.all(
       pageTags.map(async (pageTag) => {
+        const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageTag.page.id);
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
           pageTag.page.id,
         );
@@ -100,6 +117,7 @@ export class UserService {
         );
         return PageResponseDto.ofPageSimple(
           pageTag.page,
+          isLiked,
           pageImageCount,
           pageTags,
         );

@@ -15,11 +15,12 @@ export class StoryResponseDto {
 
   public static ofPage(
     page: Page,
+    isLiked: boolean,
     imageCount: number,
     tags: any[],
   ): StoryResponseDto {
     return {
-      page: PageResponseDto.ofPageSimple(page, imageCount, tags),
+      page: PageResponseDto.ofPageSimple(page, isLiked, imageCount, tags),
     };
   }
 }

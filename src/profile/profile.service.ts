@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ResponseStatus } from 'src/config/res/response-status';
+import { LikeUserRepository } from 'src/repositories/like-user.repository';
 import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
 import { RecommendTagRepository } from 'src/repositories/recommend-tag.repository';
@@ -22,6 +23,7 @@ export class ProfileService {
     private readonly tagRepository: TagRepository,
     private readonly profileTagRepository: ProfileTagRepository,
     private readonly profileRepository: ProfileRepository,
+    private readonly likeUserRepository: LikeUserRepository,
   ) {}
 
   async getRecommendTags(): Promise<TagResponseDto[]> {
@@ -59,11 +61,11 @@ export class ProfileService {
     const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
     const tags = profileTags.map(profileTag => profileTag.tag);
 
-    return ProfileResponseDto.ofProfile(profile, tags);
+    return ProfileResponseDto.ofMyProfile(profile, tags);
   }
 
   // 프로필 조회
-  async getProfile(userId: number) {
+  async getProfile(currentUserId: number, userId: number) {
     const profile = await this.profileRepository.findOne(userId);
     if (!profile) {
       throw new NotFoundException(ResponseStatus.PROFILE_NOT_FOUND);
@@ -72,10 +74,12 @@ export class ProfileService {
       throw new ForbiddenException(ResponseStatus.PROFILE_IS_NOT_PUBLIC);
     }
 
+    const isLiked = await this.likeUserRepository.existsBySenderAndReceiver(currentUserId, userId);
+
     const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
     const tags = profileTags.map(profileTag => profileTag.tag);
     
-    return ProfileResponseDto.ofProfile(profile, tags);
+    return ProfileResponseDto.ofProfile(profile, isLiked, tags);
   }
 
   async updateProfile(

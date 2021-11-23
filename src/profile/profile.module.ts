@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Profile } from 'src/entities/Profile';
 import { RecommendTag } from 'src/entities/RecommendTag';
 import { Tag } from 'src/entities/Tag';
+import { LikeUserRepository } from 'src/repositories/like-user.repository';
 import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
 import { RecommendTagRepository } from 'src/repositories/recommend-tag.repository';
@@ -23,6 +24,7 @@ import { ProfileService } from './profile.service';
       ProfileRepository,
       TagRepository,
       ProfileTagRepository,
+      LikeUserRepository,
     ]),
   ],
   providers: [ProfileService, S3Service],

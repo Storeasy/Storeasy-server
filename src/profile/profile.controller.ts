@@ -54,8 +54,8 @@ export class ProfileController {
   @ApiOperation({ summary: '프로필 조회' })
   @ApiOkResponse({ type: ProfileResponseDto })
   @Get(':userId')
-  async getProfile(@Param('userId') userId: number) {
-    const data = await this.profileService.getProfile(userId);
+  async getProfile(@Req() req, @Param('userId') userId: number) {
+    const data = await this.profileService.getProfile(req.user.userId, userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_PROFILE_SUCCESS, data);
   }
 
