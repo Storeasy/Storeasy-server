@@ -3,6 +3,15 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(PageTag)
 export class PageTagRepository extends Repository<PageTag> {
+  public async findAllPagesByTagId(tagId: number) {
+    return await this.createQueryBuilder('pageTag')
+      .where('pageTag.tagId = :tagId', { tagId: tagId })
+      .leftJoinAndSelect('pageTag.page', 'page')
+      .leftJoinAndSelect('page.project', 'project')
+      .andWhere('page.isPublic = true')
+      .getMany();
+  }
+
   public async findAllJoinQuery(pageId: number) {
     return await this.query(
       `
