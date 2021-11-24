@@ -6,6 +6,7 @@ import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
 import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
+import { TagRepository } from 'src/repositories/tag.repository';
 import { ExploreController } from './explore.controller';
 import { ExploreService } from './explore.service';
 
@@ -13,11 +14,12 @@ import { ExploreService } from './explore.service';
   imports: [
     TypeOrmModule.forFeature([
       PageRepository,
-      ProfileRepository,
       PageImageRepository,
       PageTagRepository,
-      ProfileTagRepository,
       LikePageRepository,
+      ProfileRepository,
+      ProfileTagRepository,
+      TagRepository,
     ]),
   ],
   controllers: [ExploreController],
