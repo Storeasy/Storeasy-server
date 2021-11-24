@@ -3,6 +3,27 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Page)
 export class PageRepository extends Repository<Page> {
+  public async findAllRecentPages(userId: number) {
+    return await this.find({
+      where: { userId: !userId, isPublic: true },
+      relations: ['project'],
+      order: {
+        createdAt: "DESC",
+      },
+      take: 100,
+    });
+  }
+
+  public async findRecentPageByUserId(userId: number) {
+    return await this.findOne({
+      where: { userId: userId, isPublic: true },
+      relations: ['project'],
+      order: {
+        createdAt: "DESC",
+      }
+    });
+  }
+
   public async findOneByPageId(pageId: number) {
     return await this.findOne({
       where: { id: pageId },

@@ -92,6 +92,7 @@ export class ExplorePageResponseDto {
   public static ofExplorePage(
     profile: Profile,
     page: Page,
+    isLiked: boolean,
     images: PageImage[],
     tags: any[],
   ): ExplorePageResponseDto {
@@ -99,7 +100,7 @@ export class ExplorePageResponseDto {
       userId: +page.userId,
       profileImage: profile.profileImage,
       nickname: profile.nickname,
-      isLiked: true,
+      isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
       pageId: +page.id,
@@ -115,6 +116,7 @@ export class ExplorePageResponseDto {
   public static ofExplorePageSimple(
     profile: Profile,
     page: Page,
+    isLiked: boolean,
     imageCount: number,
     tags: any[],
   ): ExplorePageResponseDto {
@@ -122,7 +124,7 @@ export class ExplorePageResponseDto {
       userId: +page.userId,
       profileImage: profile.profileImage,
       nickname: profile.nickname,
-      isLiked: true,
+      isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
       pageId: +page.id,
