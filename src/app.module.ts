@@ -45,6 +45,7 @@ import { Profile } from './entities/Profile';
 import { Notification } from './entities/Notification';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { LikeModule } from './like/like.module';
+import { ExploreModule } from './explore/explore.module';
 import configuration from './config/configuration';
 import databaseConfig from './config/database.config';
 import mailConfig from './config/mail.config';
@@ -117,6 +118,7 @@ dotenv.config();
     PageModule,
     UserModule,
     LikeModule,
+    ExploreModule,
   ],
   providers: [
     {
