@@ -3,6 +3,21 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(ProfileTag)
 export class ProfileTagRepository extends Repository<ProfileTag> {
+  public async findOneByUserId(userId: number) {
+    return await this.findOne({
+      where: { userId: userId },
+      order: {
+        orderNum: "ASC",
+      }
+    });
+  }
+
+  public async findAllByUserId(userId: number) {
+    return await this.find({
+      where: { userId: userId },
+    });
+  }
+
   public async findAllByUserIdJoinTag(userId: number) {
     return await this.createQueryBuilder('profileTag')
       .where('profileTag.userId = :userId', { userId: userId })

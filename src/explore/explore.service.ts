@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
@@ -16,6 +16,12 @@ export class ExploreService {
   ) {}
 
   public async getRecommendPages(userId: number) {
-    
+    const profileTag = await this.profileTagRepository.findOneByUserId(userId);
+    console.log(profileTag);
+    const profileTags = await this.profileTagRepository.findAllByUserId(userId);
+    console.log(profileTags);
+
+    const tag = profileTag.tag;
+    console.log(tag);
   }
 }
