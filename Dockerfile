@@ -1,7 +1,10 @@
 FROM node:16.13.0 AS builder
 WORKDIR /app
+COPY package*.json ./
+RUN  npm install
+
 COPY . .
-RUN npm install
+RUN ["/bin/ls", '-a']
 
 # FROM node:16.13.0-alpine
 # WORKDIR /app
