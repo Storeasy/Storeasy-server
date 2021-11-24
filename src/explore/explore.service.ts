@@ -7,6 +7,7 @@ import { ProfileTagRepository } from 'src/repositories/profile-tag.repository';
 import { ProfileRepository } from 'src/repositories/profile.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
 import { ExplorePageResponseDto } from './dto/explore-page.response.dto';
+import { ExploreUserResponseDto } from './dto/explore-user.response.dto';
 
 @Injectable()
 export class ExploreService {
@@ -120,5 +121,19 @@ export class ExploreService {
 
   public async searchUsersByTag(tagName: string) {
     const tag = await this.tagRepository.findOneByName(tagName);
+    if(!tag) {
+      return null;
+    }
+
+    const profileTags = await this.profileTagRepository.findAllProfilesByTagId(tag.id);
+    const profiles = profileTags.map(profileTag => profileTag.user.profile);
+
+    return await Promise.all(
+      profiles.map(async (profile) => {
+        const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(profile.userId);
+        const tags = profileTags.map(profileTag => profileTag.tag);
+        return  ExploreUserResponseDto.ofExploreUser(profile, tags);
+      })
+    );
   }
 }

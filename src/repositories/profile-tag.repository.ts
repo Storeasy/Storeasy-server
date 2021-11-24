@@ -3,6 +3,15 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(ProfileTag)
 export class ProfileTagRepository extends Repository<ProfileTag> {
+  public async findAllProfilesByTagId(tagId: number) {
+    return await this.createQueryBuilder('profileTag')
+      .where('profileTag.tagId = :tagId', { tagId: tagId })
+      .leftJoinAndSelect('profileTag.user', 'user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .andWhere('profile.isPublic = 1')
+      .getMany();
+  }
+
   public async findOneByUserId(userId: number) {
     return await this.findOne({
       where: { userId: userId },
