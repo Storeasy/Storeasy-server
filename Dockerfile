@@ -4,7 +4,6 @@ COPY package*.json ./
 RUN  npm install
 
 COPY . .
-RUN ["/bin/ls", '-a']
 
 # FROM node:16.13.0-alpine
 # WORKDIR /app
