@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from 'src/config/res/response-entity';
 import { ResponseStatus } from 'src/config/res/response-status';
@@ -21,7 +21,7 @@ export class ExploreController {
 
   @ApiOperation({ summary: '태그별 페이지 검색' })
   @ApiOkResponse()
-  @Get('/page')
+  @Get('page')
   async searchPagesByTag(@Req() req, @Query('tag') tag: string) {
     const data = await this.exploreService.searchPagesByTag(req.user.userId, tag);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_EXPLORE_PAGES_SUCCESS, data)
@@ -29,9 +29,17 @@ export class ExploreController {
 
   @ApiOperation({ summary: '태그별 페이지 검색' })
   @ApiOkResponse()
-  @Get('/user')
+  @Get('user')
   async searchUsersByTag(@Req() req, @Query('tag') tag: string) {
     const data = await this.exploreService.searchUsersByTag(tag);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_EXPLORE_USERS_SUCCESS, data)
+  }
+
+  @ApiOperation({ summary: '탐색 페이지 상세 조회' })
+  @ApiOkResponse()
+  @Get('page/:pageId')
+  async getPage(@Req() req, @Param('pageId') pageId: number) {
+    const data = await this.exploreService.getPage(req.user.userId, pageId);
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_EXPLORE_PAGE_SUCCESS, data);
   }
 }

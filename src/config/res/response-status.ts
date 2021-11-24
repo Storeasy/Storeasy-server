@@ -218,6 +218,10 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
     HttpStatus.OK,
     '추천 페이지 목록 조회 성공',
   );
+  static READ_EXPLORE_PAGE_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '탐색 페이지 상세 조회 성공',
+  );
   static READ_ALL_EXPLORE_PAGES_SUCCESS = new ResponseStatus(
     HttpStatus.OK,
     '검색 페이지 목록 조회 성공',

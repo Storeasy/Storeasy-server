@@ -1,4 +1,5 @@
-import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ResponseStatus } from 'src/config/res/response-status';
 import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
@@ -135,5 +136,22 @@ export class ExploreService {
         return  ExploreUserResponseDto.ofExploreUser(profile, tags);
       })
     );
+  }
+
+  public async getPage(userId: number, pageId: number) {
+    const page = await this.pageRepository.findOneByPageId(pageId);
+
+    if(!page) {
+      throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
+    }
+    if(!page.isPublic) {
+      throw new ForbiddenException(ResponseStatus.PAGE_IS_NOT_PUBLIC);
+    }
+
+    const profile = await this.profileRepository.findOne(page.userId);
+    const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
+    const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
+    const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
+    return ExplorePageResponseDto.ofExplorePage(profile,  page, isLiked, pageImages, pageTags);
   }
 }
