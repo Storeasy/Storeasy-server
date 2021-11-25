@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/build
+    destination: /home/ubuntu/Storeasy-server
     overwrite: yes
 permissions:
   - object: /home/ubuntu
