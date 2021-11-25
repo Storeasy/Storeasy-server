@@ -54,4 +54,4 @@ jobs:
             ./$GITHUB_SHA.tgz s3://storeasy/build/$GITHUB_SHA.tgz
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name storeasy --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name storeasy --s3-location bucket=storeasy,bundleType=tgz,key=build/$GITHUB_SHA.tgz
+        run: aws deploy create-deployment --application-name storeasy --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name storeasy --s3-location bucket=storeasy,bundleType=tgz,key=build/$GITHUB_SHA.tgz
