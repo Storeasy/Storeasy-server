@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Page } from 'src/entities/Page';
 import { PageImage } from 'src/entities/PageImage';
+import { UserTag } from 'src/entities/UserTag';
 import { TagResponseDto } from 'src/tag/dto/tag.response.dto';
 
 export class PageResponseDto {
@@ -101,6 +102,28 @@ export class PageResponseDto {
       endDate: page.endDate,
       images: images.map((image) => image.imageUrl),
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
+    };
+  }
+
+  public static ofPageSimpleWithUserTag(
+    page: Page,
+    isLiked: boolean,
+    imageCount: number,
+    tags: UserTag[],
+  ): PageResponseDto {
+    return {
+      userId: +page.userId,
+      isPublic: page.isPublic == true ? true : false,
+      isLiked: isLiked,
+      projectId: page.project == null ? null : +page.project.id,
+      projectTitle: page.project == null ? null : page.project.title,
+      pageId: +page.id,
+      title: page.title,
+      content: page.content,
+      startDate: page.startDate,
+      endDate: page.endDate,
+      imageCount: imageCount,
+      tags: tags.map((tag) => TagResponseDto.ofUserTag(tag)),
     };
   }
 

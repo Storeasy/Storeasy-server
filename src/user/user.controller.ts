@@ -39,7 +39,7 @@ export class UserController {
   @Get('story')
   async getMyStory(@Req() req) {
     console.log(req.user);
-    const data = await this.userService.getStory(req.user.userId);
+    const data = await this.userService.getMyStory(req.user.userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STORY_SUCCESS, data);
   }
 
@@ -47,7 +47,7 @@ export class UserController {
   @ApiOkResponse({ type: StoryResponseDto })
   @Get(':userId/story')
   async getStory(@Param('userId') userId: number) {
-    const data = await this.userService.getStory(userId);
+    const data = await this.userService.getMyStory(userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STORY_SUCCESS, data);
   }
 

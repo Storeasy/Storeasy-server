@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Tag } from 'src/entities/Tag';
 import { TagColor } from 'src/entities/TagColor';
+import { UserTag } from 'src/entities/UserTag';
 
 export class TagResponseDto {
   @ApiProperty({
@@ -50,6 +51,14 @@ export class TagResponseDto {
       id: +projectTag.id,
       tagName: projectTag.name,
       tagColor: projectTag.value,
+    };
+  }
+
+  public static ofUserTag(userTag: UserTag): TagResponseDto {
+    return {
+      id: +userTag.tagId,
+      tagName: userTag.tag.name,
+      tagColor: userTag.tagColor.value,
     };
   }
 }

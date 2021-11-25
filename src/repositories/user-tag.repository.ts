@@ -3,6 +3,15 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(UserTag)
 export class UserTagRepository extends Repository<UserTag> {
+  public async findAllByUserIdAndTagIds(userId: number, tagIds: number[]) {
+    return await this.createQueryBuilder('userTag')
+      .where('userTag.userId = :userId', { userId: userId })
+      .andWhere('userTag.tagId IN (:tagIds)', { tagIds: tagIds })
+      .leftJoinAndSelect('userTag.tag', 'tag')
+      .leftJoinAndSelect('userTag.tagColor', 'tagColor')
+      .getMany();
+  }
+
   public async findAllByUserId(userId: number) {
     return await this.find({
       where: { userId: userId },

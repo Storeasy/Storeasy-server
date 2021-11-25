@@ -1,5 +1,6 @@
 import { Page } from 'src/entities/Page';
 import { Project } from 'src/entities/Project';
+import { UserTag } from 'src/entities/UserTag';
 import { PageResponseDto } from 'src/page/dto/page.response.dto';
 import { ProjectResponseDto } from 'src/project/dto/project.response.dto';
 
@@ -7,20 +8,20 @@ export class StoryResponseDto {
   project?: ProjectResponseDto;
   page?: PageResponseDto;
 
-  public static ofProject(project: Project, tags: any[]): StoryResponseDto {
+  public static ofProjectWithUserTag(project: Project, tags: UserTag[]): StoryResponseDto {
     return {
-      project: ProjectResponseDto.ofProject(project, tags),
+      project: ProjectResponseDto.ofProjectWithUserTag(project, tags),
     };
   }
 
-  public static ofPage(
+  public static ofPageWithUserTag(
     page: Page,
     isLiked: boolean,
     imageCount: number,
-    tags: any[],
+    tags: UserTag[],
   ): StoryResponseDto {
     return {
-      page: PageResponseDto.ofPageSimple(page, isLiked, imageCount, tags),
+      page: PageResponseDto.ofPageSimpleWithUserTag(page, isLiked, imageCount, tags),
     };
   }
 }
