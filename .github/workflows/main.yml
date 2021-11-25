@@ -33,12 +33,29 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: bulid file
+        run: npm run build
+          
+	    # tar파일 생성
+      - name: Make tar file
+        run: tar -cpvzf ./build/$GITHUB_SHA.tgz *
+        shell: bash
+        
+	    # AWS 인증을 사용함
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+	    # S3 업로드
+      - name: Upload to S3
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          aws s3 cp \
+            --region ap-northeast-2 \
+            ./build/$GITHUB_SHA.tgz s3://storeasy/build/$GITHUB_SHA.tgz
+
+	    # Code Deploy 배포
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name storeasy --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name storeasy --s3-location bucket=storeasy,bundleType=tgz,key=build/$GITHUB_SHA.tgz
