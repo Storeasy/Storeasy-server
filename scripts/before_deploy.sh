@@ -5,4 +5,4 @@ cd $REPOSITORY
 sudo docker stop storeasy
 sudo docker rm storeasy
 
-npm run prebuild
+sudo rm -rf dist
