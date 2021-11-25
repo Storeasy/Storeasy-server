@@ -90,7 +90,7 @@ export class LikeService {
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
           page.id,
         );
-        const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
+        const pageTags = await this.pageTagRepository.findAllTagsByPageId(page.id);
         return LikePageResponseDto.ofLikePageSimple(profile, page, pageImageCount, pageTags);
       })
     );
@@ -98,7 +98,6 @@ export class LikeService {
 
   public async getLikePage(userId: number, pageId: number) {
     const likePage = await this.likePageRepository.findPageByUserIdAndPageId(userId, pageId);
-    console.log(likePage);
 
     if (!likePage) {
       throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
@@ -109,7 +108,7 @@ export class LikeService {
 
     const profile = await this.profileRepository.findOne(likePage.page.userId);
     const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
-    const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
+    const pageTags = await this.pageTagRepository.findAllTagsByPageId(pageId);
     return LikePageResponseDto.ofLikePage(profile, likePage.page, pageImages, pageTags);
   }
 }
