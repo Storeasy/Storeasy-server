@@ -9,6 +9,7 @@ import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
+import { UserTagRepository } from 'src/repositories/user-tag.repository';
 import { CreatePageRequestDto } from './dto/create-page.request.dto';
 import { PageResponseDto } from './dto/page.response.dto';
 import { UpdatePageRequestDto } from './dto/update-page.request.dto';
@@ -21,6 +22,7 @@ export class PageService {
     private readonly pageTagRepository: PageTagRepository,
     private readonly tagRepository: TagRepository,
     private readonly likePageRepository: LikePageRepository,
+    private readonly userTagRepository: UserTagRepository,
   ) {}
 
   // 페이지 생성
@@ -124,15 +126,23 @@ export class PageService {
     if (!page) {
       throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
     }
-    if (page.userId != userId && !page.isPublic) {
+    if (userId != page.userId && !page.isPublic) {
       throw new ForbiddenException(ResponseStatus.PAGE_IS_NOT_PUBLIC);
     }
 
-    const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
+    if (userId == page.userId) {
+      const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
+      const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
+      const pageTags = await this.pageTagRepository.findAllByPageId(pageId);
+      const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
 
-    const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
-    const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
+      return PageResponseDto.ofPageWithUserTag(page, isLiked, pageImages, userTags);
+    } else {
+      const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
+      const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
+      const pageTags = await this.pageTagRepository.findAllTagsByPageId(pageId);
 
-    return PageResponseDto.ofPage(page, isLiked, pageImages, pageTags);
+      return PageResponseDto.ofPage(page, isLiked, pageImages, pageTags);
+    }  
   }
 }

@@ -127,6 +127,28 @@ export class PageResponseDto {
     };
   }
 
+  public static ofPageWithUserTag(
+    page: Page,
+    isLiked: boolean,
+    images: PageImage[],
+    tags: UserTag[],
+  ): PageResponseDto {
+    return {
+      userId: +page.userId,
+      isPublic: page.isPublic == true ? true : false,
+      isLiked: isLiked,
+      projectId: page.project == null ? null : +page.project.id,
+      projectTitle: page.project == null ? null : page.project.title,
+      pageId: +page.id,
+      title: page.title,
+      content: page.content,
+      startDate: page.startDate,
+      endDate: page.endDate,
+      images: images.map((image) => image.imageUrl),
+      tags: tags.map((tag) => TagResponseDto.ofUserTag(tag)),
+    };
+  }
+
   public static ofPage(
     page: Page,
     isLiked: boolean,
