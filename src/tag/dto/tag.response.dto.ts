@@ -42,7 +42,7 @@ export class TagResponseDto {
     return {
       id: +pageTag.id,
       tagName: pageTag.name,
-      tagColor: pageTag.value,
+      tagColor: 'default',
     };
   }
 
@@ -50,7 +50,7 @@ export class TagResponseDto {
     return {
       id: +projectTag.id,
       tagName: projectTag.name,
-      tagColor: projectTag.value,
+      tagColor: 'default',
     };
   }
 

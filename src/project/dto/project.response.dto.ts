@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Project } from 'src/entities/Project';
+import { ProjectTag } from 'src/entities/ProjectTag';
 import { UserTag } from 'src/entities/UserTag';
 import { TagResponseDto } from 'src/tag/dto/tag.response.dto';
 

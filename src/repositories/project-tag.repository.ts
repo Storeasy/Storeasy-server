@@ -9,6 +9,16 @@ export class ProjectTagRepository extends Repository<ProjectTag> {
     });
   }
 
+  public async findAllTagsByProjectId(projectId: number) {
+    return await this.query(
+      `
+      select * from project_tag
+      left join tag on project_tag.tag_id = tag.id
+      where project_id = ?`,
+      [projectId],
+    );
+  }
+
   public async findAllJoinQuery(projectId: number) {
     return await this.query(
       `

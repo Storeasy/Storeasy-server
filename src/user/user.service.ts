@@ -38,8 +38,51 @@ export class UserService {
     });
   }
 
-  // 스토리 조회
+  // 본인 스토리 조회
   async getMyStory(userId: number) {
+    const projects = await this.projectRepository.findAllByUserId(userId);
+
+    const projectData = await Promise.all(
+      projects.map(async (project) => {
+        const projectTags = await this.projectTagRepository.findAllByProjectId(project.id);
+        const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, projectTags.map(projectTag => projectTag.tagId));
+        return StoryResponseDto.ofProjectWithUserTag(project, userTags);
+      }),
+    );
+
+    const pages = await this.pageRepository.findAllSinglePageByUserId(userId);
+
+    const pageData = await Promise.all(
+      pages.map(async (page) => {
+        if(page.isPublic) {
+          const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
+          const pageImageCount = await this.pageImageRepository.getCountByPageId(
+            page.id,
+          );
+          const pageTags = await this.pageTagRepository.findAllByPageId(page.id);
+          const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
+          return StoryResponseDto.ofPageWithUserTag(page, isLiked, pageImageCount, userTags);
+        }
+      }),
+    );
+
+    // Array.prototype.push.apply(projectData, pageData);
+    // Array.prototype.concat(projectData, pageData);
+    const data = [...projectData, ...pageData];
+
+    data.sort((a: StoryResponseDto, b: StoryResponseDto): number => {
+      const d1 = new Date(a.project != null ? a.project.startDate : a.page.startDate);
+      const d2 = new Date(b.project != null ? b.project.startDate : b.page.startDate);
+      if (d1 < d2) return 1;
+      else if (d1 > d2) return -1;
+      else return 0;
+    });
+
+    return data;
+  }
+
+  // 스토리 조회
+  async getStory(userId: number) {
     const projects = await this.projectRepository.findAllByUserId(userId);
     const publicProjects = projects.filter(project => {
       if(project.isPublic) {
@@ -50,11 +93,8 @@ export class UserService {
     });
     const projectData = await Promise.all(
       publicProjects.map(async (project) => {
-        if(project.isPublic) {
-          const projectTags = await this.projectTagRepository.findAllByProjectId(project.id);
-          const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, projectTags.map(projectTag => projectTag.tagId));
-          return StoryResponseDto.ofProjectWithUserTag(project, userTags);
-        }
+        const projectTags = await this.projectTagRepository.findAllTagsByProjectId(project.id);
+        return StoryResponseDto.ofProject(project, projectTags);
       }),
     );
 
@@ -73,10 +113,8 @@ export class UserService {
           const pageImageCount = await this.pageImageRepository.getCountByPageId(
             page.id,
           );
-          // const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
-          const pageTags = await this.pageTagRepository.findAllByPageId(page.id);
-          const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
-          return StoryResponseDto.ofPageWithUserTag(page, isLiked, pageImageCount, userTags);
+          const pageTags = await this.pageTagRepository.findAllTagsByPageId(page.id);
+          return StoryResponseDto.ofPage(page, isLiked, pageImageCount, pageTags);
         }
       }),
     );

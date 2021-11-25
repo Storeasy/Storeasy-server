@@ -18,6 +18,16 @@ export class PageTagRepository extends Repository<PageTag> {
       .getMany();
   }
 
+  public async findAllTagsByPageId(pageId: number) {
+    return await this.query(
+      `
+      select * from page_tag
+      left join tag on page_tag.tag_id = tag.id
+      where page_id = ?`,
+      [pageId],
+    );
+  }
+
   public async findAllJoinQuery(pageId: number) {
     return await this.query(
       `

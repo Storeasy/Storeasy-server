@@ -47,7 +47,7 @@ export class UserController {
   @ApiOkResponse({ type: StoryResponseDto })
   @Get(':userId/story')
   async getStory(@Param('userId') userId: number) {
-    const data = await this.userService.getMyStory(userId);
+    const data = await this.userService.getStory(userId);
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STORY_SUCCESS, data);
   }
 
