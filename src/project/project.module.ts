@@ -7,6 +7,7 @@ import { ProjectColorRepository } from 'src/repositories/project-color.repositor
 import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
+import { UserTagRepository } from 'src/repositories/user-tag.repository';
 import { UserRepository } from 'src/repositories/user.repository';
 import { ProjectController } from './project.controller';
 import { ProjectService } from './project.service';
@@ -22,6 +23,7 @@ import { ProjectService } from './project.service';
       PageImageRepository,
       PageTagRepository,
       LikePageRepository,
+      UserTagRepository,
     ]),
   ],
   controllers: [ProjectController],

@@ -12,6 +12,7 @@ import { ProjectColorRepository } from 'src/repositories/project-color.repositor
 import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
+import { UserTagRepository } from 'src/repositories/user-tag.repository';
 import { CreateProjectRequestDto } from './dto/create-project.request.dto';
 import { ProjectDetailResponseDto } from './dto/project-detail.response.dto';
 import { ProjectListResponseDto } from './dto/project-list.response.dto';
@@ -28,6 +29,7 @@ export class ProjectService {
     private readonly pageImageRepository: PageImageRepository,
     private readonly pageTagRepository: PageTagRepository,
     private readonly likePageRepository: LikePageRepository,
+    private readonly userTagRepository: UserTagRepository,
   ) {}
 
   // 프로젝트색 목록 조회
@@ -126,36 +128,50 @@ export class ProjectService {
     if (!project) {
       throw new NotFoundException(ResponseStatus.PROJECT_NOT_FOUND);
     }
-    if (project.userId != userId && !project.isPublic) {
+    if (userId != project.userId && !project.isPublic) {
       throw new ForbiddenException(ResponseStatus.PROFILE_IS_NOT_PUBLIC);
     }
 
-    const projectTags = await this.projectTagRepository.findAllJoinQuery(
-      project.id,
-    );
-    const projectData = ProjectResponseDto.ofProject(project, projectTags);
-
-    const pages = project.pages;
-    const publicPages = pages.filter(page => {
-      if(page.isPublic) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-    const pageData = await Promise.all(
-      publicPages.map(async (page) => {
-        const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
-        const pageImageCount =
-          await this.pageImageRepository.getCountByPageId(page.id);
-        const pageTags = await this.pageTagRepository.findAllJoinQuery(
-          page.id,
-        );
-        return PageResponseDto.ofPageSimple(page, isLiked, pageImageCount, pageTags);
-      }),
-    );
-
-    return ProjectDetailResponseDto.ofProjectPage(projectData, pageData);
+    if (userId == project.userId) {
+      const projectTags = await this.projectTagRepository.findAllByProjectId(project.id);
+      const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, projectTags.map(projectTag => projectTag.tagId));
+      const projectData = ProjectResponseDto.ofProjectWithUserTag(project, userTags);
+  
+      const pages = project.pages;
+      const pageData = await Promise.all(
+        pages.map(async (page) => {
+          const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
+          const pageImageCount =
+            await this.pageImageRepository.getCountByPageId(page.id);
+            const pageTags = await this.pageTagRepository.findAllByPageId(page.id);
+            const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
+          return PageResponseDto.ofPageSimpleWithUserTag(page, isLiked, pageImageCount, userTags);
+        }),
+      );
+      return ProjectDetailResponseDto.ofProjectPage(projectData, pageData);
+    } else {
+      const projectTags = await this.projectTagRepository.findAllTagsByProjectId(project.id);
+      const projectData = ProjectResponseDto.ofProject(project, projectTags);
+  
+      const pages = project.pages;
+      const publicPages = pages.filter(page => {
+        if(page.isPublic) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      const pageData = await Promise.all(
+        publicPages.map(async (page) => {
+          const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
+          const pageImageCount =
+            await this.pageImageRepository.getCountByPageId(page.id);
+          const pageTags = await this.pageTagRepository.findAllTagsByPageId(page.id);
+          return PageResponseDto.ofPageSimple(page, isLiked, pageImageCount, pageTags);
+        }),
+      );
+      return ProjectDetailResponseDto.ofProjectPage(projectData, pageData);
+    }
   }
 
   public async getMyProjects(userId: number) {
