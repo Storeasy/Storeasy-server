@@ -151,15 +151,9 @@ export class UserService {
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
           pageTag.page.id,
         );
-        const pageTags = await this.pageTagRepository.findAllJoinQuery(
-          pageTag.page.id,
-        );
-        return PageResponseDto.ofPageSimple(
-          pageTag.page,
-          isLiked,
-          pageImageCount,
-          pageTags,
-        );
+        const pageTags = await this.pageTagRepository.findAllByPageId(pageTag.page.id);
+        const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
+        return PageResponseDto.ofPageSimpleWithUserTag(pageTag.page, isLiked, pageImageCount, userTags);
       }),
     );
   }

@@ -141,10 +141,9 @@ export class ProjectService {
       const pageData = await Promise.all(
         pages.map(async (page) => {
           const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
-          const pageImageCount =
-            await this.pageImageRepository.getCountByPageId(page.id);
-            const pageTags = await this.pageTagRepository.findAllByPageId(page.id);
-            const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
+          const pageImageCount = await this.pageImageRepository.getCountByPageId(page.id);
+          const pageTags = await this.pageTagRepository.findAllByPageId(page.id);
+          const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
           return PageResponseDto.ofPageSimpleWithUserTag(page, isLiked, pageImageCount, userTags);
         }),
       );
