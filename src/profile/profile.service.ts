@@ -58,7 +58,7 @@ export class ProfileService {
   // 본인 프로필 조회
   async getMyProfile(userId: number) {
     const profile = await this.profileRepository.findOne(userId);
-    const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
+    const profileTags = await this.profileTagRepository.findAllTagsByUserId(userId);
     const tags = profileTags.map(profileTag => profileTag.tag);
 
     return ProfileResponseDto.ofMyProfile(profile, tags);
@@ -76,7 +76,7 @@ export class ProfileService {
 
     const isLiked = await this.likeUserRepository.existsBySenderAndReceiver(currentUserId, userId);
 
-    const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(userId);
+    const profileTags = await this.profileTagRepository.findAllTagsByUserId(userId);
     const tags = profileTags.map(profileTag => profileTag.tag);
     
     return ProfileResponseDto.ofProfile(profile, isLiked, tags);

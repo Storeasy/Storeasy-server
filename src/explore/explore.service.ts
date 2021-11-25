@@ -131,7 +131,7 @@ export class ExploreService {
 
     return await Promise.all(
       profiles.map(async (profile) => {
-        const profileTags = await this.profileTagRepository.findAllByUserIdJoinTag(profile.userId);
+        const profileTags = await this.profileTagRepository.findAllTagsByUserId(profile.userId);
         const tags = profileTags.map(profileTag => profileTag.tag);
         return  ExploreUserResponseDto.ofExploreUser(profile, tags);
       })
