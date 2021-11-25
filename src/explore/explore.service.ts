@@ -77,7 +77,7 @@ export class ExploreService {
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
           page.id,
         );
-        const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
+        const pageTags = await this.pageTagRepository.findAllTagsByPageId(page.id);
         return ExplorePageResponseDto.ofExplorePageSimple(profile, page, isLiked, pageImageCount, pageTags);
       })
     );
@@ -114,7 +114,7 @@ export class ExploreService {
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
           page.id,
         );
-        const pageTags = await this.pageTagRepository.findAllJoinQuery(page.id);
+        const pageTags = await this.pageTagRepository.findAllTagsByPageId(page.id);
         return ExplorePageResponseDto.ofExplorePageSimple(profile, page, isLiked, pageImageCount, pageTags);
       })
     );
@@ -151,7 +151,7 @@ export class ExploreService {
     const profile = await this.profileRepository.findOne(page.userId);
     const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
     const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
-    const pageTags = await this.pageTagRepository.findAllJoinQuery(pageId);
+    const pageTags = await this.pageTagRepository.findAllTagsByPageId(pageId);
     return ExplorePageResponseDto.ofExplorePage(profile,  page, isLiked, pageImages, pageTags);
   }
 }

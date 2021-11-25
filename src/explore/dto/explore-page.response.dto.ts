@@ -109,7 +109,7 @@ export class ExplorePageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       images: images.map((image) => image.imageUrl),
-      tags: tags.map((tag) => TagResponseDto.ofTag(tag)),
+      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };
   }
 
@@ -133,7 +133,7 @@ export class ExplorePageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       imageCount: imageCount,
-      tags: tags.map((tag) => TagResponseDto.ofTag(tag)),
+      tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };
   }
 }
