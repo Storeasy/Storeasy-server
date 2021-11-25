@@ -14,6 +14,7 @@ import { ProjectRepository } from 'src/repositories/project.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
 import { CreateProjectRequestDto } from './dto/create-project.request.dto';
 import { ProjectDetailResponseDto } from './dto/project-detail.response.dto';
+import { ProjectListResponseDto } from './dto/project-list.response.dto';
 import { ProjectResponseDto } from './dto/project.response.dto';
 import { UpdateProjectRequestDto } from './dto/update-project.request.dto';
 
@@ -155,5 +156,15 @@ export class ProjectService {
     );
 
     return ProjectDetailResponseDto.ofProjectPage(projectData, pageData);
+  }
+
+  public async getMyProjects(userId: number) {
+    const projects = await this.projectRepository.findAllProjectIdAndTitleByUserId(userId);
+    console.log(projects);
+    return await Promise.all(
+      projects.map(project => {
+        return ProjectListResponseDto.ofProject(project);
+      })
+    );
   }
 }

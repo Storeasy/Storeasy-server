@@ -18,6 +18,7 @@ import { ResponseStatus } from 'src/config/res/response-status';
 import { CreateProjectRequestDto } from './dto/create-project.request.dto';
 import { ProjectColorResponseDto } from './dto/project-color.response.dto';
 import { ProjectDetailResponseDto } from './dto/project-detail.response.dto';
+import { ProjectListResponseDto } from './dto/project-list.response.dto';
 import { UpdateProjectRequestDto } from './dto/update-project.request.dto';
 import { ProjectService } from './project.service';
 
@@ -84,5 +85,13 @@ export class ProjectController {
       projectId,
     );
     return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_PAGES_SUCCESS, data);
+  }
+
+  @ApiOperation({ summary: '본인 프로젝트 목록 조회' })
+  @ApiOkResponse({ type: ProjectListResponseDto })
+  @Get()
+  async getMyProjects(@Req() req) {
+    const data = await this.projectService.getMyProjects(req.user.userId);
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_PROJECTS_SUCCESS, data)
   }
 }

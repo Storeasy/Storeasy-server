@@ -3,6 +3,16 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Project)
 export class ProjectRepository extends Repository<Project> {
+  public async findAllProjectIdAndTitleByUserId(userId: number) {
+    return await this.find({
+      select: [ 'id', 'title' ],
+      where: { userId: userId },
+      order: {
+        createdAt: "DESC",
+      }
+    })
+  }
+
   public async findAllByUserId(userId: number) {
     return await this.find({
       where: { userId: userId },

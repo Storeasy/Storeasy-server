@@ -57,7 +57,7 @@ export class ProjectResponseDto {
   })
   tags: TagResponseDto[];
 
-  public static ofProject(project: Project, tags: any[]) {
+  public static ofProject(project: Project, tags: any[]): ProjectResponseDto {
     return {
       userId: +project.userId,
       isPublic: project.isPublic == true ? true : false,
