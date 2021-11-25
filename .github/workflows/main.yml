@@ -36,12 +36,10 @@ jobs:
       - name: bulid file
         run: npm run build
         
-	# tar파일 생성
       - name: Make tar file
         run: tar -cpvzf ./build/$GITHUB_SHA.tgz *
         shell: bash
         
-	# AWS 인증을 사용함
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -49,13 +47,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-	# S3 업로드
       - name: Upload to S3
         run: |
           aws s3 cp \
             --region ap-northeast-2 \
             ./build/$GITHUB_SHA.tgz s3://storeasy/build/$GITHUB_SHA.tgz
 
-	# Code Deploy 배포
       - name: Code Deploy
         run: aws deploy create-deployment --application-name storeasy --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name storeasy --s3-location bucket=storeasy,bundleType=tgz,key=build/$GITHUB_SHA.tgz
