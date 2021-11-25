@@ -37,7 +37,7 @@ jobs:
         run: npm run build
         
       - name: Make tar file
-        run: tar -cpvzf ./$GITHUB_SHA.tgz *
+        run: tar -cpvzf ./$GITHUB_SHA.tgz dist
         shell: bash
         
       - name: Configure AWS credentials
@@ -51,7 +51,7 @@ jobs:
         run: |
           aws s3 cp \
             --region ap-northeast-2 \
-            ./build/$GITHUB_SHA.tgz s3://storeasy/build/$GITHUB_SHA.tgz
+            ./$GITHUB_SHA.tgz s3://storeasy/build/$GITHUB_SHA.tgz
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name storeasy --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name storeasy --s3-location bucket=storeasy,bundleType=tgz,key=storeasy/$GITHUB_SHA.tgz
+        run: aws deploy create-deployment --application-name storeasy --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name storeasy --s3-location bucket=storeasy,bundleType=tgz,key=storeasy/build/$GITHUB_SHA.tgz
