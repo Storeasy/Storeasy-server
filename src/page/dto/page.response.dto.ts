@@ -116,7 +116,7 @@ export class PageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       imageCount: imageCount,
-      images: null,
+      images: [],
       tags: tags.map((tag) => TagResponseDto.ofUserTag(tag)),
     };
   }
@@ -141,7 +141,7 @@ export class PageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       imageCount: imageCount,
-      images: null,
+      images: [],
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };
   }
