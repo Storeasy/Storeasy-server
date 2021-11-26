@@ -8,6 +8,7 @@ import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
 import { PageRepository } from 'src/repositories/page.repository';
+import { ProfileRepository } from 'src/repositories/profile.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
 import { UserTagRepository } from 'src/repositories/user-tag.repository';
 import { CreatePageRequestDto } from './dto/create-page.request.dto';
@@ -23,6 +24,7 @@ export class PageService {
     private readonly tagRepository: TagRepository,
     private readonly likePageRepository: LikePageRepository,
     private readonly userTagRepository: UserTagRepository,
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   // 페이지 생성
@@ -138,11 +140,12 @@ export class PageService {
 
       return PageResponseDto.ofPageWithUserTag(page, isLiked, pageImages, userTags);
     } else {
+      const profile = await this.profileRepository.findOne(page.userId);
       const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
       const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
       const pageTags = await this.pageTagRepository.findAllTagsByPageId(pageId);
 
-      return PageResponseDto.ofPage(page, isLiked, pageImages, pageTags);
+      return PageResponseDto.ofPage(profile, page, isLiked, pageImages, pageTags);
     }  
   }
 }
