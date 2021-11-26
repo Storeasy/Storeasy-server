@@ -52,7 +52,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '본인 태그별 페이지 목록 조회' })
-  @ApiOkResponse({ type: PageResponseDto })
+  @ApiOkResponse({ type: StoryResponseDto })
   @Get('/page')
   async getPageByTag(@Req() req, @Query('tag') tag: number) {
     const data = await this.userService.getPagesByTag(req.user.userId, tag);

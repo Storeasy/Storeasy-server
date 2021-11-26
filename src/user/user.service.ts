@@ -153,7 +153,7 @@ export class UserService {
         );
         const pageTags = await this.pageTagRepository.findAllByPageId(pageTag.page.id);
         const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
-        return PageResponseDto.ofPageSimpleWithUserTag(pageTag.page, isLiked, pageImageCount, userTags);
+        return StoryResponseDto.ofPageWithUserTag(pageTag.page, isLiked, pageImageCount, userTags);
       }),
     );
   }
