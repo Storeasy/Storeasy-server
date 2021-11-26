@@ -233,7 +233,15 @@ export class ResponseStatus extends EnumType<ResponseStatus>() {
   static READ_ALL_PROJECTS_SUCCESS = new ResponseStatus(
     HttpStatus.OK,
     '본인 프로젝트 목록 조회 성공',
-  )
+  );
+  static READ_ALL_STOREASY_TEMPLATES_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '스토리지 템플릿 목록 조회 성공',
+  );
+  static READ_STOREASY_TEMPLATE_SUCCESS = new ResponseStatus(
+    HttpStatus.OK,
+    '스토리지 템플릿 상세 조회 성공',
+  );
 
   @Exclude() private readonly _httpStatus: HttpStatus;
   @Exclude() private readonly _message: string;

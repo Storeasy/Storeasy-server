@@ -9,6 +9,7 @@ import { ProfileRepository } from 'src/repositories/profile.repository';
 import { TagRepository } from 'src/repositories/tag.repository';
 import { ExplorePageResponseDto } from './dto/explore-page.response.dto';
 import { ExploreUserResponseDto } from './dto/explore-user.response.dto';
+import { StoreasyTemplateListResponseDto } from './dto/storeasy-template-list.response.dto';
 
 @Injectable()
 export class ExploreService {
@@ -21,6 +22,28 @@ export class ExploreService {
     private readonly profileTagRepository: ProfileTagRepository,
     private readonly tagRepository: TagRepository,
   ) {}
+
+  public async getStoreasyTemplates() {
+    const storeasyPages = await this.pageRepository.findStoreasyPages();
+    return storeasyPages.map(storeasyPage => StoreasyTemplateListResponseDto.ofPage(storeasyPage));
+  }
+
+  public async getStoreasyTemplate(userId: number, pageId: number) {
+    const page = await this.pageRepository.findStoreasyPageByPageId(pageId);
+
+    if(!page) {
+      throw new NotFoundException(ResponseStatus.PAGE_NOT_FOUND);
+    }
+    if(!page.isPublic) {
+      throw new ForbiddenException(ResponseStatus.PAGE_IS_NOT_PUBLIC);
+    }
+
+    const profile = await this.profileRepository.findOne(page.userId);
+    const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
+    const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
+    const pageTags = await this.pageTagRepository.findAllTagsByPageId(pageId);
+    return ExplorePageResponseDto.ofExplorePage(profile,  page, isLiked, pageImages, pageTags);
+  }
 
   public async getRecommendPages(userId: number) {
     const tag = await this.profileTagRepository.findOneByUserId(userId);

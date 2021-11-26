@@ -11,6 +11,22 @@ export class ExploreController {
     private readonly exploreService: ExploreService,
   ) {}
 
+  @ApiOperation({ summary: '스토리지 템플릿 목록 조회' })
+  @ApiOkResponse()
+  @Get('storeasy')
+  async getStoreasyTemplates() {
+    const data = await this.exploreService.getStoreasyTemplates();
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_ALL_STOREASY_TEMPLATES_SUCCESS, data);
+  }
+
+  @ApiOperation({ summary: '스토리지 템플릿 목록 조회' })
+  @ApiOkResponse()
+  @Get('storeasy/:pageId')
+  async getStoreasyTemplate(@Req() req, @Param('pageId') pageId: number) {
+    const data = await this.exploreService.getStoreasyTemplate(req.user.userId, pageId);
+    return ResponseEntity.OK_WITH(ResponseStatus.READ_STOREASY_TEMPLATE_SUCCESS, data);
+  }
+
   @ApiOperation({ summary: '추천 페이지 목록 조회' })
   @ApiOkResponse()
   @Get('page/recommend')
