@@ -48,6 +48,12 @@ export class ExplorePageResponseDto {
   projectTitle: string;
 
   @ApiProperty({
+    example: '테스트 프로젝트색',
+    description: '프로젝트색',
+  })
+  projectColor: string;
+
+  @ApiProperty({
     example: 1,
     description: '페이지 ID',
   })
@@ -110,6 +116,7 @@ export class ExplorePageResponseDto {
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
+      projectColor: null,
       pageId: +page.id,
       title: page.title,
       content: page.content,
@@ -136,6 +143,7 @@ export class ExplorePageResponseDto {
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
+      projectColor: null,
       pageId: +page.id,
       title: page.title,
       content: page.content,
