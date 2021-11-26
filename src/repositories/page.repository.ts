@@ -29,13 +29,12 @@ export class PageRepository extends Repository<Page> {
   }
 
   public async findAllByProjectId(projectId: number) {
-    return await this.find({
-      where: { projectId: projectId },
-      relations: ['project'],
-      order: {
-        startDate: "DESC",
-      }
-    });
+    return await this.createQueryBuilder('page')
+      .where('page.projectId = :projectId', { projectId: projectId })
+      .leftJoinAndSelect('page.project', 'project')
+      .leftJoinAndSelect('project.projectColor', 'projectColor')
+      .orderBy('page.startDate', 'DESC')
+      .getMany();
   }
 
   public async findAllRecentPages(userId: number) {
