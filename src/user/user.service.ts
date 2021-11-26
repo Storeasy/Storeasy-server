@@ -144,16 +144,16 @@ export class UserService {
   }
 
   // 본인 태그별 페이지 목록 조회
-  public async getPagesByTag(userId: number, tag: number) {
+  public async getPagesByTag(userId: number, tagId: number) {
     const userTag = await this.userTagRepository.findAllPagesByUserIdAndTagId(
       userId,
-      tag,
+      tagId,
     );
     if(!userTag) {
       return null;
     }
 
-    const pageTags = userTag.pageTags;
+    const pageTags = await this.pageTagRepository.findAllPagesByTagIdAndUserId(tagId, userId);
     const pages = await this.pageRepository.findAllByIds(pageTags.map(pageTag => pageTag.pageId));
     const data =  await Promise.all(
       pages.map(async (page) => {

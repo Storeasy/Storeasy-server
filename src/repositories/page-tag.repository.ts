@@ -3,6 +3,14 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(PageTag)
 export class PageTagRepository extends Repository<PageTag> {
+  public async findAllPagesByTagIdAndUserId(tagId: number, userId: number) {
+    return await this.createQueryBuilder('pageTag')
+      .where('pageTag.tagId = :tagId', { tagId: tagId })
+      .leftJoinAndSelect('pageTag.page', 'page')
+      .andWhere('page.userId = :userId', { userId: userId })
+      .getMany();
+  }
+
   public async findAllByPageId(pageId: number) {
     return await this.find({
       where: { pageId: pageId },
