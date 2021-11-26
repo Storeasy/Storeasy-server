@@ -59,10 +59,11 @@ export class PageRepository extends Repository<Page> {
   }
 
   public async findOneByPageId(pageId: number) {
-    return await this.findOne({
-      where: { id: pageId },
-      relations: ['project'],
-    });
+    return await this.createQueryBuilder('page')
+    .where('page.id = :pageId', { pageId: pageId })
+    .leftJoinAndSelect('page.project', 'project')
+    .leftJoinAndSelect('project.projectColor', 'projectColor')
+    .getOne();
   }
 
   public async findAllSinglePageByUserId(userId: number) {
