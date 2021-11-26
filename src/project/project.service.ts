@@ -136,7 +136,11 @@ export class ProjectService {
 
     if (userId == project.userId) {
       const projectTags = await this.projectTagRepository.findAllByProjectId(project.id);
-      const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, projectTags.map(projectTag => projectTag.tagId));
+      const userTags = await Promise.all(
+        projectTags.map(async (projectTag) => {
+          return this.userTagRepository.findOneByUserIdAndTagId(userId, projectTag.tagId);
+        })
+      );
       const projectData = ProjectResponseDto.ofProjectWithUserTag(project, userTags);
   
       const pages = await this.pageRepository.findAllByProjectId(project.id);
@@ -145,7 +149,11 @@ export class ProjectService {
           const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
           const pageImageCount = await this.pageImageRepository.getCountByPageId(page.id);
           const pageTags = await this.pageTagRepository.findAllByPageId(page.id);
-          const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
+          const userTags = await Promise.all(
+            pageTags.map(async (pageTag) => {
+              return this.userTagRepository.findOneByUserIdAndTagId(userId, pageTag.tagId);
+            })
+          );
           return PageResponseDto.ofPageSimpleWithUserTag(page, isLiked, pageImageCount, userTags);
         }),
       );

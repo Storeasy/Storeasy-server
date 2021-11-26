@@ -45,7 +45,11 @@ export class UserService {
     const projectData = await Promise.all(
       projects.map(async (project) => {
         const projectTags = await this.projectTagRepository.findAllByProjectId(project.id);
-        const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, projectTags.map(projectTag => projectTag.tagId));
+        const userTags = await Promise.all(
+          projectTags.map(async (projectTag) => {
+            return this.userTagRepository.findOneByUserIdAndTagId(userId, projectTag.tagId);
+          })
+        );
         return StoryResponseDto.ofProjectWithUserTag(project, userTags);
       }),
     );
@@ -60,7 +64,12 @@ export class UserService {
             page.id,
           );
           const pageTags = await this.pageTagRepository.findAllByPageId(page.id);
-          const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
+          const userTags = await Promise.all(
+            pageTags.map(async (pageTag) => {
+              return this.userTagRepository.findOneByUserIdAndTagId(userId, pageTag.tagId);
+            })
+          );
+          
           return StoryResponseDto.ofPageWithUserTag(page, isLiked, pageImageCount, userTags);
         }
       }),
@@ -152,7 +161,11 @@ export class UserService {
           pageTag.page.id,
         );
         const pageTags = await this.pageTagRepository.findAllByPageId(pageTag.page.id);
-        const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
+        const userTags = await Promise.all(
+          pageTags.map(async (pageTag) => {
+            return this.userTagRepository.findOneByUserIdAndTagId(userId, pageTag.tagId);
+          })
+        );
         return StoryResponseDto.ofPageWithUserTag(pageTag.page, isLiked, pageImageCount, userTags);
       }),
     );

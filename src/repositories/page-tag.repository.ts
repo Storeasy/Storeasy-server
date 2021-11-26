@@ -6,6 +6,9 @@ export class PageTagRepository extends Repository<PageTag> {
   public async findAllByPageId(pageId: number) {
     return await this.find({
       where: { pageId: pageId },
+      order: {
+        orderNum: "ASC",
+      }
     });
   }
 

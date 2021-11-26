@@ -136,15 +136,17 @@ export class PageService {
       const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
       const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
       const pageTags = await this.pageTagRepository.findAllByPageId(pageId);
-      const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, pageTags.map(pageTag => pageTag.tagId));
-
+      const userTags = await Promise.all(
+        pageTags.map(async (pageTag) => {
+          return this.userTagRepository.findOneByUserIdAndTagId(userId, pageTag.tagId);
+        })
+      );
       return PageResponseDto.ofPageWithUserTag(page, isLiked, pageImages, userTags);
     } else {
       const profile = await this.profileRepository.findOne(page.userId);
       const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageId);
       const pageImages = await this.pageImageRepository.findAllByPageId(pageId);
       const pageTags = await this.pageTagRepository.findAllTagsByPageId(pageId);
-
       return PageResponseDto.ofPage(profile, page, isLiked, pageImages, pageTags);
     }  
   }
