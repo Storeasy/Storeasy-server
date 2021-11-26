@@ -20,6 +20,9 @@ export class UserTagRepository extends Repository<UserTag> {
     return await this.find({
       where: { userId: userId },
       relations: ['tag', 'tagColor'],
+      order: {
+        orderNum: "ASC",
+      }
     });
   }
 
