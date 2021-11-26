@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
+import { PageRepository } from 'src/repositories/page.repository';
 import { ProjectColorRepository } from 'src/repositories/project-color.repository';
 import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
@@ -24,6 +25,7 @@ import { ProjectService } from './project.service';
       PageTagRepository,
       LikePageRepository,
       UserTagRepository,
+      PageRepository,
     ]),
   ],
   controllers: [ProjectController],

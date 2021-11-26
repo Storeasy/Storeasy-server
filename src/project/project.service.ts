@@ -8,6 +8,7 @@ import { PageResponseDto } from 'src/page/dto/page.response.dto';
 import { LikePageRepository } from 'src/repositories/like-page.repository';
 import { PageImageRepository } from 'src/repositories/page-image.repository';
 import { PageTagRepository } from 'src/repositories/page-tag.repository';
+import { PageRepository } from 'src/repositories/page.repository';
 import { ProjectColorRepository } from 'src/repositories/project-color.repository';
 import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
 import { ProjectRepository } from 'src/repositories/project.repository';
@@ -30,6 +31,7 @@ export class ProjectService {
     private readonly pageTagRepository: PageTagRepository,
     private readonly likePageRepository: LikePageRepository,
     private readonly userTagRepository: UserTagRepository,
+    private readonly pageRepository: PageRepository,
   ) {}
 
   // 프로젝트색 목록 조회
@@ -137,7 +139,7 @@ export class ProjectService {
       const userTags = await this.userTagRepository.findAllByUserIdAndTagIds(userId, projectTags.map(projectTag => projectTag.tagId));
       const projectData = ProjectResponseDto.ofProjectWithUserTag(project, userTags);
   
-      const pages = project.pages;
+      const pages = await this.pageRepository.findAllByProjectId(project.id);
       const pageData = await Promise.all(
         pages.map(async (page) => {
           const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, page.id);
@@ -152,7 +154,7 @@ export class ProjectService {
       const projectTags = await this.projectTagRepository.findAllTagsByProjectId(project.id);
       const projectData = ProjectResponseDto.ofProject(project, projectTags);
   
-      const pages = project.pages;
+      const pages = await this.pageRepository.findAllByProjectId(project.id);
       const publicPages = pages.filter(page => {
         if(page.isPublic) {
           return true;

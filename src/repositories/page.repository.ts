@@ -19,6 +19,16 @@ export class PageRepository extends Repository<Page> {
     });
   }
 
+  public async findAllByProjectId(projectId: number) {
+    return await this.find({
+      where: { projectId: projectId },
+      relations: ['project'],
+      order: {
+        startDate: "DESC",
+      }
+    });
+  }
+
   public async findAllRecentPages(userId: number) {
     return await this.find({
       where: { userId: !userId, isPublic: true },
