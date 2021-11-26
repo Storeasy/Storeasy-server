@@ -8,6 +8,7 @@ export class PageRepository extends Repository<Page> {
       .whereInIds(pageIds)
       .leftJoinAndSelect('page.project', 'project')
       .leftJoinAndSelect('project.projectColor', 'projectColor')
+      .orderBy('page.startDate', 'DESC')
       .getMany();
   }
 
