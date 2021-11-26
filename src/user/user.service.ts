@@ -145,7 +145,7 @@ export class UserService {
     }
 
     const pageTags = userTag.pageTags;
-    return await Promise.all(
+    const data =  await Promise.all(
       pageTags.map(async (pageTag) => {
         const isLiked = await this.likePageRepository.existsBySenderAndPageId(userId, pageTag.page.id);
         const pageImageCount = await this.pageImageRepository.getCountByPageId(
@@ -156,5 +156,15 @@ export class UserService {
         return StoryResponseDto.ofPageWithUserTag(pageTag.page, isLiked, pageImageCount, userTags);
       }),
     );
+
+    data.sort((a: StoryResponseDto, b: StoryResponseDto): number => {
+      const d1 = new Date(a.page.startDate);
+      const d2 = new Date(b.page.startDate);
+      if (d1 < d2) return 1;
+      else if (d1 > d2) return -1;
+      else return 0;
+    });
+
+    return data;
   }
 }
