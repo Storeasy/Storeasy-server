@@ -12,6 +12,18 @@ export class PageResponseDto {
   userId: number;
 
   @ApiProperty({
+    example: 'http://~~',
+    description: '프로필 이미지 URL',
+  })
+  profileImage: string;
+
+  @ApiProperty({
+    example: '행복한 만두',
+    description: '사용자 닉네임',
+  })
+  nickname: string;
+
+  @ApiProperty({
     example: true,
     description: '공개 여부',
   })
@@ -91,6 +103,8 @@ export class PageResponseDto {
   ): PageResponseDto {
     return {
       userId: +page.userId,
+      profileImage: null,
+      nickname: null,
       isPublic: page.isPublic == true ? true : false,
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
@@ -101,6 +115,7 @@ export class PageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       imageCount: imageCount,
+      images: null,
       tags: tags.map((tag) => TagResponseDto.ofUserTag(tag)),
     };
   }
@@ -113,6 +128,8 @@ export class PageResponseDto {
   ): PageResponseDto {
     return {
       userId: +page.userId,
+      profileImage: null,
+      nickname: null,
       isPublic: page.isPublic == true ? true : false,
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
@@ -123,6 +140,7 @@ export class PageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       imageCount: imageCount,
+      images: null,
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };
   }
@@ -135,6 +153,8 @@ export class PageResponseDto {
   ): PageResponseDto {
     return {
       userId: +page.userId,
+      profileImage: null,
+      nickname: null,
       isPublic: page.isPublic == true ? true : false,
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
@@ -144,6 +164,7 @@ export class PageResponseDto {
       content: page.content,
       startDate: page.startDate,
       endDate: page.endDate,
+      imageCount: null,
       images: images.map((image) => image.imageUrl),
       tags: tags.map((tag) => TagResponseDto.ofUserTag(tag)),
     };
@@ -157,6 +178,8 @@ export class PageResponseDto {
   ): PageResponseDto {
     return {
       userId: +page.userId,
+      profileImage: null,
+      nickname: null,
       isPublic: page.isPublic == true ? true : false,
       isLiked: isLiked,
       projectId: page.project == null ? null : +page.project.id,
@@ -166,6 +189,7 @@ export class PageResponseDto {
       content: page.content,
       startDate: page.startDate,
       endDate: page.endDate,
+      imageCount: null,
       images: images.map((image) => image.imageUrl),
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };

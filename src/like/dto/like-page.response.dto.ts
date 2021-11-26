@@ -30,16 +30,22 @@ export class LikePageResponseDto {
   isLiked: boolean;
 
   @ApiProperty({
+    example: true,
+    description: '공개 여부',
+  })
+  isPublic: boolean;
+
+  @ApiProperty({
     example: 1,
     description: '프로젝트 ID',
   })
-  projectId?: number;
+  projectId: number;
 
   @ApiProperty({
     example: '테스트 프로젝트',
     description: '프로젝트명',
   })
-  projectTitle?: string;
+  projectTitle: string;
 
   @ApiProperty({
     example: 1,
@@ -99,6 +105,7 @@ export class LikePageResponseDto {
       userId: +page.userId,
       profileImage: profile.profileImage,
       nickname: profile.nickname,
+      isPublic: null,
       isLiked: true,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
@@ -107,6 +114,7 @@ export class LikePageResponseDto {
       content: page.content,
       startDate: page.startDate,
       endDate: page.endDate,
+      imageCount: null,
       images: images.map((image) => image.imageUrl),
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };
@@ -122,6 +130,7 @@ export class LikePageResponseDto {
       userId: +page.userId,
       profileImage: profile.profileImage,
       nickname: profile.nickname,
+      isPublic: null,
       isLiked: true,
       projectId: page.project == null ? null : +page.project.id,
       projectTitle: page.project == null ? null : page.project.title,
@@ -131,6 +140,7 @@ export class LikePageResponseDto {
       startDate: page.startDate,
       endDate: page.endDate,
       imageCount: imageCount,
+      images: null,
       tags: tags.map((tag) => TagResponseDto.ofPageTag(tag)),
     };
   }
