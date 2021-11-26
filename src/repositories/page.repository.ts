@@ -3,6 +3,14 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Page)
 export class PageRepository extends Repository<Page> {
+  public async findAllByIds(pageIds: number[]) {
+    return await this.createQueryBuilder('page')
+      .whereInIds(pageIds)
+      .leftJoinAndSelect('page.project', 'project')
+      .leftJoinAndSelect('project.projectColor', 'projectColor')
+      .getMany();
+  }
+
   public async findStoreasyPages() {
     return await this.find({
       where: { userId: 17 },
