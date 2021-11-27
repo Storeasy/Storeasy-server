@@ -7,12 +7,18 @@
 
 대학생들의 모든 경험들이 특별한 스토리로 남기를   
 **모든게 우리의 스토리지!** ✨
+<br></br>
 
 ## 📦 주요 기능
 | 기능 | 구현 |   
 | :- | :-: |   
 | 기능 이름 | ✅ |
 | 미기능 이름 |  |
+<br>
+
+## 📦 API 문서
+### 📄 [Storeasy REST API](http://3.38.20.217:3000/api/)
+<br>
 
 ## 📦 Tech Stack
 | 역할 | 스택명 |   
@@ -25,12 +31,15 @@
 | API Docs | ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white) |
 | SCM | ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white) |
 | CI/CD | ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=GitHubActions&logoColor=white) ![AWS CodeDeploy](https://img.shields.io/badge/AWS%20CodeDeploy-569A31?style=for-the-badge&logo=amazon%20AWS&logoColor=white) |
+<br>
 
 ## 📦 Architecture
 ![Architecture](https://user-images.githubusercontent.com/46434694/143673505-2d773d03-bcf5-4f42-aa67-f17ecb43a8c4.png)
+<br>
 
 ## 📦 ERD
 ![ERD](https://user-images.githubusercontent.com/46434694/143673552-152e4811-4e7a-419e-8150-e29652526b7d.png)
+<br>
 
 ## 📦 Team. Victorizy
 | 임수정 | 김혜인 | 이혜원 | 이유진 |
@@ -38,7 +47,7 @@
 | iOS 개발 | 서버 개발 | 디자인 | 기획 · 마케팅 |
 | <img src="https://user-images.githubusercontent.com/41771874/143672945-9d667451-560b-41a1-a9b2-3a4a7bed94b9.png" width = 140> | <img src="https://user-images.githubusercontent.com/41771874/143672941-62eb1018-1004-47a9-94ab-85c7481bc9bb.png" width = 140> | <img src="https://user-images.githubusercontent.com/41771874/143672792-04a43f41-37ef-4396-a1ff-454ffd68e078.png" width = 140> | <img src="https://user-images.githubusercontent.com/41771874/143672787-3b929bf5-e5a4-400c-b37f-9e14439f7839.png" width = 140> |
 | [sio2whocodes](https://github.com/sio2whocodes) | [hyeinisfree](https://github.com/hyeinisfree) | [Hyewon Lee](https://www.behance.net/hyewonlee_works) | [yujinlee]() |
-
+<br>
 
 ## 📦 LICENSE
 프로젝트의 모든 라이센스는 MIT License를 따릅니다. 상세 라이센스 정보는 [LICENSE](https://github.com/Storeasy/Storeasy-server/blob/develop/LICENSE.md)를 참조해주세요.
